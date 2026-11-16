@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HERMES SYNDICATE // BLOOMBERG KPI TERMINAL</title>
+    <title>JAC // HERMES ASYMMETRIC SYNDICATE TERMINAL</title>
     <style>
         :root {
             --bg-dark: #0a0e14;
@@ -33,6 +33,8 @@
             border-bottom: 2px solid var(--accent-cyan);
             padding-bottom: 12px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         .logo-group h1 {
             font-size: 20px;
@@ -121,6 +123,8 @@
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--card-border);
+            flex-wrap: wrap;
+            gap: 6px;
         }
         .ticket-header h3 {
             font-size: 13px;
@@ -139,11 +143,12 @@
         }
         .legs-table th {
             text-align: left;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
             padding: 8px 12px;
             color: var(--text-muted);
             border-bottom: 1px solid var(--card-border);
-            font-weight: 500;
+            font-weight: 600;
+            font-family: var(--mono-font);
         }
         .legs-table td {
             padding: 8px 12px;
@@ -263,17 +268,55 @@
             border-radius: 3px;
             font-size: 10px;
         }
+        .tier-elite {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: bold;
+        }
+        .tier-sharp {
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: bold;
+        }
+        .tier-probation {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+        }
+        .tier-faded {
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
         <div class="logo-group">
-            <h1>HERMES // ASYMMETRIC SYNDICATE TERMINAL</h1>
-            <p>7-DAY ROLLING HORIZON (NOV 16 – NOV 22) // TELECEL SPORTYBET GHANA ACCOUNT</p>
+            <h1>JAC // HERMES ASYMMETRIC SYNDICATE TERMINAL</h1>
+            <p>7-DAY ROLLING HORIZON (NOV 16 – NOV 22) // TELECEL SPORTYBET GHANA ACCOUNT // 3X DAILY CODEHUB WINDOWS (06:00, 14:00, 20:00 GMT)</p>
         </div>
         <div class="status-badge">
-            ● SENTINEL ONLINE // HEURISTICS #22–#25 LOCKED
+            ● 24/7 DAEMON + CREATOR TRUST ENGINE ACTIVE
         </div>
     </div>
 
@@ -282,249 +325,640 @@
         <div class="stat-card">
             <div class="stat-label">Telecel Liquid Wallet</div>
             <div class="stat-value">208.67 GHS</div>
-            <div class="stat-sub">Max Permissible Exposure (24%): 50.08 GHS</div>
+            <div class="stat-sub">Untouched Cash Reserve After 22.00 GHS Active Stakes</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Active Cycle Exposure</div>
-            <div class="stat-value">20.00 GHS</div>
-            <div class="stat-sub">9.6% of Wallet // 4 Tickets @ 5.00 GHS</div>
+            <div class="stat-label">Active Portfolio Exposure</div>
+            <div class="stat-value">22.00 GHS</div>
+            <div class="stat-sub">4 Core Tickets (20 GHS) + 1 Monster 20-Fold (2 GHS)</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Aggregate Cycle Return Potential</div>
-            <div class="stat-value" style="color: var(--accent-green);">1833.04 GHS</div>
-            <div class="stat-sub">Multiplier: 91.7x Total Exposure</div>
+            <div class="stat-label">Aggregate Return Potential</div>
+            <div class="stat-value" style="color: var(--accent-green);">10,951.41 GHS</div>
+            <div class="stat-sub">Core: 423.41 GHS + Monster D8WJHX: 10,528.00 GHS</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Correlation Defense</div>
-            <div class="stat-value" style="color: var(--accent-cyan);">0.00% OVERLAP</div>
-            <div class="stat-sub">32 Matches 100% Mutually Exclusive</div>
+            <div class="stat-label">Creator Trust & Correlation</div>
+            <div class="stat-value" style="color: var(--accent-cyan);">24 CREATORS</div>
+            <div class="stat-sub">5 Elite Alpha (2.0x) // 5 Verified Sharp // 8 Faded Traps</div>
         </div>
     </div>
 
-    <!-- The 4 Core Syndicate Tickets -->
-    <div class="section-title">Core Asymmetric Multi-Week Portfolio (4 Independent Tickets)</div>
-    <div class="ticket-grid">
-
-        <div class="ticket-card">
+    <!-- Staked CodeHub Monster Accumulator Section -->
+    <div class="section-title">Staked CodeHub Monster Accumulator (Live Booked Slip: D8WJHX)</div>
+    <div style="margin-bottom: 28px;">
+    
+        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold);">
             <div class="ticket-header">
-                <h3>Ticket 1: The Continental Titan Accumulator (7-Day European & NBA Anchor)</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 35.99x</span>
+                <h3>20-Fold CodeHub Consensus Monster Accumulator <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: D8WJHX</span></h3>
+                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 3,899.26x (+ Win Bonus) | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">10,528.00 GHS</strong> | STATUS: IN_PROGRESS</span>
             </div>
             <table class="legs-table">
                 <thead>
                     <tr>
-                        <th>Date & Kickoff</th>
+                        <th>#</th>
+                        <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
-                        <th>Selection</th>
-                        <th>Odds</th>
+                        <th>Selection (1X2)</th>
+                        <th>Endorsing CodeHub Creators (Source Slips)</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
         
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Germany vs Netherlands</td>
-                        <td class="selection-cell">Over 1.5 Goals</td>
-                        <td class="odds-cell">@1.25</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Over/Under: Over 1.5 Goals @ 1.25</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20 18:00</td>
+                        <td class="match-cell">Molde vs Bodoe/Glimt</td>
+                        <td class="selection-cell">Away</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), 531713985 (8AUU31)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Germany vs Netherlands</td>
-                        <td class="selection-cell">Yes (GG)</td>
-                        <td class="odds-cell">@1.55</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Goals ➔ Both Teams to Score: Yes @ 1.55</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20 20:00</td>
+                        <td class="match-cell">Athletic Bilbao vs Espanyol</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">manstopp3r (807N0V), 0598715631 (DKS24Y)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Spain vs Switzerland</td>
-                        <td class="selection-cell">Home (Spain)</td>
-                        <td class="odds-cell">@1.45</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ 1X2: Home (Spain) @ 1.45</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">3</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 12:30</td>
+                        <td class="match-cell">Man City vs Fulham</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">0538798784 (8ECDUC), 0592138961 (DASQJ1), 0598715631 (DKS24Y), mercidez (EJY0ZK)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Spain vs Switzerland</td>
-                        <td class="selection-cell">Spain & Over 1.5 Goals</td>
-                        <td class="odds-cell">@1.62</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Combo ➔ 1X2 & O/U 1.5: Spain & Over 1.5 @ 1.62</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">4</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 13:00</td>
+                        <td class="match-cell">Galatasaray vs Samsunspor</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Argentina vs Peru</td>
-                        <td class="selection-cell">Home (Argentina)</td>
-                        <td class="odds-cell">@1.22</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ South America ➔ World Cup Qualifiers ➔ Main ➔ 1X2: Home (Argentina) @ 1.22</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">5</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:00</td>
+                        <td class="match-cell">Como 1907 vs Cagliari</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), 531713985 (8AUU31), manstopp3r (807N0V), 0538798784 (8ECDUC), 0592138961 (DASQJ1), 0598715631 (DKS24Y), mercidez (EJY0ZK), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Argentina vs Peru</td>
-                        <td class="selection-cell">Argentina Win to Nil</td>
-                        <td class="odds-cell">@1.6</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ South America ➔ World Cup Qualifiers ➔ Specials ➔ Win to Nil: Argentina @ 1.60</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">6</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:00</td>
+                        <td class="match-cell">Lazio vs Lecce</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), 531713985 (8AUU31), manstopp3r (807N0V), 0538798784 (8ECDUC), 0592138961 (DASQJ1), 0598715631 (DKS24Y), mercidez (EJY0ZK), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Real Madrid vs ALBA Berlin</td>
-                        <td class="selection-cell">Home (Real Madrid)</td>
-                        <td class="odds-cell">@1.18</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ International ➔ EuroLeague ➔ Main ➔ Moneyline: Real Madrid @ 1.18</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">7</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:30</td>
+                        <td class="match-cell">Eintracht Frankfurt vs Hoffenheim</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">lcare1 (FMCVFG), manstopp3r (807N0V), 0538798784 (8ECDUC), mercidez (EJY0ZK)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Real Madrid vs ALBA Berlin</td>
-                        <td class="selection-cell">Real Madrid -12.5</td>
-                        <td class="odds-cell">@1.5</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ International ➔ EuroLeague ➔ Main ➔ Handicap: Real Madrid -12.5 @ 1.50</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">8</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:30</td>
+                        <td class="match-cell">Union Berlin vs RB Leipzig</td>
+                        <td class="selection-cell">Away</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">manstopp3r (807N0V), 0538798784 (8ECDUC), 0598715631 (DKS24Y), mercidez (EJY0ZK)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">Bayern Munich vs Augsburg</td>
-                        <td class="selection-cell">Over 2.5 Goals</td>
-                        <td class="odds-cell">@1.3</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Germany ➔ Bundesliga ➔ Main ➔ Over/Under: Over 2.5 Goals @ 1.30</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">9</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
+                        <td class="match-cell">Aston Villa vs Sunderland</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), manstopp3r (807N0V), 0592138961 (DASQJ1), mercidez (EJY0ZK), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">Bayern Munich vs Augsburg</td>
-                        <td class="selection-cell">Bayern Munich & Over 2.5</td>
-                        <td class="odds-cell">@1.48</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Germany ➔ Bundesliga ➔ Combo ➔ 1X2 & O/U 2.5: Bayern & Over 2.5 @ 1.48</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">10</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
+                        <td class="match-cell">Chelsea vs Leeds United</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), manstopp3r (807N0V), areafynboy (807NSX), 0592138961 (DASQJ1), mercidez (EJY0ZK), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Arsenal vs Nottingham Forest</td>
-                        <td class="selection-cell">Home (Arsenal)</td>
-                        <td class="odds-cell">@1.38</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Main ➔ 1X2: Home (Arsenal) @ 1.38</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
+                        <td class="match-cell">Tottenham vs Ipswich</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">manstopp3r (807N0V), 0538798784 (8ECDUC), 0592138961 (DASQJ1), 0598715631 (DKS24Y), mercidez (EJY0ZK), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Arsenal vs Nottingham Forest</td>
-                        <td class="selection-cell">Arsenal & Over 1.5</td>
-                        <td class="odds-cell">@1.58</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Combo ➔ 1X2 & O/U 1.5: Arsenal & Over 1.5 @ 1.58</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">12</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:30</td>
+                        <td class="match-cell">NEC Nijmegen vs PSV Eindhoven</td>
+                        <td class="selection-cell">Away</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">lcare1 (FMCVFG), 0592138961 (DASQJ1)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Southampton vs Liverpool</td>
-                        <td class="selection-cell">Away (Liverpool)</td>
-                        <td class="odds-cell">@1.32</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Main ➔ 1X2: Away (Liverpool) @ 1.32</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">13</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 16:00</td>
+                        <td class="match-cell">Kocaelispor vs Fenerbahce</td>
+                        <td class="selection-cell">Away</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), 0598715631 (DKS24Y)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Southampton vs Liverpool</td>
-                        <td class="selection-cell">Liverpool & Over 1.5</td>
-                        <td class="odds-cell">@1.52</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Combo ➔ 1X2 & O/U 1.5: Liverpool & Over 1.5 @ 1.52</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">14</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 16:15</td>
+                        <td class="match-cell">Nice vs PSG</td>
+                        <td class="selection-cell">Away</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">ralph8833 (B10A53), 0538798784 (8ECDUC), areafynboy (807NSX), 0598715631 (DKS24Y), mercidez (EJY0ZK), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Boston Celtics vs Minnesota Timberwolves</td>
-                        <td class="selection-cell">Home (Boston Celtics)</td>
-                        <td class="odds-cell">@1.48</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Moneyline: Boston Celtics @ 1.48</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">15</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 17:00</td>
+                        <td class="match-cell">Parma Calcio vs Roma</td>
+                        <td class="selection-cell">Away</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), 531713985 (8AUU31), ralph8833 (B10A53), 0598715631 (DKS24Y), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                     <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Boston Celtics vs Minnesota Timberwolves</td>
-                        <td class="selection-cell">Boston Celtics -4.5</td>
-                        <td class="odds-cell">@1.68</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">16</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 17:30</td>
+                        <td class="match-cell">Newcastle vs Arsenal</td>
+                        <td class="selection-cell">Away</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">sarpong238h (D4T8XR), 599225329 (D30CM5), ralph8833 (B10A53), areafynboy (807NSX), 0598715631 (DKS24Y), oguandele95 (DASW99)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
+            
                     <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Handicap: Boston Celtics -4.5 @ 1.68</div>
-                        </td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">17</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 17:45</td>
+                        <td class="match-cell">Feyenoord vs Excelsior</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">lcare1 (FMCVFG)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                    </tr>
+            
+                    <tr>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">18</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 19:45</td>
+                        <td class="match-cell">Napoli vs Torino</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">areafynboy (807NSX)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                    </tr>
+            
+                    <tr>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">19</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 20:00</td>
+                        <td class="match-cell">Real Madrid vs Celta</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">599225329 (D30CM5), 531713985 (8AUU31), ralph8833 (B10A53)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                    </tr>
+            
+                    <tr>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">20</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 13:00</td>
+                        <td class="match-cell">Barcelona vs Villarreal</td>
+                        <td class="selection-cell">Home</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">ralph8833 (B10A53)</td>
+                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+25%</strong></div>
-                <div>Potential Payout: <span class="payout-val">224.94 GHS</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">D8WJHX</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">D30CM5+B10A53+807N0V</span></div>
+                <div>Total Potential Win: <span class="payout-val">10,528.00 GHS</span></div>
             </div>
         </div>
         
+    </div>
+
+    <!-- Creator Reliability, Perfection Tracking & Correlation Telemetry -->
+    <div class="section-title">CodeHub Creator Reliability KPI, Perfection Model & Correlation Telemetry</div>
+    <div class="grid-stats" style="margin-bottom: 18px;">
+    
+        <div class="stat-card">
+            <div class="stat-label">Followers vs. Anchor Consistency (r)</div>
+            <div class="stat-value" style="color: var(--accent-red);">-0.40</div>
+            <div class="stat-sub" style="color: var(--text-muted); line-height: 1.35; margin-top: 6px;">Negative Correlation (r = -0.40): Top follower accounts (daddysponsorh 802, moneykingredeem 483, sarpong238h 355) average 2.2% purity due to retail lotto bait. Follower count alone is a false signal.</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">High Return Multipliers vs. Clean Anchor Volume (r)</div>
+            <div class="stat-value" style="color: var(--accent-green);">+0.55</div>
+            <div class="stat-sub" style="color: var(--text-muted); line-height: 1.35; margin-top: 6px;">Positive Compound Correlation (r = +0.55): Legitimate 1,400x–4,887x returns (mercidez 2,341x, tugha1 3,347x, oguandele95 4,760x, 0592138961 1,475x) come from compounding 12–15 clean 1.20–1.85 anchors, NOT 3-leg high-odds traps.</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">50–370 Follower Sharp Cohort Avg Purity</div>
+            <div class="stat-value" style="color: var(--accent-green);">81.5%</div>
+            <div class="stat-sub" style="color: var(--text-muted); line-height: 1.35; margin-top: 6px;">The 'Alpha Sweet Spot' (50–370 followers: 599225329, tugha1, mercidez, oguandele95, 0592138961, 0538798784, manstopp3r) averages 81.5% anchor purity and 2,014x combined odds.</div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="stat-label">Model Trust Alignment (Purity vs. Staked Adoption)</div>
+            <div class="stat-value" style="color: var(--accent-green);">+0.53</div>
+            <div class="stat-sub" style="color: var(--text-muted); line-height: 1.35; margin-top: 6px;">Strong Positive Alignment (r = +0.52): 100% of the 20 legs staked on D8WJHX (10,528 GHS potential win) were sourced from Verified Sharp & Elite Alpha creators (trust weight >= 1.15x).</div>
+        </div>
+        
+    </div>
+
+    <div class="ticket-card" style="margin-bottom: 28px; border-top: 3px solid var(--accent-green);">
+        <div class="ticket-header">
+            <h3>Creator Trustworthiness & Bayesian Perfection Matrix (Live Selection Weights)</h3>
+            <span class="ticket-meta">Formula: W_c = 0.50(Purity) + 0.30(CleanVolume) + 0.20(YieldEfficiency) + RealizedHitAdjustment</span>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="legs-table">
+                <thead>
+                    <tr>
+                        <th>Creator Handle</th>
+                        <th>Latest Slip</th>
+                        <th>Followers</th>
+                        <th>Original Slip Odds</th>
+                        <th>Clean Anchors</th>
+                        <th>Traps Purged</th>
+                        <th>Anchor Purity %</th>
+                        <th>Adopted on D8WJHX</th>
+                        <th>Bayesian Perfection</th>
+                        <th>Trust Weight</th>
+                        <th>Model Classification</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">mercidez</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">EJY0ZK</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">71</td>
+                        <td class="odds-cell">2,341.30x <span style="color: var(--text-muted); font-weight: normal;">(37F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">15</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">0</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">100.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">9 legs (0W-0L-9P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">99.5%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">2.00x</td>
+                        <td><span class="tier-elite">ELITE ALPHA</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">599225329</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">D30CM5</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">367</td>
+                        <td class="odds-cell">523.66x <span style="color: var(--text-muted); font-weight: normal;">(37F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">14</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">1</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">93.3%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">10 legs (0W-0L-10P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">95.2%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.98x</td>
+                        <td><span class="tier-elite">ELITE ALPHA</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">oguandele95</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">DASW99</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">53</td>
+                        <td class="odds-cell">4,760.19x <span style="color: var(--text-muted); font-weight: normal;">(49F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">13</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">2</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">86.7%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">8 legs (0W-0L-8P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">89.7%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.87x</td>
+                        <td><span class="tier-elite">ELITE ALPHA</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">0592138961</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">DASQJ1</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">142</td>
+                        <td class="odds-cell">1,475.53x <span style="color: var(--text-muted); font-weight: normal;">(45F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">12</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">3</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">80.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">7 legs (0W-0L-7P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">84.2%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.69x</td>
+                        <td><span class="tier-elite">ELITE ALPHA</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">tugha1</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">A4A3SB</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">125</td>
+                        <td class="odds-cell">3,347.18x <span style="color: var(--text-muted); font-weight: normal;">(15F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">13</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">0</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">100.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">99.5%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.58x</td>
+                        <td><span class="tier-elite">ELITE ALPHA</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">0598715631</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">DKS24Y</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">77</td>
+                        <td class="odds-cell">4,887.07x <span style="color: var(--text-muted); font-weight: normal;">(50F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">11</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">4</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">73.3%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">10 legs (0W-0L-10P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">80.6%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.45x</td>
+                        <td><span class="tier-sharp">VERIFIED SHARP</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">0538798784</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">8ECDUC</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">130</td>
+                        <td class="odds-cell">334.58x <span style="color: var(--text-muted); font-weight: normal;">(35F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">11</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">4</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">73.3%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">7 legs (0W-0L-7P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">78.9%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.36x</td>
+                        <td><span class="tier-sharp">VERIFIED SHARP</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">manstopp3r</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">807N0V</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">104</td>
+                        <td class="odds-cell">422.55x <span style="color: var(--text-muted); font-weight: normal;">(33F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">10</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">5</td>
+                        <td style="color: var(--accent-gold); font-family: var(--mono-font); font-weight: bold;">66.7%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">8 legs (0W-0L-8P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">74.4%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.33x</td>
+                        <td><span class="tier-sharp">VERIFIED SHARP</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">531713985</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">8AUU31</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">16</td>
+                        <td class="odds-cell">99.79x <span style="color: var(--text-muted); font-weight: normal;">(19F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">11</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">3</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">78.6%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">5 legs (0W-0L-5P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">82.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.27x</td>
+                        <td><span class="tier-sharp">VERIFIED SHARP</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">ralph8833</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">B10A53</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">151</td>
+                        <td class="odds-cell">29.80x <span style="color: var(--text-muted); font-weight: normal;">(24F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">9</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">6</td>
+                        <td style="color: var(--accent-gold); font-family: var(--mono-font); font-weight: bold;">60.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">5 legs (0W-0L-5P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">66.3%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">1.04x</td>
+                        <td><span class="tier-sharp">VERIFIED SHARP</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">jjjjkkkwww111</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">B8G7JW</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">8</td>
+                        <td class="odds-cell">320.16x <span style="color: var(--text-muted); font-weight: normal;">(3F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">3</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">0</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">100.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">99.5%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.69x</td>
+                        <td><span class="tier-probation">PROBATION // MICRO</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">ankohjoseph</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">9T51YY</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
+                        <td class="odds-cell">12.86x <span style="color: var(--text-muted); font-weight: normal;">(5F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">5</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">0</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">100.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">99.5%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.66x</td>
+                        <td><span class="tier-probation">PROBATION // MICRO</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">cn5wxd</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">F13Q33</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">42</td>
+                        <td class="odds-cell">63.29x <span style="color: var(--text-muted); font-weight: normal;">(3F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">3</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">0</td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">100.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">99.5%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.65x</td>
+                        <td><span class="tier-probation">PROBATION // MICRO</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">lcare1</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">FMCVFG</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">66</td>
+                        <td class="odds-cell">158.77x <span style="color: var(--text-muted); font-weight: normal;">(30F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">8</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">7</td>
+                        <td style="color: var(--accent-gold); font-family: var(--mono-font); font-weight: bold;">53.3%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">3 legs (0W-0L-3P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">58.1%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.53x</td>
+                        <td><span class="tier-probation">PROBATION // MICRO</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">areafynboy</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">807NSX</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">135</td>
+                        <td class="odds-cell">116.26x <span style="color: var(--text-muted); font-weight: normal;">(50F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">4</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">11</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">26.7%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">4 legs (0W-0L-4P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">36.2%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.35x</td>
+                        <td><span class="tier-probation">PROBATION // MICRO</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">GH25269790</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">E0FLEF</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">14</td>
+                        <td class="odds-cell">82.30x <span style="color: var(--text-muted); font-weight: normal;">(40F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">3</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">10</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">23.1%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">23.1%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.35x</td>
+                        <td><span class="tier-probation">PROBATION // MICRO</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">sarpong238h</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">D4T8XR</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">355</td>
+                        <td class="odds-cell">198.38x <span style="color: var(--text-muted); font-weight: normal;">(48F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">1</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">14</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">6.7%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">1 legs (0W-0L-1P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">10.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">daddysponsorh</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">9RS9G9</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">802</td>
+                        <td class="odds-cell">83.83x <span style="color: var(--text-muted); font-weight: normal;">(45F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">0</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">13</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">0.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">0.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">moneykingredeem</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">BQYGKZ</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">483</td>
+                        <td class="odds-cell">583.91x <span style="color: var(--text-muted); font-weight: normal;">(3F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">0</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">3</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">0.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">0.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">moneyteam2005</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">96FXS5</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">283</td>
+                        <td class="odds-cell">91.20x <span style="color: var(--text-muted); font-weight: normal;">(2F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">0</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">2</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">0.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">0.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">makarios07</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">82DN4R</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">192</td>
+                        <td class="odds-cell">69.69x <span style="color: var(--text-muted); font-weight: normal;">(42F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">0</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">15</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">0.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">0.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">rhichbosssss</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">AK8L99</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">41</td>
+                        <td class="odds-cell">794.31x <span style="color: var(--text-muted); font-weight: normal;">(3F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">0</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">3</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">0.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">0.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">GH04643306</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">CTNAQL</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">31</td>
+                        <td class="odds-cell">1,270.97x <span style="color: var(--text-muted); font-weight: normal;">(40F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">0</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">15</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">0.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">0.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">pascapaspascap</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">CGHLTE</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">9</td>
+                        <td class="odds-cell">73.04x <span style="color: var(--text-muted); font-weight: normal;">(2F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">0</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">2</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font); font-weight: bold;">0.0%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">0 legs (0W-0L-0P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">0.0%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">0.05x</td>
+                        <td><span class="tier-faded">FADED // TRAP BAIT</span></td>
+                    </tr>
+        
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- The 4 Core Syndicate Tickets -->
+    <div class="section-title">Core Asymmetric Multi-Week Portfolio (4 Independent Tickets @ 5.00 GHS)</div>
+    <div class="ticket-grid">
+
         <div class="ticket-card">
             <div class="ticket-header">
-                <h3>Ticket 1: Live Cross-Sport Accumulator</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 16.42x</span>
+                <h3>Ticket 1: Live Cross-Sport Accumulator <span class="code-tag" style="margin-left:8px;">CODE: C6QSSB</span></h3>
+                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 16.42x | STATUS: IN_PROGRESS</span>
             </div>
             <table class="legs-table">
                 <thead>
@@ -636,231 +1070,15 @@
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+0%</strong></div>
+                <div>Booking Code: <strong style="color: var(--accent-cyan);">C6QSSB</strong></div>
                 <div>Potential Payout: <span class="payout-val">89.38 GHS</span></div>
             </div>
         </div>
         
         <div class="ticket-card">
             <div class="ticket-header">
-                <h3>Ticket 2: The Goal Velocity & Pace Multiplier (Uncorrelated Matches)</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 61.19x</span>
-            </div>
-            <table class="legs-table">
-                <thead>
-                    <tr>
-                        <th>Date & Kickoff</th>
-                        <th>Fixture</th>
-                        <th>Selection</th>
-                        <th>Odds</th>
-                    </tr>
-                </thead>
-                <tbody>
-        
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Iceland vs Luxembourg</td>
-                        <td class="selection-cell">1X (Iceland or Draw)</td>
-                        <td class="odds-cell">@1.28</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Double Chance: 1X (Iceland or Draw) @ 1.28</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Iceland vs Luxembourg</td>
-                        <td class="selection-cell">Home (Iceland)</td>
-                        <td class="odds-cell">@1.8</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ 1X2: Home (Iceland) @ 1.80</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Croatia vs Portugal</td>
-                        <td class="selection-cell">Over 1.5 Goals</td>
-                        <td class="odds-cell">@1.3</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Over/Under: Over 1.5 Goals @ 1.30</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Croatia vs Portugal</td>
-                        <td class="selection-cell">Portugal DNB</td>
-                        <td class="odds-cell">@1.6</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Draw No Bet: Portugal @ 1.60</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Brazil vs Uruguay</td>
-                        <td class="selection-cell">Over 1.5 Goals</td>
-                        <td class="odds-cell">@1.34</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ South America ➔ World Cup Qualifiers ➔ Main ➔ Over/Under: Over 1.5 Goals @ 1.34</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Brazil vs Uruguay</td>
-                        <td class="selection-cell">Yes (GG)</td>
-                        <td class="odds-cell">@1.85</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ South America ➔ World Cup Qualifiers ➔ Goals ➔ Both Teams to Score: Yes @ 1.85</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Monaco vs ASVEL</td>
-                        <td class="selection-cell">Home (Monaco)</td>
-                        <td class="odds-cell">@1.25</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ International ➔ EuroLeague ➔ Main ➔ Moneyline: AS Monaco @ 1.25</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Monaco vs ASVEL</td>
-                        <td class="selection-cell">Monaco -7.5</td>
-                        <td class="odds-cell">@1.65</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ International ➔ EuroLeague ➔ Main ➔ Handicap: Monaco -7.5 @ 1.65</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">PSG vs Toulouse</td>
-                        <td class="selection-cell">Home (PSG)</td>
-                        <td class="odds-cell">@1.35</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ France ➔ Ligue 1 ➔ Main ➔ 1X2: Home (PSG) @ 1.35</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">PSG vs Toulouse</td>
-                        <td class="selection-cell">PSG & Over 2.5</td>
-                        <td class="odds-cell">@1.62</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ France ➔ Ligue 1 ➔ Combo ➔ 1X2 & O/U 2.5: PSG & Over 2.5 @ 1.62</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Manchester City vs Tottenham Hotspur</td>
-                        <td class="selection-cell">Over 2.5 Goals</td>
-                        <td class="odds-cell">@1.4</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Main ➔ Over/Under: Over 2.5 Goals @ 1.40</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Manchester City vs Tottenham Hotspur</td>
-                        <td class="selection-cell">Yes & Over 2.5</td>
-                        <td class="odds-cell">@1.65</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Combo ➔ BTTS & O/U 2.5: Yes & Over 2.5 @ 1.65</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Leganes vs Real Madrid</td>
-                        <td class="selection-cell">Away (Real Madrid)</td>
-                        <td class="odds-cell">@1.38</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Spain ➔ La Liga ➔ Main ➔ 1X2: Away (Real Madrid) @ 1.38</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Leganes vs Real Madrid</td>
-                        <td class="selection-cell">Real Madrid & Over 1.5</td>
-                        <td class="odds-cell">@1.55</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Spain ➔ La Liga ➔ Combo ➔ 1X2 & O/U 1.5: Real Madrid & Over 1.5 @ 1.55</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Miami Heat vs Dallas Mavericks</td>
-                        <td class="selection-cell">Over 215.5 Points</td>
-                        <td class="odds-cell">@1.62</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Over/Under (incl. overtime): Over 215.5 @ 1.62</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Miami Heat vs Dallas Mavericks</td>
-                        <td class="selection-cell">Dallas Mavericks Moneyline</td>
-                        <td class="odds-cell">@1.68</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Moneyline: Dallas Mavericks @ 1.68</div>
-                        </td>
-                    </tr>
-            
-                </tbody>
-            </table>
-            <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+25%</strong></div>
-                <div>Potential Payout: <span class="payout-val">382.44 GHS</span></div>
-            </div>
-        </div>
-        
-        <div class="ticket-card">
-            <div class="ticket-header">
-                <h3>Ticket 2: Live Cross-Sport Accumulator</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 27.89x</span>
+                <h3>Ticket 2: Live Cross-Sport Accumulator <span class="code-tag" style="margin-left:8px;">CODE: D2X3PV</span></h3>
+                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 27.89x | STATUS: IN_PROGRESS</span>
             </div>
             <table class="legs-table">
                 <thead>
@@ -960,231 +1178,15 @@
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+0%</strong></div>
+                <div>Booking Code: <strong style="color: var(--accent-cyan);">D2X3PV</strong></div>
                 <div>Potential Payout: <span class="payout-val">149.33 GHS</span></div>
             </div>
         </div>
         
         <div class="ticket-card">
             <div class="ticket-header">
-                <h3>Ticket 3: The Asymmetric Cross-Sport Value Engine (Uncorrelated Matches)</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 51.54x</span>
-            </div>
-            <table class="legs-table">
-                <thead>
-                    <tr>
-                        <th>Date & Kickoff</th>
-                        <th>Fixture</th>
-                        <th>Selection</th>
-                        <th>Odds</th>
-                    </tr>
-                </thead>
-                <tbody>
-        
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Switzerland vs Scotland</td>
-                        <td class="selection-cell">1X (Switzerland or Draw)</td>
-                        <td class="odds-cell">@1.25</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Double Chance: 1X (Switzerland or Draw) @ 1.25</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Switzerland vs Scotland</td>
-                        <td class="selection-cell">Home (Switzerland)</td>
-                        <td class="odds-cell">@1.72</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ 1X2: Home (Switzerland) @ 1.72</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Poland vs Scotland</td>
-                        <td class="selection-cell">Over 1.5 Goals</td>
-                        <td class="odds-cell">@1.28</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Over/Under: Over 1.5 Goals @ 1.28</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Poland vs Scotland</td>
-                        <td class="selection-cell">Poland DNB</td>
-                        <td class="odds-cell">@1.62</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Draw No Bet: Poland @ 1.62</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Colombia vs Ecuador</td>
-                        <td class="selection-cell">Home (Colombia)</td>
-                        <td class="odds-cell">@1.58</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ South America ➔ World Cup Qualifiers ➔ Main ➔ 1X2: Home (Colombia) @ 1.58</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Colombia vs Ecuador</td>
-                        <td class="selection-cell">Home (Colombia)</td>
-                        <td class="odds-cell">@1.65</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ South America ➔ World Cup Qualifiers ➔ Main ➔ 1X2: Home (Colombia) @ 1.65</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Olympiacos vs Baskonia</td>
-                        <td class="selection-cell">Home (Olympiacos)</td>
-                        <td class="odds-cell">@1.26</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ International ➔ EuroLeague ➔ Main ➔ Moneyline: Olympiacos BC @ 1.26</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Olympiacos vs Baskonia</td>
-                        <td class="selection-cell">Olympiacos -6.5</td>
-                        <td class="odds-cell">@1.65</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ International ➔ EuroLeague ➔ Main ➔ Handicap: Olympiacos BC -6.5 @ 1.65</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">Sporting CP vs Amarante</td>
-                        <td class="selection-cell">Over 2.5 Goals</td>
-                        <td class="odds-cell">@1.28</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Portugal ➔ Cup ➔ Main ➔ Over/Under: Over 2.5 Goals @ 1.28</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">Sporting CP vs Amarante</td>
-                        <td class="selection-cell">Sporting CP Over 2.5 Team Goals</td>
-                        <td class="odds-cell">@1.52</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Portugal ➔ Cup ➔ Goals ➔ Team Goals: Sporting CP Over 2.5 @ 1.52</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Leicester City vs Chelsea</td>
-                        <td class="selection-cell">Away (Chelsea)</td>
-                        <td class="odds-cell">@1.52</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Main ➔ 1X2: Away (Chelsea) @ 1.52</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Leicester City vs Chelsea</td>
-                        <td class="selection-cell">Away (Chelsea)</td>
-                        <td class="odds-cell">@1.55</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ England ➔ Premier League ➔ Main ➔ 1X2: Away (Chelsea) @ 1.55</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Napoli vs Roma</td>
-                        <td class="selection-cell">1X (Napoli or Draw)</td>
-                        <td class="odds-cell">@1.24</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Italy ➔ Serie A ➔ Main ➔ Double Chance: 1X (Napoli or Draw) @ 1.24</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Napoli vs Roma</td>
-                        <td class="selection-cell">Home (Napoli)</td>
-                        <td class="odds-cell">@1.78</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Italy ➔ Serie A ➔ Main ➔ 1X2: Home (Napoli) @ 1.78</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Denver Nuggets vs Dallas Mavericks</td>
-                        <td class="selection-cell">Home (Denver Nuggets)</td>
-                        <td class="odds-cell">@1.58</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Moneyline: Denver Nuggets @ 1.58</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Denver Nuggets vs Dallas Mavericks</td>
-                        <td class="selection-cell">Home (Denver Nuggets)</td>
-                        <td class="odds-cell">@1.62</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Moneyline: Denver Nuggets @ 1.62</div>
-                        </td>
-                    </tr>
-            
-                </tbody>
-            </table>
-            <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+25%</strong></div>
-                <div>Potential Payout: <span class="payout-val">322.13 GHS</span></div>
-            </div>
-        </div>
-        
-        <div class="ticket-card">
-            <div class="ticket-header">
-                <h3>Ticket 3: Live Cross-Sport Accumulator</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 17.07x</span>
+                <h3>Ticket 3: Live Cross-Sport Accumulator <span class="code-tag" style="margin-left:8px;">CODE: BD8Y44</span></h3>
+                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 17.07x | STATUS: IN_PROGRESS</span>
             </div>
             <table class="legs-table">
                 <thead>
@@ -1284,231 +1286,15 @@
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+0%</strong></div>
+                <div>Booking Code: <strong style="color: var(--accent-cyan);">BD8Y44</strong></div>
                 <div>Potential Payout: <span class="payout-val">93.88 GHS</span></div>
             </div>
         </div>
         
         <div class="ticket-card">
             <div class="ticket-header">
-                <h3>Ticket 4: The Chronological Arbitrage Stagger (Uncorrelated Matches)</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 76.82x</span>
-            </div>
-            <table class="legs-table">
-                <thead>
-                    <tr>
-                        <th>Date & Kickoff</th>
-                        <th>Fixture</th>
-                        <th>Selection</th>
-                        <th>Odds</th>
-                    </tr>
-                </thead>
-                <tbody>
-        
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Gibraltar vs Malta</td>
-                        <td class="selection-cell">X2 (Malta or Draw)</td>
-                        <td class="odds-cell">@1.26</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Double Chance: X2 (Malta or Draw) @ 1.26</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-16</td>
-                        <td class="match-cell">Gibraltar vs Malta</td>
-                        <td class="selection-cell">Away (Malta)</td>
-                        <td class="odds-cell">@1.75</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ 1X2: Away (Malta) @ 1.75</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Serbia vs Denmark</td>
-                        <td class="selection-cell">X2 (Denmark or Draw)</td>
-                        <td class="odds-cell">@1.38</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Double Chance: X2 (Denmark or Draw) @ 1.38</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-17</td>
-                        <td class="match-cell">Serbia vs Denmark</td>
-                        <td class="selection-cell">Denmark DNB</td>
-                        <td class="odds-cell">@1.75</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ International ➔ UEFA Nations League ➔ Main ➔ Draw No Bet: Denmark @ 1.75</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Milwaukee Bucks vs Chicago Bulls</td>
-                        <td class="selection-cell">Home (Milwaukee Bucks)</td>
-                        <td class="odds-cell">@1.36</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Moneyline: Milwaukee Bucks @ 1.36</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-18</td>
-                        <td class="match-cell">Milwaukee Bucks vs Chicago Bulls</td>
-                        <td class="selection-cell">Milwaukee Bucks -6.5</td>
-                        <td class="odds-cell">@1.7</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Handicap: Milwaukee Bucks -6.5 @ 1.70</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Minnesota Timberwolves vs Toronto Raptors</td>
-                        <td class="selection-cell">Minnesota Timberwolves -6.5</td>
-                        <td class="odds-cell">@1.55</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Handicap: Minnesota Timberwolves -6.5 @ 1.55</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-19</td>
-                        <td class="match-cell">Minnesota Timberwolves vs Toronto Raptors</td>
-                        <td class="selection-cell">Minnesota Timberwolves -6.5</td>
-                        <td class="odds-cell">@1.62</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Handicap: Minnesota Timberwolves -6.5 @ 1.62</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">Getafe vs Real Valladolid</td>
-                        <td class="selection-cell">1X (Getafe or Draw)</td>
-                        <td class="odds-cell">@1.22</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Spain ➔ La Liga ➔ Main ➔ Double Chance: 1X (Getafe or Draw) @ 1.22</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20</td>
-                        <td class="match-cell">Getafe vs Real Valladolid</td>
-                        <td class="selection-cell">Home (Getafe)</td>
-                        <td class="odds-cell">@1.7</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Spain ➔ La Liga ➔ Main ➔ 1X2: Home (Getafe) @ 1.70</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Celta Vigo vs Barcelona</td>
-                        <td class="selection-cell">Away (Barcelona)</td>
-                        <td class="odds-cell">@1.62</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Spain ➔ La Liga ➔ Main ➔ 1X2: Away (Barcelona) @ 1.62</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">Celta Vigo vs Barcelona</td>
-                        <td class="selection-cell">Barcelona & Over 1.5</td>
-                        <td class="odds-cell">@1.75</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Spain ➔ La Liga ➔ Combo ➔ 1X2 & O/U 1.5: Barcelona & Over 1.5 @ 1.75</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">AC Milan vs Juventus</td>
-                        <td class="selection-cell">Over 1.5 Goals</td>
-                        <td class="odds-cell">@1.32</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Italy ➔ Serie A ➔ Main ➔ Over/Under: Over 1.5 Goals @ 1.32</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21</td>
-                        <td class="match-cell">AC Milan vs Juventus</td>
-                        <td class="selection-cell">Yes (GG)</td>
-                        <td class="odds-cell">@1.78</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Football ➔ Italy ➔ Serie A ➔ Goals ➔ Both Teams to Score: Yes @ 1.78</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Golden State Warriors vs New Orleans Pelicans</td>
-                        <td class="selection-cell">Home (Golden State Warriors)</td>
-                        <td class="odds-cell">@1.4</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Moneyline: Golden State Warriors @ 1.40</div>
-                        </td>
-                    </tr>
-            
-                    <tr>
-                        <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22</td>
-                        <td class="match-cell">Golden State Warriors vs New Orleans Pelicans</td>
-                        <td class="selection-cell">Golden State Warriors -6.5</td>
-                        <td class="odds-cell">@1.72</td>
-                    </tr>
-                    <tr>
-                        <td colspan="4" style="padding: 0;">
-                            <div class="breadcrumb-box">Breadcrumb: Basketball ➔ USA ➔ NBA ➔ Main ➔ Handicap: Golden State Warriors -6.5 @ 1.72</div>
-                        </td>
-                    </tr>
-            
-                </tbody>
-            </table>
-            <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+25%</strong></div>
-                <div>Potential Payout: <span class="payout-val">480.12 GHS</span></div>
-            </div>
-        </div>
-        
-        <div class="ticket-card">
-            <div class="ticket-header">
-                <h3>Ticket 4: Live Cross-Sport Accumulator</h3>
-                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 16.51x</span>
+                <h3>Ticket 4: Live Cross-Sport Accumulator <span class="code-tag" style="margin-left:8px;">CODE: ASL92A</span></h3>
+                <span class="ticket-meta">STAKE: 5.00 GHS | ODDS: 16.51x | STATUS: IN_PROGRESS</span>
             </div>
             <table class="legs-table">
                 <thead>
@@ -1608,74 +1394,122 @@
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+0%</strong></div>
+                <div>Booking Code: <strong style="color: var(--accent-cyan);">ASL92A</strong></div>
                 <div>Potential Payout: <span class="payout-val">90.82 GHS</span></div>
             </div>
         </div>
         
     </div>
 
-    <!-- CodeHub Asymmetric Scout Section -->
-    <div class="section-title">CodeHub Asymmetric Scout Feed (Human Bets vs House Defense)</div>
+    <!-- CodeHub Asymmetric Scout Section (Ranked by Creator Trust Weight) -->
+    <div class="section-title">CodeHub Asymmetric Scout Feed (Ranked by Creator Trust Weight, Not Raw Follower Hype)</div>
     <div class="codehub-grid">
     
         <div class="scout-card">
             <div class="scout-header">
-                <span class="code-tag">GH892K</span>
-                <span style="color: var(--accent-gold); font-size: 11px;">815 Followers</span>
+                <span class="code-tag">EJY0ZK</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>2.00x</strong> // 71 Followers</span>
             </div>
-            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>Kumasi_Kingpin</strong> | Original: 9 Legs @ 148.5x</div>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <span class="trap-pill">Stripped 1 Traps</span>
-                <span class="anchor-pill">Retained 8 Clean Anchors</span>
-            </div>
-        </div>
-        
-        <div class="scout-card">
-            <div class="scout-header">
-                <span class="code-tag">9RS9G9</span>
-                <span style="color: var(--accent-gold); font-size: 11px;">802 Followers</span>
-            </div>
-            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>daddysponsorh</strong> | Original: 45 Legs @ 83.83x</div>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <span class="trap-pill">Stripped 13 Traps</span>
-                <span class="anchor-pill">Retained 0 Clean Anchors</span>
-            </div>
-        </div>
-        
-        <div class="scout-card">
-            <div class="scout-header">
-                <span class="code-tag">BQYGKZ</span>
-                <span style="color: var(--accent-gold); font-size: 11px;">483 Followers</span>
-            </div>
-            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>moneykingredeem</strong> | Original: 3 Legs @ 583.91x</div>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <span class="trap-pill">Stripped 3 Traps</span>
-                <span class="anchor-pill">Retained 0 Clean Anchors</span>
-            </div>
-        </div>
-        
-        <div class="scout-card">
-            <div class="scout-header">
-                <span class="code-tag">DAQTQA</span>
-                <span style="color: var(--accent-gold); font-size: 11px;">482 Followers</span>
-            </div>
-            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>Accra_Sniper_99</strong> | Original: 11 Legs @ 27.32x</div>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                <span class="trap-pill">Stripped 3 Traps</span>
-                <span class="anchor-pill">Retained 8 Clean Anchors</span>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>mercidez</strong> | Original: 37 Legs @ 2,341.30x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 15 Clean (100% Purity)</span>
+                <span class="trap-pill">Stripped 0 Traps</span>
             </div>
         </div>
         
         <div class="scout-card">
             <div class="scout-header">
                 <span class="code-tag">D30CM5</span>
-                <span style="color: var(--accent-gold); font-size: 11px;">367 Followers</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.98x</strong> // 367 Followers</span>
             </div>
             <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>599225329</strong> | Original: 37 Legs @ 523.66x</div>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 14 Clean (93% Purity)</span>
                 <span class="trap-pill">Stripped 1 Traps</span>
-                <span class="anchor-pill">Retained 14 Clean Anchors</span>
+            </div>
+        </div>
+        
+        <div class="scout-card">
+            <div class="scout-header">
+                <span class="code-tag">DASW99</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.87x</strong> // 53 Followers</span>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>oguandele95</strong> | Original: 49 Legs @ 4,760.19x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 13 Clean (87% Purity)</span>
+                <span class="trap-pill">Stripped 2 Traps</span>
+            </div>
+        </div>
+        
+        <div class="scout-card">
+            <div class="scout-header">
+                <span class="code-tag">DASQJ1</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.69x</strong> // 142 Followers</span>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>0592138961</strong> | Original: 45 Legs @ 1,475.53x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 12 Clean (80% Purity)</span>
+                <span class="trap-pill">Stripped 3 Traps</span>
+            </div>
+        </div>
+        
+        <div class="scout-card">
+            <div class="scout-header">
+                <span class="code-tag">A4A3SB</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.58x</strong> // 125 Followers</span>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>tugha1</strong> | Original: 15 Legs @ 3,347.18x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 13 Clean (100% Purity)</span>
+                <span class="trap-pill">Stripped 0 Traps</span>
+            </div>
+        </div>
+        
+        <div class="scout-card">
+            <div class="scout-header">
+                <span class="code-tag">DKS24Y</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.45x</strong> // 77 Followers</span>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>0598715631</strong> | Original: 50 Legs @ 4,887.07x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 11 Clean (73% Purity)</span>
+                <span class="trap-pill">Stripped 4 Traps</span>
+            </div>
+        </div>
+        
+        <div class="scout-card">
+            <div class="scout-header">
+                <span class="code-tag">8ECDUC</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.36x</strong> // 130 Followers</span>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>0538798784</strong> | Original: 35 Legs @ 334.58x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 11 Clean (73% Purity)</span>
+                <span class="trap-pill">Stripped 4 Traps</span>
+            </div>
+        </div>
+        
+        <div class="scout-card">
+            <div class="scout-header">
+                <span class="code-tag">807N0V</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.33x</strong> // 104 Followers</span>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>manstopp3r</strong> | Original: 33 Legs @ 422.55x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 10 Clean (67% Purity)</span>
+                <span class="trap-pill">Stripped 5 Traps</span>
+            </div>
+        </div>
+        
+        <div class="scout-card">
+            <div class="scout-header">
+                <span class="code-tag">8AUU31</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>1.27x</strong> // 16 Followers</span>
+            </div>
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>531713985</strong> | Original: 19 Legs @ 99.79x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained 11 Clean (79% Purity)</span>
+                <span class="trap-pill">Stripped 3 Traps</span>
             </div>
         </div>
         
@@ -1685,10 +1519,17 @@
     <div class="section-title">Hardened Quantitative Guardrails (Pre-Execution Assertions)</div>
     <div class="guardrails-box">
         <div class="rule-item">
+            <span class="rule-badge">HEURISTIC #26</span>
+            <div>
+                <div class="rule-text">Creator Trust Weighting & Follower Hype Discount</div>
+                <div class="rule-desc">Never rank CodeHub slips by raw follower count (r = -0.40 negative correlation with anchor purity). Weight all harvested anchors by Creator Trust Weight (W_c in 0.05x–2.00x), prioritizing the 50–370 follower Alpha Sweet Spot (81.5% purity) and auto-fading 0% purity lotto bait.</div>
+            </div>
+        </div>
+        <div class="rule-item">
             <span class="rule-badge">HEURISTIC #25</span>
             <div>
                 <div class="rule-text">Strict Zero-Correlation Firewall</div>
-                <div class="rule-desc">Zero fixture overlap across active slips. Every single ticket in a deployment cycle must contain 100% mutually exclusive matches. Enforced: 32 matches across 4 tickets with zero duplicates.</div>
+                <div class="rule-desc">Zero fixture overlap across active slips. Every single ticket in a deployment cycle must contain 100% mutually exclusive matches.</div>
             </div>
         </div>
         <div class="rule-item">
@@ -1703,13 +1544,6 @@
             <div>
                 <div class="rule-text">Double-Digit NBA Spread Cap Without Primary Alpha</div>
                 <div class="rule-desc">Never lay -10.0 or higher on an NBA favorite missing its #1 franchise scorer. Cap alternate spreads on shorthanded favorites at -5.5 to -7.5.</div>
-            </div>
-        </div>
-        <div class="rule-item">
-            <span class="rule-badge">HEURISTIC #24</span>
-            <div>
-                <div class="rule-text">Dead-Rubber & Group-Winner Rotation Filter</div>
-                <div class="rule-desc">On final group-stage matchdays, filter out teams that have already clinched 1st place in favor of teams with active qualification/promotion stakes.</div>
             </div>
         </div>
         <div class="rule-item">

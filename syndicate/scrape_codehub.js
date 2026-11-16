@@ -153,5 +153,6 @@ c.commit(); c.close()
 
   await S.persistState(context);
   await browser.close();
+  spawnSync('python3', ['creator_trust_engine.py'], { cwd: __dirname, stdio: 'inherit' });
   spawnSync('python3', ['render_syndicate_terminal.py'], { cwd: __dirname, stdio: 'inherit' });
 })();

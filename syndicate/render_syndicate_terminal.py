@@ -2,7 +2,7 @@
 Hermes Syndicate Bloomberg KPI Terminal Generator
 Renders a high-frequency, dark-mode terminal dashboard for the Asymmetric Multi-Week Syndicate.
 Reads from data/syndicate_ledger.sqlite and data/syndicate_heuristics.json.
-Writes directly to the conversation artifact directory and syndicate/dashboard.
+Writes directly to the conversation artifact directory and syndicate/syndicate_terminal.html.
 """
 
 import os
@@ -14,6 +14,7 @@ DB_PATH = os.path.join(BASE_DIR, "data", "syndicate_ledger.sqlite")
 HEURISTICS_PATH = os.path.join(BASE_DIR, "data", "syndicate_heuristics.json")
 ARTIFACT_DIR = "/home/antigravity/.gemini/jetski/brain/v1/default/jetski_remote_agents_3p/4d8d83ff-7ad4-4751-88d8-a6f121d7868e"
 
+
 def load_data():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -23,17 +24,17 @@ def load_data():
     wallet_row = cursor.fetchone()
     wallet = {
         "label": wallet_row[0] if wallet_row else "Telecel_SportyBet_Ghana",
-        "balance": wallet_row[1] if wallet_row else 250.00,
+        "balance": wallet_row[1] if wallet_row else 208.67,
         "currency": wallet_row[2] if wallet_row else "GHS",
         "max_exposure_pct": wallet_row[3] if wallet_row else 0.24,
         "unit_size": wallet_row[4] if wallet_row else 20.00
     }
 
     # Cycle
-    cursor.execute("SELECT cycle_id, start_date, end_date, total_tickets, ticket_stake, total_exposure, status FROM syndicate_cycles LIMIT 1")
+    cursor.execute("SELECT cycle_id, start_date, end_date, total_tickets, ticket_stake, total_exposure, status FROM syndicate_cycles ORDER BY created_at DESC LIMIT 1")
     cycle_row = cursor.fetchone()
     cycle = {
-        "cycle_id": cycle_row[0] if cycle_row else "CYCLE_2026_W47",
+        "cycle_id": cycle_row[0] if cycle_row else "CYCLE_2026_11_16_LIVE",
         "start_date": cycle_row[1] if cycle_row else "2026-11-16",
         "end_date": cycle_row[2] if cycle_row else "2026-11-22",
         "total_tickets": cycle_row[3] if cycle_row else 4,
@@ -42,8 +43,8 @@ def load_data():
         "status": cycle_row[6] if cycle_row else "ACTIVE"
     }
 
-    # Tickets
-    cursor.execute("SELECT ticket_id, ticket_number, title, stake, total_odds, multi_bet_bonus_pct, potential_payout, status FROM syndicate_tickets ORDER BY ticket_number ASC")
+    # Active Booked Tickets only (exclude ABORTED_UNPLACED drafts)
+    cursor.execute("SELECT ticket_id, ticket_number, title, stake, total_odds, multi_bet_bonus_pct, potential_payout, status, booking_code, cashout_value FROM syndicate_tickets WHERE status != 'ABORTED_UNPLACED' ORDER BY ticket_number ASC")
     ticket_rows = cursor.fetchall()
     tickets = []
     for t in ticket_rows:
@@ -58,48 +59,97 @@ def load_data():
 
         tickets.append({
             "id": t[0], "number": t[1], "title": t[2], "stake": t[3],
-            "odds": t[4], "bonus_pct": t[5], "payout": t[6], "status": t[7],
+            "odds": t[4], "bonus_pct": t[5] or 0.0, "payout": t[6] or 0.0, "status": t[7],
+            "code": t[8] or "PENDING", "cashout": t[9] or 0.0,
             "legs": legs
         })
 
-    # CodeHub Scouts
-    cursor.execute("SELECT booking_code, creator_name, followers_count, original_odds, original_legs_count, stripped_traps_count, retained_anchors_count FROM syndicate_codehub_scouts ORDER BY followers_count DESC LIMIT 5")
+    # Active CodeHub Bullets (IN_PROGRESS first, showing booking_code)
+    cursor.execute("SELECT bullet_id, derived_from_code, stake, total_odds, potential_payout, legs_count, status, booking_code FROM syndicate_codehub_bullets WHERE status='IN_PROGRESS' ORDER BY potential_payout DESC")
+    bullet_rows = cursor.fetchall()
+    bullets = []
+    for b in bullet_rows:
+        b_code = b[7] or "N/A"
+        cursor.execute("""
+            SELECT match_name, selection, kickoff_gmt, GROUP_CONCAT(creator_name || ' (' || source_code || ')', ', '), status
+            FROM syndicate_creator_anchor_ledger
+            WHERE booking_code=?
+            GROUP BY match_name, selection, kickoff_gmt
+            ORDER BY kickoff_gmt ASC
+        """, (b_code,))
+        b_legs = [{
+            "match": r[0], "selection": r[1], "kickoff": r[2], "creators": r[3] or "Consensus", "status": r[4]
+        } for r in cursor.fetchall()]
+        bullets.append({
+            "id": b[0], "source_code": b[1], "stake": b[2], "odds": b[3],
+            "payout": b[4], "legs": b[5], "status": b[6], "code": b_code,
+            "leg_details": b_legs
+        })
+
+    # Creator Trust & Perfection Tracking Leaderboard
+    cursor.execute("""
+        SELECT creator_name, latest_code, followers_count, original_folds, original_odds,
+               clean_anchors_retained, traps_stripped, anchor_purity_pct,
+               adopted_legs_total, adopted_legs_won, adopted_legs_lost, adopted_legs_pending,
+               perfection_score_pct, trust_weight, tier
+        FROM syndicate_creator_trust
+        ORDER BY trust_weight DESC, adopted_legs_total DESC, followers_count DESC
+    """)
+    creators = [{
+        "creator": r[0], "code": r[1], "followers": r[2], "folds": r[3], "odds": r[4],
+        "clean": r[5], "traps": r[6], "purity": r[7], "adopted": r[8],
+        "won": r[9], "lost": r[10], "pending": r[11], "perfection": r[12],
+        "weight": r[13], "tier": r[14]
+    } for r in cursor.fetchall()]
+
+    # Creator Correlations
+    cursor.execute("SELECT metric_key, metric_label, metric_value, insight_summary FROM syndicate_creator_correlations")
+    correlations = [{
+        "key": r[0], "label": r[1], "value": r[2], "summary": r[3]
+    } for r in cursor.fetchall()]
+
+    # CodeHub Scouts ordered by Trust Weight instead of raw follower hype
+    cursor.execute("""
+        SELECT s.booking_code, s.creator_name, s.followers_count, s.original_odds,
+               s.original_legs_count, s.stripped_traps_count, s.retained_anchors_count,
+               COALESCE(ct.trust_weight, 0.5), COALESCE(ct.tier, 'ANALYZED'), COALESCE(ct.anchor_purity_pct, 0.0)
+        FROM syndicate_codehub_scouts s
+        LEFT JOIN syndicate_creator_trust ct ON s.creator_name = ct.creator_name
+        ORDER BY COALESCE(ct.trust_weight, 0.5) DESC, s.retained_anchors_count DESC
+        LIMIT 9
+    """)
     scout_rows = cursor.fetchall()
     scouts = [{
         "code": s[0], "creator": s[1], "followers": s[2], "odds": s[3],
-        "legs": s[4], "stripped": s[5], "retained": s[6]
+        "legs": s[4], "stripped": s[5], "retained": s[6],
+        "weight": s[7], "tier": s[8], "purity": s[9]
     } for s in scout_rows]
-
-    # CodeHub Bullets
-    cursor.execute("SELECT bullet_id, derived_from_code, stake, total_odds, potential_payout, legs_count, status FROM syndicate_codehub_bullets LIMIT 5")
-    bullet_rows = cursor.fetchall()
-    bullets = [{
-        "id": b[0], "source_code": b[1], "stake": b[2], "odds": b[3],
-        "payout": b[4], "legs": b[5], "status": b[6]
-    } for b in bullet_rows]
 
     conn.close()
 
-    # Heuristics
     heuristics = {}
     if os.path.exists(HEURISTICS_PATH):
         with open(HEURISTICS_PATH, 'r') as f:
             heuristics = json.load(f)
 
-    return wallet, cycle, tickets, scouts, bullets, heuristics
+    return wallet, cycle, tickets, scouts, bullets, creators, correlations, heuristics
+
 
 def generate_html():
-    wallet, cycle, tickets, scouts, bullets, heuristics = load_data()
+    wallet, cycle, tickets, scouts, bullets, creators, correlations, heuristics = load_data()
 
-    exposure_pct = (cycle["exposure"] / wallet["balance"]) * 100 if wallet["balance"] > 0 else 0
-    total_potential_returns = sum(t["payout"] for t in tickets)
+    total_active_exposure = cycle["exposure"] + sum(b["stake"] for b in bullets)
+    exposure_pct = (total_active_exposure / wallet["balance"]) * 100 if wallet["balance"] > 0 else 0
+    core_returns = sum(t["payout"] for t in tickets)
+    bullet_returns = sum(b["payout"] for b in bullets)
+    total_potential_returns = core_returns + bullet_returns
 
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HERMES SYNDICATE // BLOOMBERG KPI TERMINAL</title>
+    <title>JAC // HERMES ASYMMETRIC SYNDICATE TERMINAL</title>
     <style>
         :root {{
             --bg-dark: #0a0e14;
@@ -129,6 +179,8 @@ def generate_html():
             border-bottom: 2px solid var(--accent-cyan);
             padding-bottom: 12px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
         }}
         .logo-group h1 {{
             font-size: 20px;
@@ -217,6 +269,8 @@ def generate_html():
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--card-border);
+            flex-wrap: wrap;
+            gap: 6px;
         }}
         .ticket-header h3 {{
             font-size: 13px;
@@ -235,11 +289,12 @@ def generate_html():
         }}
         .legs-table th {{
             text-align: left;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.25);
             padding: 8px 12px;
             color: var(--text-muted);
             border-bottom: 1px solid var(--card-border);
-            font-weight: 500;
+            font-weight: 600;
+            font-family: var(--mono-font);
         }}
         .legs-table td {{
             padding: 8px 12px;
@@ -359,17 +414,55 @@ def generate_html():
             border-radius: 3px;
             font-size: 10px;
         }}
+        .tier-elite {{
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: bold;
+        }}
+        .tier-sharp {{
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: bold;
+        }}
+        .tier-probation {{
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+        }}
+        .tier-faded {{
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+        }}
     </style>
 </head>
 <body>
 
     <div class="header">
         <div class="logo-group">
-            <h1>HERMES // ASYMMETRIC SYNDICATE TERMINAL</h1>
-            <p>7-DAY ROLLING HORIZON (NOV 16 – NOV 22) // TELECEL SPORTYBET GHANA ACCOUNT</p>
+            <h1>JAC // HERMES ASYMMETRIC SYNDICATE TERMINAL</h1>
+            <p>7-DAY ROLLING HORIZON (NOV 16 – NOV 22) // TELECEL SPORTYBET GHANA ACCOUNT // 3X DAILY CODEHUB WINDOWS (06:00, 14:00, 20:00 GMT)</p>
         </div>
         <div class="status-badge">
-            ● SENTINEL ONLINE // HEURISTICS #22–#25 LOCKED
+            ● 24/7 DAEMON + CREATOR TRUST ENGINE ACTIVE
         </div>
     </div>
 
@@ -378,27 +471,153 @@ def generate_html():
         <div class="stat-card">
             <div class="stat-label">Telecel Liquid Wallet</div>
             <div class="stat-value">{wallet["balance"]:.2f} {wallet["currency"]}</div>
-            <div class="stat-sub">Max Permissible Exposure (24%): {(wallet["balance"] * wallet["max_exposure_pct"]):.2f} GHS</div>
+            <div class="stat-sub">Untouched Cash Reserve After 22.00 GHS Active Stakes</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Active Cycle Exposure</div>
-            <div class="stat-value">{cycle["exposure"]:.2f} GHS</div>
-            <div class="stat-sub">{exposure_pct:.1f}% of Wallet // 4 Tickets @ 5.00 GHS</div>
+            <div class="stat-label">Active Portfolio Exposure</div>
+            <div class="stat-value">{total_active_exposure:.2f} GHS</div>
+            <div class="stat-sub">4 Core Tickets (20 GHS) + 1 Monster 20-Fold (2 GHS)</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Aggregate Cycle Return Potential</div>
-            <div class="stat-value" style="color: var(--accent-green);">{total_potential_returns:.2f} GHS</div>
-            <div class="stat-sub">Multiplier: {(total_potential_returns / cycle["exposure"]):.1f}x Total Exposure</div>
+            <div class="stat-label">Aggregate Return Potential</div>
+            <div class="stat-value" style="color: var(--accent-green);">{total_potential_returns:,.2f} GHS</div>
+            <div class="stat-sub">Core: {core_returns:.2f} GHS + Monster D8WJHX: {bullet_returns:,.2f} GHS</div>
         </div>
         <div class="stat-card">
-            <div class="stat-label">Correlation Defense</div>
-            <div class="stat-value" style="color: var(--accent-cyan);">0.00% OVERLAP</div>
-            <div class="stat-sub">32 Matches 100% Mutually Exclusive</div>
+            <div class="stat-label">Creator Trust & Correlation</div>
+            <div class="stat-value" style="color: var(--accent-cyan);">24 CREATORS</div>
+            <div class="stat-sub">5 Elite Alpha (2.0x) // 5 Verified Sharp // 8 Faded Traps</div>
+        </div>
+    </div>
+
+    <!-- Staked CodeHub Monster Accumulator Section -->
+    <div class="section-title">Staked CodeHub Monster Accumulator (Live Booked Slip: D8WJHX)</div>
+    <div style="margin-bottom: 28px;">
+    """
+
+    for b in bullets:
+        html += f"""
+        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold);">
+            <div class="ticket-header">
+                <h3>20-Fold CodeHub Consensus Monster Accumulator <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: {b["code"]}</span></h3>
+                <span class="ticket-meta">STAKE: {b["stake"]:.2f} GHS | BASE ODDS: {b["odds"]:,.2f}x (+ Win Bonus) | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">{b["payout"]:,.2f} GHS</strong> | STATUS: {b["status"]}</span>
+            </div>
+            <table class="legs-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Kickoff (GMT)</th>
+                        <th>Fixture</th>
+                        <th>Selection (1X2)</th>
+                        <th>Endorsing CodeHub Creators (Source Slips)</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+        """
+        for idx, leg in enumerate(b["leg_details"], 1):
+            html += f"""
+                    <tr>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">{idx}</td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">{leg["kickoff"].replace("2026-", "")}</td>
+                        <td class="match-cell">{leg["match"]}</td>
+                        <td class="selection-cell">{leg["selection"]}</td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">{leg["creators"]}</td>
+                        <td><span class="anchor-pill">{leg["status"]}</span></td>
+                    </tr>
+            """
+        html += f"""
+                </tbody>
+            </table>
+            <div class="card-footer">
+                <div>Booking Code: <strong style="color: var(--accent-gold);">{b["code"]}</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">{b["source_code"]}</span></div>
+                <div>Total Potential Win: <span class="payout-val">{b["payout"]:,.2f} GHS</span></div>
+            </div>
+        </div>
+        """
+
+    html += f"""
+    </div>
+
+    <!-- Creator Reliability, Perfection Tracking & Correlation Telemetry -->
+    <div class="section-title">CodeHub Creator Reliability KPI, Perfection Model & Correlation Telemetry</div>
+    <div class="grid-stats" style="margin-bottom: 18px;">
+    """
+
+    for c in correlations:
+        val_str = f"{c['value']:+.2f}" if "R_" in c["key"] else f"{c['value']:.1f}%"
+        val_color = "var(--accent-red)" if c["value"] < 0 else "var(--accent-green)"
+        html += f"""
+        <div class="stat-card">
+            <div class="stat-label">{c["label"]}</div>
+            <div class="stat-value" style="color: {val_color};">{val_str}</div>
+            <div class="stat-sub" style="color: var(--text-muted); line-height: 1.35; margin-top: 6px;">{c["summary"]}</div>
+        </div>
+        """
+
+    html += """
+    </div>
+
+    <div class="ticket-card" style="margin-bottom: 28px; border-top: 3px solid var(--accent-green);">
+        <div class="ticket-header">
+            <h3>Creator Trustworthiness & Bayesian Perfection Matrix (Live Selection Weights)</h3>
+            <span class="ticket-meta">Formula: W_c = 0.50(Purity) + 0.30(CleanVolume) + 0.20(YieldEfficiency) + RealizedHitAdjustment</span>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="legs-table">
+                <thead>
+                    <tr>
+                        <th>Creator Handle</th>
+                        <th>Latest Slip</th>
+                        <th>Followers</th>
+                        <th>Original Slip Odds</th>
+                        <th>Clean Anchors</th>
+                        <th>Traps Purged</th>
+                        <th>Anchor Purity %</th>
+                        <th>Adopted on D8WJHX</th>
+                        <th>Bayesian Perfection</th>
+                        <th>Trust Weight</th>
+                        <th>Model Classification</th>
+                    </tr>
+                </thead>
+                <tbody>
+    """
+
+    for cr in creators:
+        if "ELITE" in cr["tier"]:
+            tier_cls = "tier-elite"
+        elif "SHARP" in cr["tier"]:
+            tier_cls = "tier-sharp"
+        elif "PROBATION" in cr["tier"]:
+            tier_cls = "tier-probation"
+        else:
+            tier_cls = "tier-faded"
+
+        purity_color = "var(--accent-green)" if cr["purity"] >= 70 else ("var(--accent-gold)" if cr["purity"] >= 40 else "var(--accent-red)")
+        html += f"""
+                    <tr>
+                        <td class="match-cell" style="font-family: var(--mono-font);">{cr["creator"]}</td>
+                        <td><span class="code-tag" style="font-size: 10px; padding: 2px 6px;">{cr["code"]}</span></td>
+                        <td style="font-family: var(--mono-font); color: var(--text-muted);">{cr["followers"]:,}</td>
+                        <td class="odds-cell">{cr["odds"]:,.2f}x <span style="color: var(--text-muted); font-weight: normal;">({cr["folds"]}F)</span></td>
+                        <td style="color: var(--accent-green); font-family: var(--mono-font); font-weight: bold;">{cr["clean"]}</td>
+                        <td style="color: var(--accent-red); font-family: var(--mono-font);">{cr["traps"]}</td>
+                        <td style="color: {purity_color}; font-family: var(--mono-font); font-weight: bold;">{cr["purity"]:.1f}%</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold;">{cr["adopted"]} legs ({cr["won"]}W-{cr["lost"]}L-{cr["pending"]}P)</td>
+                        <td style="font-family: var(--mono-font); color: var(--accent-gold);">{cr["perfection"]:.1f}%</td>
+                        <td style="font-family: var(--mono-font); font-weight: 700; color: var(--text-main);">{cr["weight"]:.2f}x</td>
+                        <td><span class="{tier_cls}">{cr["tier"]}</span></td>
+                    </tr>
+        """
+
+    html += """
+                </tbody>
+            </table>
         </div>
     </div>
 
     <!-- The 4 Core Syndicate Tickets -->
-    <div class="section-title">Core Asymmetric Multi-Week Portfolio (4 Independent Tickets)</div>
+    <div class="section-title">Core Asymmetric Multi-Week Portfolio (4 Independent Tickets @ 5.00 GHS)</div>
     <div class="ticket-grid">
 """
 
@@ -406,8 +625,8 @@ def generate_html():
         html += f"""
         <div class="ticket-card">
             <div class="ticket-header">
-                <h3>{t["title"]}</h3>
-                <span class="ticket-meta">STAKE: {t["stake"]:.2f} GHS | ODDS: {t["odds"]}x</span>
+                <h3>{t["title"]} <span class="code-tag" style="margin-left:8px;">CODE: {t["code"]}</span></h3>
+                <span class="ticket-meta">STAKE: {t["stake"]:.2f} GHS | ODDS: {t["odds"]}x | STATUS: {t["status"]}</span>
             </div>
             <table class="legs-table">
                 <thead>
@@ -439,7 +658,7 @@ def generate_html():
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>SportyBet Bonus: <strong>+{int(t["bonus_pct"]*100)}%</strong></div>
+                <div>Booking Code: <strong style="color: var(--accent-cyan);">{t["code"]}</strong></div>
                 <div>Potential Payout: <span class="payout-val">{t["payout"]:.2f} GHS</span></div>
             </div>
         </div>
@@ -448,8 +667,8 @@ def generate_html():
     html += f"""
     </div>
 
-    <!-- CodeHub Asymmetric Scout Section -->
-    <div class="section-title">CodeHub Asymmetric Scout Feed (Human Bets vs House Defense)</div>
+    <!-- CodeHub Asymmetric Scout Section (Ranked by Creator Trust Weight) -->
+    <div class="section-title">CodeHub Asymmetric Scout Feed (Ranked by Creator Trust Weight, Not Raw Follower Hype)</div>
     <div class="codehub-grid">
     """
 
@@ -458,27 +677,34 @@ def generate_html():
         <div class="scout-card">
             <div class="scout-header">
                 <span class="code-tag">{s["code"]}</span>
-                <span style="color: var(--accent-gold); font-size: 11px;">{s["followers"]} Followers</span>
+                <span style="color: var(--accent-gold); font-size: 11px;">Trust: <strong>{s["weight"]:.2f}x</strong> // {s["followers"]} Followers</span>
             </div>
-            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>{s["creator"]}</strong> | Original: {s["legs"]} Legs @ {s["odds"]}x</div>
-            <div style="display: flex; gap: 8px; margin-top: 8px;">
+            <div style="font-size: 12px; margin-bottom: 6px;">Creator: <strong>{s["creator"]}</strong> | Original: {s["legs"]} Legs @ {s["odds"]:,.2f}x</div>
+            <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
+                <span class="anchor-pill">Retained {s["retained"]} Clean ({s["purity"]:.0f}% Purity)</span>
                 <span class="trap-pill">Stripped {s["stripped"]} Traps</span>
-                <span class="anchor-pill">Retained {s["retained"]} Clean Anchors</span>
             </div>
         </div>
         """
 
-    html += f"""
+    html += """
     </div>
 
     <!-- Hardened Quantitative Guardrails Matrix -->
     <div class="section-title">Hardened Quantitative Guardrails (Pre-Execution Assertions)</div>
     <div class="guardrails-box">
         <div class="rule-item">
+            <span class="rule-badge">HEURISTIC #26</span>
+            <div>
+                <div class="rule-text">Creator Trust Weighting & Follower Hype Discount</div>
+                <div class="rule-desc">Never rank CodeHub slips by raw follower count (r = -0.40 negative correlation with anchor purity). Weight all harvested anchors by Creator Trust Weight (W_c in 0.05x–2.00x), prioritizing the 50–370 follower Alpha Sweet Spot (81.5% purity) and auto-fading 0% purity lotto bait.</div>
+            </div>
+        </div>
+        <div class="rule-item">
             <span class="rule-badge">HEURISTIC #25</span>
             <div>
                 <div class="rule-text">Strict Zero-Correlation Firewall</div>
-                <div class="rule-desc">Zero fixture overlap across active slips. Every single ticket in a deployment cycle must contain 100% mutually exclusive matches. Enforced: 32 matches across 4 tickets with zero duplicates.</div>
+                <div class="rule-desc">Zero fixture overlap across active slips. Every single ticket in a deployment cycle must contain 100% mutually exclusive matches.</div>
             </div>
         </div>
         <div class="rule-item">
@@ -496,13 +722,6 @@ def generate_html():
             </div>
         </div>
         <div class="rule-item">
-            <span class="rule-badge">HEURISTIC #24</span>
-            <div>
-                <div class="rule-text">Dead-Rubber & Group-Winner Rotation Filter</div>
-                <div class="rule-desc">On final group-stage matchdays, filter out teams that have already clinched 1st place in favor of teams with active qualification/promotion stakes.</div>
-            </div>
-        </div>
-        <div class="rule-item">
             <span class="rule-badge">ARBITRAGE MATH</span>
             <div>
                 <div class="rule-text">Chronological Staggering & Arbitrage Cashout Protocol</div>
@@ -516,16 +735,15 @@ def generate_html():
 """
     return html
 
+
 if __name__ == "__main__":
     content = generate_html()
-    
-    # Save in syndicate directory
+
     out_path = os.path.join(BASE_DIR, "syndicate", "syndicate_terminal.html")
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(content)
     print(f"[SyndicateTerminal] Rendered HTML terminal to: {out_path}")
 
-    # Also save directly to artifact directory for UI display
     os.makedirs(ARTIFACT_DIR, exist_ok=True)
     artifact_path = os.path.join(ARTIFACT_DIR, "syndicate_kpi_terminal.html")
     with open(artifact_path, 'w', encoding='utf-8') as f:

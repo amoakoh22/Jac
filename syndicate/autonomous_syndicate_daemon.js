@@ -101,8 +101,10 @@ print(json.dumps(exp))
       const balMatch = monOut.match(/Live Balance:\s*GHS\s*([0-9,.]+)/i);
       if (balMatch) log(`[Telemetry] Wallet: GHS ${balMatch[1]}`);
 
-      // 2. Self-Learning Post-Mortem & Experience Calibration
+      // 2. Self-Learning Post-Mortem & Creator Trust Calibration
       runLearningLoop();
+      spawnSync('python3', ['syndicate/creator_trust_engine.py'], { cwd: ROOT_DIR, encoding: 'utf8' });
+      spawnSync('python3', ['syndicate/render_syndicate_terminal.py'], { cwd: ROOT_DIR, encoding: 'utf8' });
 
       // 3. Sync sanitized Syndicate Terminal to root index.html & docs/index.html inside Jac repo
       const termSrc = path.join(ROOT_DIR, 'syndicate', 'syndicate_terminal.html');
@@ -113,15 +115,17 @@ print(json.dumps(exp))
         spawnSync('bash', ['-c', 'git add index.html docs/index.html syndicate/syndicate_terminal.html data/syndicate_ledger.sqlite && ! git diff --staged --quiet && git commit -m "chore(jac-daemon): live terminal & ledger telemetry sync" && git pull --rebase origin main && git push origin main'], { cwd: ROOT_DIR, timeout: 30000 });
       }
 
-      // 4. Every 12 ticks (~60 mins): CodeHub Fresh Scout & Session Keep-Alive
-      if (tick === 1 || tick % 12 === 0) {
-        log('[CodeHub] Running hourly live CodeHub intelligence & trap-purge...');
+      // 4. Intelligent 3x Daily Pre-Slate CodeHub Scout Windows (06:00, 14:00, 20:00 GMT)
+      const now = new Date();
+      const utcH = now.getUTCHours();
+      const utcM = now.getUTCMinutes();
+      if ([6, 14, 20].includes(utcH) && utcM >= 0 && utcM < 6) {
+        log(`[CodeHub Window ${utcH}:00 GMT] Running scheduled pre-slate CodeHub intelligence & creator trust audit...`);
         runScript('syndicate/scrape_codehub.js');
       }
 
-      // 4. Daily 05:30 GMT: Refresh live fixtures cache for next cycle
-      const now = new Date();
-      if (now.getUTCHours() === 5 && now.getUTCMinutes() >= 30 && now.getUTCMinutes() < 36) {
+      // 5. Daily 05:30 GMT: Refresh live fixtures cache for next cycle
+      if (utcH === 5 && utcM >= 30 && utcM < 36) {
         log('[05:30 GMT Gate] Harvesting fresh daily fixtures...');
         runScript('syndicate/harvest_live_fixtures.js');
       }
