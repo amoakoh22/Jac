@@ -121,10 +121,7 @@ def calibrate_creator_trust():
 
     now = datetime.utcnow().isoformat()
 
-    # Clear old ledger before re-mapping clean anchors
-    cur.execute("DELETE FROM syndicate_creator_anchor_ledger")
-
-    # Map staked monster legs to endorsing creators from raw_slip_json (clean anchors only)
+    # Map staked monster legs to endorsing creators from raw_slip_json (preserve existing WON/LOST/VOID statuses)
     for s_code, creator, followers, orig_odds, orig_folds, traps, clean, raw_json in scouts:
         if (clean or 0) == 0:
             continue
@@ -150,7 +147,7 @@ def calibrate_creator_trust():
             if matched:
                 lid = f"{m_leg['booking_code']}_{creator}_{m_leg['home'].replace(' ', '')}"
                 cur.execute("""
-                    INSERT OR REPLACE INTO syndicate_creator_anchor_ledger
+                    INSERT OR IGNORE INTO syndicate_creator_anchor_ledger
                     (ledger_id, bullet_id, booking_code, creator_name, source_code, match_name, selection, kickoff_gmt, status, updated_at)
                     VALUES (?,?,?,?,?,?,?,?,?,?)
                 """, (lid, m_leg["bullet_id"], m_leg["booking_code"], creator, s_code, f"{m_leg['home']} vs {m_leg['away']}", m_leg["selection"], m_leg["kickoff"], "IN_PROGRESS", now))

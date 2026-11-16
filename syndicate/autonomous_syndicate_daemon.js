@@ -96,8 +96,8 @@ print(json.dumps(exp))
     tick++;
     log(`--- Cycle #${tick} starting ---`);
     try {
-      // 1. Live Open/Settled Bets + Balance + Cashout Audit + Terminal Sync
-      const monOut = runScript('syndicate/monitor_syndicate_bets.js');
+      // 1. Live Open/Settled Bets + Balance + Auto-Cashout + Survivor Re-Bullet + Leg-Level Learning
+      const monOut = runScript('syndicate/monitor_syndicate_bets.js', { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
       const balMatch = monOut.match(/Live Balance:\s*GHS\s*([0-9,.]+)/i);
       if (balMatch) log(`[Telemetry] Wallet: GHS ${balMatch[1]}`);
 

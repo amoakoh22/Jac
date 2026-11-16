@@ -694,6 +694,13 @@ def generate_html():
     <div class="section-title">Hardened Quantitative Guardrails (Pre-Execution Assertions)</div>
     <div class="guardrails-box">
         <div class="rule-item">
+            <span class="rule-badge">HEURISTIC #27</span>
+            <div>
+                <div class="rule-text">Autonomous Cashout Profit-Lock & Survivor Re-Bullet Protocol</div>
+                <div class="rule-desc">Unified 5-minute daemon monitors both Core Tickets and Monster Bullets (D8WJHX). Automatically locks Cashout if Core Ticket equity >= 92% (or >= 100 GHS) or Monster Bullet offer >= 150 GHS (75x stake). If an early leg busts a Monster Bullet while >= 8 clean legs remain, automatically deploys 1 GHS 2.00 Survivor Bullet (max 1/24h, min balance 50 GHS) and updates creator leg-level trust weights.</div>
+            </div>
+        </div>
+        <div class="rule-item">
             <span class="rule-badge">HEURISTIC #26</span>
             <div>
                 <div class="rule-text">Creator Trust Weighting & Follower Hype Discount</div>
