@@ -1,0 +1,291 @@
+[
+ {
+  "ticket": 1,
+  "stake": "5",
+  "legs": [
+   {
+    "home": "Central African Republic",
+    "away": "Benin",
+    "idx": 2,
+    "odds": 1.46,
+    "page": "football",
+    "ko": "16:00",
+    "league": "AFCON Qual"
+   },
+   {
+    "home": "Iceland",
+    "away": "Luxembourg",
+    "idx": 0,
+    "odds": 1.2,
+    "page": "football",
+    "ko": "17:00",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "Andorra",
+    "away": "Azerbaijan",
+    "idx": 2,
+    "odds": 1.84,
+    "page": "football",
+    "ko": "18:00",
+    "league": "Int. Friendly"
+   },
+   {
+    "home": "Leones de Rosario",
+    "away": "CS Barracas",
+    "idx": 0,
+    "odds": 1.48,
+    "page": "football",
+    "ko": "18:00",
+    "league": "Argentina Primera C"
+   },
+   {
+    "home": "Guadeloupe",
+    "away": "Bermuda",
+    "idx": 0,
+    "odds": 1.13,
+    "page": "football",
+    "ko": "19:00",
+    "league": "CONCACAF NL"
+   },
+   {
+    "home": "Albacete",
+    "away": "Celta Fortuna",
+    "idx": 0,
+    "odds": 1.62,
+    "page": "football",
+    "ko": "19:30",
+    "league": "LaLiga Hypermotion"
+   },
+   {
+    "home": "Brooklyn Nets",
+    "away": "Philadelphia 76ers",
+    "idx": 1,
+    "odds": 1.47,
+    "page": "nba",
+    "ko": "00:30",
+    "league": "NBA"
+   },
+   {
+    "home": "Denver Nuggets",
+    "away": "Phoenix Suns",
+    "idx": 0,
+    "odds": 1.26,
+    "page": "nba",
+    "ko": "02:00",
+    "league": "NBA"
+   }
+  ],
+  "est_odds": 16.18
+ },
+ {
+  "ticket": 2,
+  "stake": "5",
+  "legs": [
+   {
+    "home": "Eritrea",
+    "away": "Guinea",
+    "idx": 2,
+    "odds": 1.48,
+    "page": "football",
+    "ko": "16:00",
+    "league": "AFCON Qual"
+   },
+   {
+    "home": "VfB Stuttgart",
+    "away": "Bayer Leverkusen",
+    "idx": 2,
+    "odds": 1.59,
+    "page": "football",
+    "ko": "17:00",
+    "league": "Women Bundesliga"
+   },
+   {
+    "home": "Lithuania",
+    "away": "Liechtenstein",
+    "idx": 0,
+    "odds": 1.13,
+    "page": "football",
+    "ko": "17:00",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "Union de Santa Fe",
+    "away": "Racing Club",
+    "idx": 2,
+    "odds": 1.25,
+    "page": "football",
+    "ko": "18:00",
+    "league": "Argentina Women"
+   },
+   {
+    "home": "Gibraltar",
+    "away": "Malta",
+    "idx": 2,
+    "odds": 1.61,
+    "page": "football",
+    "ko": "19:45",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "Miami Heat",
+    "away": "Houston Rockets",
+    "idx": 1,
+    "odds": 1.71,
+    "page": "nba",
+    "ko": "00:30",
+    "league": "NBA"
+   },
+   {
+    "home": "Minnesota Timberwolves",
+    "away": "Portland Trail Blazers",
+    "idx": 0,
+    "odds": 1.79,
+    "page": "nba",
+    "ko": "01:00",
+    "league": "NBA"
+   }
+  ],
+  "est_odds": 16.38
+ },
+ {
+  "ticket": 3,
+  "stake": "5",
+  "legs": [
+   {
+    "home": "Tatran Presov",
+    "away": "MFK Zvolen",
+    "idx": 0,
+    "odds": 1.57,
+    "page": "football",
+    "ko": "16:00",
+    "league": "Slovakia 2. Liga"
+   },
+   {
+    "home": "Guyana",
+    "away": "Puerto Rico",
+    "idx": 0,
+    "odds": 1.76,
+    "page": "football",
+    "ko": "19:00",
+    "league": "CONCACAF NL"
+   },
+   {
+    "home": "Norwich City U21",
+    "away": "Exeter City",
+    "idx": 0,
+    "odds": 1.24,
+    "page": "football",
+    "ko": "19:00",
+    "league": "PL Cup"
+   },
+   {
+    "home": "Cuba",
+    "away": "Grenada",
+    "idx": 0,
+    "odds": 1.27,
+    "page": "football",
+    "ko": "19:00",
+    "league": "CONCACAF NL"
+   },
+   {
+    "home": "Switzerland",
+    "away": "Scotland",
+    "idx": 0,
+    "odds": 1.88,
+    "page": "football",
+    "ko": "19:45",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "Boston Celtics",
+    "away": "Orlando Magic",
+    "idx": 0,
+    "odds": 1.28,
+    "page": "nba",
+    "ko": "00:00",
+    "league": "NBA"
+   },
+   {
+    "home": "New Orleans Pelicans",
+    "away": "Golden State Warriors",
+    "idx": 1,
+    "odds": 1.63,
+    "page": "nba",
+    "ko": "01:00",
+    "league": "NBA"
+   }
+  ],
+  "est_odds": 17.07
+ },
+ {
+  "ticket": 4,
+  "stake": "5",
+  "legs": [
+   {
+    "home": "Atletico Lanus",
+    "away": "Talleres",
+    "idx": 2,
+    "odds": 1.29,
+    "page": "football",
+    "ko": "18:00",
+    "league": "Argentina Women"
+   },
+   {
+    "home": "Plymouth Argyle",
+    "away": "Leicester City U21",
+    "idx": 2,
+    "odds": 1.38,
+    "page": "football",
+    "ko": "19:00",
+    "league": "PL Cup"
+   },
+   {
+    "home": "Greece",
+    "away": "Serbia",
+    "idx": 0,
+    "odds": 1.47,
+    "page": "football",
+    "ko": "19:45",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "Germany",
+    "away": "Netherlands",
+    "idx": 0,
+    "odds": 1.94,
+    "page": "football",
+    "ko": "19:45",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "North Macedonia",
+    "away": "Slovenia",
+    "idx": 2,
+    "odds": 1.58,
+    "page": "football",
+    "ko": "19:45",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "Cleveland Cavaliers",
+    "away": "Chicago Bulls",
+    "idx": 0,
+    "odds": 1.27,
+    "page": "nba",
+    "ko": "00:00",
+    "league": "NBA"
+   },
+   {
+    "home": "Washington Wizards",
+    "away": "Memphis Grizzlies",
+    "idx": 1,
+    "odds": 1.64,
+    "page": "nba",
+    "ko": "00:00",
+    "league": "NBA"
+   }
+  ],
+  "est_odds": 16.71
+ }
+]

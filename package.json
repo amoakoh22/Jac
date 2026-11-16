@@ -1,0 +1,16 @@
+{
+  "name": "bermesi",
+  "version": "1.0.0",
+  "description": "Bermesi Autonomous Betting Agent Harness (Hermes Engine 4.2) with DPAPI Vault & Playwright/CDP Dual Browser Automation",
+  "main": "bin/bermesi_cli.js",
+  "scripts": {
+    "test": "node test/engine_test.js",
+    "test:browser": "node test/playwright_test.js",
+    "status": "node bin/bermesi_cli.js status",
+    "slate": "node bin/bermesi_cli.js slate",
+    "daemon": "node daemon/bermesi_daemon.js"
+  },
+  "dependencies": {
+    "playwright-core": "^1.65.1"
+  }
+}

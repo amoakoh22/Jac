@@ -1,0 +1,72 @@
+[
+ {
+  "ticket": 2,
+  "stake": "5",
+  "legs": [
+   {
+    "home": "Eritrea",
+    "away": "Guinea",
+    "idx": 2,
+    "odds": 1.48,
+    "page": "football",
+    "ko": "16:00",
+    "league": "AFCON Qual"
+   },
+   {
+    "home": "VfB Stuttgart",
+    "away": "Bayer Leverkusen",
+    "idx": 2,
+    "odds": 1.59,
+    "page": "football",
+    "ko": "17:00",
+    "league": "Women Bundesliga"
+   },
+   {
+    "home": "Lithuania",
+    "away": "Liechtenstein",
+    "idx": 0,
+    "odds": 1.13,
+    "page": "football",
+    "ko": "17:00",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "England",
+    "away": "France",
+    "idx": 0,
+    "odds": 2.1,
+    "page": "football",
+    "ko": "19:30",
+    "league": "U21 Friendly"
+   },
+   {
+    "home": "Gibraltar",
+    "away": "Malta",
+    "idx": 2,
+    "odds": 1.61,
+    "page": "football",
+    "ko": "19:45",
+    "league": "UEFA Nations League"
+   },
+   {
+    "home": "Miami Heat",
+    "away": "Houston Rockets",
+    "idx": 1,
+    "odds": 1.71,
+    "page": "nba",
+    "ko": "00:30",
+    "league": "NBA"
+   },
+   {
+    "home": "Minnesota Timberwolves",
+    "away": "Portland Trail Blazers",
+    "idx": 0,
+    "odds": 1.79,
+    "page": "nba",
+    "ko": "01:00",
+    "league": "NBA"
+   }
+  ],
+  "est_odds": 16.38
+ }
+]

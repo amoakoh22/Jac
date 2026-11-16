@@ -1,0 +1,69 @@
+name: Jac 24/7 Autonomous Monitor, Learning Loop & CodeHub Scout
+
+on:
+  schedule:
+    # Free unlimited public runner schedule: 06:00, 08:30, 14:00, 20:00, and 01:00 GMT
+    - cron: '0 6 * * *'
+    - cron: '30 8 * * *'
+    - cron: '0 14 * * *'
+    - cron: '0 20 * * *'
+    - cron: '0 1 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Execution mode (auto, monitor, codehub)'
+        required: false
+        default: 'auto'
+
+permissions:
+  contents: write
+
+jobs:
+  jac-syndicate-engine:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      JACK_AUTHENTICATED_STATE_JSON: ${{ secrets.JACK_AUTHENTICATED_STATE_JSON }}
+
+    steps:
+      - name: Checkout Jac Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22 & Python 3
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Playwright & Chromium
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Hydrate Trusted Telecel SportyBet Session State
+        run: |
+          mkdir -p runtime/logs/screenshots
+          if [ -n "$JACK_AUTHENTICATED_STATE_JSON" ]; then
+            echo "$JACK_AUTHENTICATED_STATE_JSON" > runtime/jack_authenticated_state.json
+          fi
+
+      - name: Execute Jac Monitor, Learning Loop & CodeHub Scout
+        run: |
+          node syndicate/github_syndicate_cron.js
+          cp syndicate/syndicate_terminal.html index.html
+          mkdir -p docs
+          cp syndicate/syndicate_terminal.html docs/index.html
+
+      - name: Commit Updated Syndicate Ledger & Terminal
+        run: |
+          git config user.name "Jac Autonomous Engine"
+          git config user.email "jac-syndicate@users.noreply.github.com"
+          git add data/syndicate_ledger.sqlite syndicate/syndicate_terminal.html index.html docs/index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(jac-cron): sync live ledger, settlements & terminal"
+            git pull --rebase origin main
+            git push origin main
+          else
+            echo "No syndicate ledger changes to commit."
+          fi

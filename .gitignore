@@ -1,0 +1,18 @@
+# Jac (Hermes Syndicate) Security & Environment GitIgnore
+# NEVER commit credentials, cookies, storageState, or browser profiles
+
+runtime/
+!runtime/.gitkeep
+*.key
+*.enc
+*.bin
+*credentials*.json
+*vault*.json
+*authenticated_state*.json
+*auth_state*.json
+node_modules/
+npm-debug.log*
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

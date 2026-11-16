@@ -1,0 +1,70 @@
+{
+  "version": "2.0.0-syndicate",
+  "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
+  "last_updated": "2026-11-16T13:29:41.389Z",
+  "rules": {
+    "rule_22_nba_spread_cap_missing_alpha": {
+      "id": 22,
+      "name": "Double-Digit NBA Spread Cap Without Primary Alpha",
+      "description": "Never lay -10.0 or higher on an NBA favorite missing its #1 franchise scorer. Cap alternate spreads on shorthanded favorites at -5.5 to -7.5.",
+      "max_spread_without_alpha": -7.5,
+      "hard_forbidden_threshold": -10,
+      "active": true
+    },
+    "rule_23_zero_handicap_stretching": {
+      "id": 23,
+      "name": "Zero Handicap Stretching",
+      "description": "Never stretch a handicap deeper (e.g. -5.5 to -10.5 or 0:1 to 0:2) to artificially manufacture higher odds. If odds fall below value threshold, drop match and substitute clean primary market.",
+      "allow_stretched_handicap": false,
+      "active": true
+    },
+    "rule_24_dead_rubber_rotation_filter": {
+      "id": 24,
+      "name": "Dead-Rubber & Group-Winner Rotation Filter",
+      "description": "On final group-stage matchdays or end-of-season fixtures, filter out teams that have already clinched 1st place in favor of teams with active qualification/promotion stakes.",
+      "disallow_clinched_teams": true,
+      "active": true
+    },
+    "rule_25_zero_correlation_firewall": {
+      "id": 25,
+      "name": "Strict Zero-Correlation Firewall",
+      "description": "Zero fixture overlap across active slips. Every single ticket in a deployment cycle must contain 100% mutually exclusive matches.",
+      "allow_fixture_overlap": false,
+      "active": true
+    },
+    "pricing_liquidity_filter": {
+      "id": "P1",
+      "name": "Market Liquidity & Pricing Filter",
+      "description": "Reject dead-money legs below 1.15 on singles or 1.12 on accumulators unless justified by overwhelming statistical dominance.",
+      "min_accumulator_leg_odds": 1.12,
+      "min_single_leg_odds": 1.15,
+      "active": true
+    },
+    "codehub_trap_filter": {
+      "id": "CH1",
+      "name": "CodeHub Asymmetric Scout Trap Filter",
+      "description": "Strip 1.02–1.07 3-way handicaps (0:3/2:0), 1st-half under traps, and bloated 40-leg lotteries. Retain only verified Tier-1 anchors.",
+      "forbidden_handicap_min_odds": 1.02,
+      "forbidden_handicap_max_odds": 1.07,
+      "max_codehub_legs": 15,
+      "disallow_first_half_unders": true,
+      "max_bullets_budget": 5,
+      "bullet_stake": 1,
+      "active": true
+    },
+    "arbitrage_hedge_protocol": {
+      "id": "ARB1",
+      "name": "Chronological Arbitrage & Live Hedge Lock",
+      "description": "Trigger Principal Protection or Equalized Arbitrage Lock when potential payout reaches >= 5x cycle exposure.",
+      "min_payout_multiplier_trigger": 5,
+      "cashout_equity_ratio_trigger": 0.92,
+      "active": true
+    }
+  },
+  "dynamic_weights": {
+    "road_b2b_penalty": 0.15,
+    "home_court_boost": 1.08,
+    "post_international_break_away_penalty": 0.12
+  },
+  "calibration_log": []
+}
