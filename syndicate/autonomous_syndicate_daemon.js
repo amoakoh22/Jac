@@ -97,7 +97,15 @@ print(json.dumps(exp))
     log(`--- Cycle #${tick} starting ---`);
     try {
       // 1. Live Open/Settled Bets + Balance + Auto-Cashout + Survivor Re-Bullet + Leg-Level Learning
-      const monOut = runScript('syndicate/monitor_syndicate_bets.js', { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
+      let monOut = runScript('syndicate/monitor_syndicate_bets.js', { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
+      if (monOut.includes('Stored session invalid')) {
+        log('[SessionSelfHeal] Stored session expired — running active_login_sentinel.js...');
+        const authOut = runScript('syndicate/active_login_sentinel.js');
+        if (authOut.includes('AUTHENTICATED')) {
+          log('[SessionSelfHeal] Re-authenticated cleanly — retrying monitor pass...');
+          monOut = runScript('syndicate/monitor_syndicate_bets.js', { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
+        }
+      }
       const balMatch = monOut.match(/Live Balance:\s*GHS\s*([0-9,.]+)/i);
       if (balMatch) log(`[Telemetry] Wallet: GHS ${balMatch[1]}`);
 
