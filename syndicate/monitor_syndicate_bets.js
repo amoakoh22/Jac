@@ -44,30 +44,47 @@ tickets = c.execute("""
     SELECT ticket_id, ticket_number, booking_code, stake, total_odds, potential_payout
     FROM syndicate_tickets WHERE status='IN_PROGRESS'
 """).fetchall()
+t_list = []
+for r in tickets:
+    legs = [x[0] for x in c.execute("SELECT match_name FROM syndicate_legs WHERE ticket_id=?", (r[0],)).fetchall()]
+    t_list.append(dict(kind="TICKET", id=r[0], number=r[1], code=r[2], stake=r[3], total_odds=r[4], potential_payout=r[5], matches=legs))
 
 bullets = c.execute("""
     SELECT bullet_id, booking_code, stake, total_odds, potential_payout, legs_count
     FROM syndicate_codehub_bullets WHERE status='IN_PROGRESS'
 """).fetchall()
+b_list = []
+for r in bullets:
+    legs = [x[0] for x in c.execute("SELECT DISTINCT match_name FROM syndicate_creator_anchor_ledger WHERE booking_code=?", (r[1],)).fetchall()]
+    b_list.append(dict(kind="BULLET", id=r[0], number=r[5], code=r[1], stake=r[2], total_odds=r[3], potential_payout=r[4], matches=legs))
 
-print(json.dumps({
-    "tickets": [dict(kind="TICKET", id=r[0], number=r[1], code=r[2], stake=r[3], total_odds=r[4], potential_payout=r[5]) for r in tickets],
-    "bullets": [dict(kind="BULLET", id=r[0], number=r[5], code=r[1], stake=r[2], total_odds=r[3], potential_payout=r[4]) for r in bullets]
-}))
+print(json.dumps({"tickets": t_list, "bullets": b_list}))
 `);
   return JSON.parse(out.trim() || '{"tickets":[],"bullets":[]}');
 }
 
-async function scrapeBetCards(page, url) {
-  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 35000 });
-  await page.waitForTimeout(4000);
+async function scrapeBetCards(page, mode) {
+  if (mode === 'OPEN') {
+    await page.goto('https://www.sportybet.com/gh/m/my_accounts/open_bets', { waitUntil: 'domcontentloaded', timeout: 35000 });
+    await page.waitForTimeout(3500);
+  } else {
+    // Click the "Bet History" tab on the Open Bets page (/settled_bets is 404)
+    await page.goto('https://www.sportybet.com/gh/m/my_accounts/open_bets', { waitUntil: 'domcontentloaded', timeout: 35000 });
+    await page.waitForTimeout(3000);
+    await page.evaluate(() => {
+      const tab = Array.from(document.querySelectorAll('div, span, a, li')).find(e => (e.innerText || '').trim() === 'Bet History');
+      if (tab) tab.click();
+    });
+    await page.waitForTimeout(4000);
+  }
+
   for (let i = 0; i < 4; i++) {
     await page.evaluate(() => {
       const mid = document.querySelector('.m-main-mid') || document.scrollingElement;
       if (mid) mid.scrollTop += 600;
       window.scrollBy(0, 600);
     });
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(450);
   }
   await page.evaluate(() => {
     const mid = document.querySelector('.m-main-mid');
@@ -98,13 +115,39 @@ async function scrapeBetCards(page, url) {
   });
 }
 
-async function extractBulletLegOutcomes(page, bookingCode) {
-  // Click into the matching bet card to inspect individual leg statuses (Won / Lost / Void)
-  const clicked = await page.evaluate((code) => {
+function findMatchingCard(cards, item) {
+  const code = item.code || '';
+  // 1. Direct booking code match if visible
+  if (code) {
+    const byCode = cards.find(c => c.text.includes(code));
+    if (byCode) return byCode;
+  }
+  // 2. Match by exact Stake + at least one leg team keyword from item.matches
+  const stakeStr = item.stake.toFixed(2);
+  const teamKeywords = [];
+  for (const m of (item.matches || [])) {
+    for (const side of m.split(/\s+vs\s+/i)) {
+      const clean = side.replace(/\b(FC|CF|AFC|SC|U21|CA|1\.|de|la)\b/gi, '').trim();
+      if (clean.length >= 4) teamKeywords.push(clean);
+    }
+  }
+  return cards.find(c => {
+    const hasStake = c.text.includes(stakeStr);
+    if (!hasStake) return false;
+    return teamKeywords.some(kw => c.text.includes(kw));
+  });
+}
+
+async function extractBulletLegOutcomes(page, item) {
+  const stakeStr = item.stake.toFixed(2);
+  const keywords = (item.matches || []).slice(0, 3).map(m => m.split(/\s+vs\s+/i)[0].trim()).filter(Boolean);
+  const clicked = await page.evaluate(({ code, stakeStr, keywords }) => {
     const els = Array.from(document.querySelectorAll('.m-order-card, .order-item, [class*="order-card"], [class*="bet-card"], div, li'));
     const target = els.find(el => {
       const t = el.innerText || '';
-      return t.includes(code) && t.length < 2500 && el.querySelectorAll('div').length < 50;
+      if (t.length >= 2500 || el.querySelectorAll('div').length >= 50) return false;
+      if (code && t.includes(code)) return true;
+      return t.includes(stakeStr) && keywords.some(k => t.includes(k));
     });
     if (target) {
       target.scrollIntoView({ block: 'center' });
@@ -112,7 +155,7 @@ async function extractBulletLegOutcomes(page, bookingCode) {
       return true;
     }
     return false;
-  }, bookingCode);
+  }, { code: item.code || '', stakeStr, keywords });
 
   if (!clicked) return [];
   await page.waitForTimeout(2500);
@@ -124,7 +167,6 @@ async function extractBulletLegOutcomes(page, bookingCode) {
       .filter(Boolean);
   });
 
-  // Parse leg blocks: look for match strings ("Home vs Away" or "Home v Away") paired with Won/Lost/Void nearby
   const outcomes = [];
   for (let i = 0; i < legLines.length; i++) {
     const line = legLines[i];
@@ -140,12 +182,16 @@ async function extractBulletLegOutcomes(page, bookingCode) {
   return outcomes;
 }
 
-async function executeCashoutOnPage(page, bookingCode) {
-  const clicked = await page.evaluate((code) => {
+async function executeCashoutOnPage(page, item) {
+  const stakeStr = item.stake.toFixed(2);
+  const keywords = (item.matches || []).slice(0, 3).map(m => m.split(/\s+vs\s+/i)[0].trim()).filter(Boolean);
+  const clicked = await page.evaluate(({ code, stakeStr, keywords }) => {
     const els = Array.from(document.querySelectorAll('.m-order-card, .order-item, [class*="order-card"], [class*="bet-card"], div, li'));
     const card = els.find(el => {
       const t = el.innerText || '';
-      return t.includes(code) && t.length < 2500 && el.querySelectorAll('div').length < 50;
+      if (t.length >= 2500 || el.querySelectorAll('div').length >= 50) return false;
+      if (code && t.includes(code)) return true;
+      return t.includes(stakeStr) && keywords.some(k => t.includes(k));
     });
     if (!card) return false;
     const btn = card.querySelector('[data-op*="cashout"], [class*="cashout"], button');
@@ -155,12 +201,11 @@ async function executeCashoutOnPage(page, bookingCode) {
       return true;
     }
     return false;
-  }, bookingCode);
+  }, { code: item.code || '', stakeStr, keywords });
 
   if (!clicked) return false;
   await page.waitForTimeout(1500);
 
-  // Confirm cashout dialog if present
   const confirmed = await page.evaluate(() => {
     const btns = Array.from(document.querySelectorAll('button, .es-dialog-btn, .m-btn, div'))
       .filter(e => e.offsetParent !== null && /^(confirm|cashout|ok|yes)$/i.test((e.innerText || '').trim()));
@@ -194,11 +239,11 @@ async function executeCashoutOnPage(page, bookingCode) {
   }
   console.log(`[Wallet] Live Balance: GHS ${sess.balance.toFixed(2)}`);
 
-  const openData = await scrapeBetCards(page, 'https://www.sportybet.com/gh/m/my_accounts/open_bets');
+  const openData = await scrapeBetCards(page, 'OPEN');
   await page.screenshot({ path: path.join(S.SCREENSHOT_DIR, 'monitor_open_bets.png'), fullPage: true });
   console.log(`[OpenBets] Extracted ${openData.cards.length} card elements.`);
 
-  const settledData = await scrapeBetCards(page, 'https://www.sportybet.com/gh/m/my_accounts/settled_bets');
+  const settledData = await scrapeBetCards(page, 'SETTLED');
   await page.screenshot({ path: path.join(S.SCREENSHOT_DIR, 'monitor_settled_bets.png'), fullPage: true });
   console.log(`[SettledBets] Extracted ${settledData.cards.length} card elements.`);
 
@@ -208,8 +253,8 @@ async function executeCashoutOnPage(page, bookingCode) {
 
   for (const item of allItems) {
     const code = item.code || '';
-    const openMatch = openData.cards.find(c => code && c.text.includes(code));
-    const settledMatch = settledData.cards.find(c => code && c.text.includes(code));
+    const openMatch = findMatchingCard(openData.cards, item);
+    const settledMatch = findMatchingCard(settledData.cards, item);
 
     let status = 'IN_PROGRESS';
     let cashoutOffer = 0.0;
@@ -231,7 +276,7 @@ async function executeCashoutOnPage(page, bookingCode) {
         console.log(`[AUTO-CASHOUT TRIGGERED] ${item.kind} ${code} offering GHS ${cashoutOffer.toFixed(2)} (${(equity * 100).toFixed(1)}% equity)!`);
         await page.goto('https://www.sportybet.com/gh/m/my_accounts/open_bets', { waitUntil: 'domcontentloaded', timeout: 35000 });
         await page.waitForTimeout(3000);
-        const ok = await executeCashoutOnPage(page, code);
+        const ok = await executeCashoutOnPage(page, item);
         if (ok) {
           status = 'CASHED_OUT';
           realizedReturn = cashoutOffer;
@@ -257,9 +302,14 @@ async function executeCashoutOnPage(page, bookingCode) {
       if (item.kind === 'BULLET') {
         if (status === 'LOST') bustedBulletDetected = true;
         // Extract per-leg WON / LOST / VOID statuses for creator trust attribution
-        await page.goto('https://www.sportybet.com/gh/m/my_accounts/settled_bets', { waitUntil: 'domcontentloaded', timeout: 35000 });
+        await page.goto('https://www.sportybet.com/gh/m/my_accounts/open_bets', { waitUntil: 'domcontentloaded', timeout: 35000 });
         await page.waitForTimeout(2500);
-        const legResults = await extractBulletLegOutcomes(page, code);
+        await page.evaluate(() => {
+          const tab = Array.from(document.querySelectorAll('div, span, a, li')).find(e => (e.innerText || '').trim() === 'Bet History');
+          if (tab) tab.click();
+        });
+        await page.waitForTimeout(3000);
+        const legResults = await extractBulletLegOutcomes(page, item);
         console.log(`  [LegAudit | ${code}] Extracted ${legResults.length} individual leg outcomes.`);
         for (const lr of legResults) {
           legOutcomeUpdates.push({ booking_code: code, ...lr });
