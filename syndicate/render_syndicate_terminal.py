@@ -510,7 +510,7 @@ def generate_html():
                         <th>#</th>
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
-                        <th>Selection (1X2)</th>
+                        <th>Selection (Multi-Market)</th>
                         <th>Endorsing CodeHub Creators (Source Slips)</th>
                         <th>Status</th>
                     </tr>
@@ -576,7 +576,7 @@ def generate_html():
                         <th>Clean Anchors</th>
                         <th>Traps Purged</th>
                         <th>Anchor Purity %</th>
-                        <th>Adopted on D8WJHX</th>
+                        <th>Adopted on Monsters</th>
                         <th>Bayesian Perfection</th>
                         <th>Trust Weight</th>
                         <th>Model Classification</th>

@@ -40,7 +40,7 @@ const DB_PATH = path.join(S.ROOT_DIR, 'data', 'syndicate_ledger.sqlite');
         const followers = parseInt(fMatch[1].replace(/,/g, ''), 10);
         let code = null, folds = 0, odds = 0;
         const legs = [];
-        for (let j = i + 1; j < Math.min(lines.length, i + 140); j++) {
+        for (let j = i + 1; j < Math.min(lines.length, i + 650); j++) {
           if (/^[0-9,]+\s+Followers$/i.test(lines[j])) break;
           if (!code && /^[A-Z0-9]{6,8}$/.test(lines[j])) code = lines[j];
           const fm = lines[j].match(/^Folds:\s*([0-9]+)/i);
