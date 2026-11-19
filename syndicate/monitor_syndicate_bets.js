@@ -229,6 +229,16 @@ async function executeCashoutOnPage(page, item) {
   console.log(`[Monitor] Tracking ${portfolio.tickets.length} Core Tickets + ${portfolio.bullets.length} Monster Bullets:`, allItems.map(t => t.code).join(', '));
 
   const { browser, context, page } = await S.launchBrowser();
+  const liveOpenBetsApi = [];
+  page.on('response', async (res) => {
+    if (res.url().includes('/api/gh/realSportsGame/openbets?')) {
+      try {
+        const j = await res.json();
+        const list = j?.data?.cashAbleBets || [];
+        if (Array.isArray(list)) liveOpenBetsApi.push(...list);
+      } catch {}
+    }
+  });
   await page.goto('https://www.sportybet.com/gh/m/', { waitUntil: 'domcontentloaded', timeout: 35000 });
   await page.waitForTimeout(3000);
   const sess = await S.readSession(page);
@@ -241,7 +251,7 @@ async function executeCashoutOnPage(page, item) {
 
   const openData = await scrapeBetCards(page, 'OPEN');
   await page.screenshot({ path: path.join(S.SCREENSHOT_DIR, 'monitor_open_bets.png'), fullPage: true });
-  console.log(`[OpenBets] Extracted ${openData.cards.length} card elements.`);
+  console.log(`[OpenBets] Extracted ${openData.cards.length} card elements (${liveOpenBetsApi.length} API orders).`);
 
   const settledData = await scrapeBetCards(page, 'SETTLED');
   await page.screenshot({ path: path.join(S.SCREENSHOT_DIR, 'monitor_settled_bets.png'), fullPage: true });
@@ -249,6 +259,19 @@ async function executeCashoutOnPage(page, item) {
 
   const updates = [];
   const legOutcomeUpdates = [];
+  for (const ob of liveOpenBetsApi) {
+    const sels = ob.selections || [];
+    for (const s of sels) {
+      if (s.isSettled === 1) {
+        const st = s.settleStatus === 1 ? 'WON' : (s.settleStatus === 2 ? 'LOST' : 'VOID');
+        legOutcomeUpdates.push({
+          booking_code: null,
+          matchText: `${s.home} vs ${s.away}`,
+          status: st
+        });
+      }
+    }
+  }
   let bustedBulletDetected = false;
 
   for (const item of allItems) {
@@ -364,10 +387,13 @@ for u in json.loads(${JSON.stringify(JSON.stringify(updates))}):
 # Apply per-leg WON/LOST/VOID outcomes to syndicate_creator_anchor_ledger
 for lr in json.loads(${JSON.stringify(JSON.stringify(legOutcomeUpdates))}):
     m_txt = lr['matchText'].lower()
-    rows = c.execute("SELECT ledger_id, match_name FROM syndicate_creator_anchor_ledger WHERE booking_code=?", (lr['booking_code'],)).fetchall()
+    if lr.get('booking_code'):
+        rows = c.execute("SELECT ledger_id, match_name FROM syndicate_creator_anchor_ledger WHERE booking_code=?", (lr['booking_code'],)).fetchall()
+    else:
+        rows = c.execute("SELECT ledger_id, match_name FROM syndicate_creator_anchor_ledger WHERE LOWER(match_name)=?", (m_txt,)).fetchall()
     for lid, mname in rows:
         parts = [p.strip().lower() for p in mname.split(' vs ')]
-        if any(len(p) >= 4 and p in m_txt for p in parts):
+        if mname.lower() == m_txt or any(len(p) >= 4 and p in m_txt for p in parts):
             c.execute("UPDATE syndicate_creator_anchor_ledger SET status=?, updated_at=? WHERE ledger_id=?", (lr['status'], now, lid))
 
 c.commit(); c.close()
