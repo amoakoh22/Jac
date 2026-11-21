@@ -59,6 +59,22 @@
       "min_payout_multiplier_trigger": 5,
       "cashout_equity_ratio_trigger": 0.92,
       "active": true
+    },
+    "rule_28_friday_postmortem_market_ban": {
+      "id": 28,
+      "name": "Post-Mortem Fragile Market Ban (1H NG / -1 Hcp / 2H O0.5)",
+      "description": "Empirically banned after Nov 20 settlements: 1H GG/NG: No (double-bust on Troyes 3-1 & Metz 2-1), -1 Handicaps on heavy favorites (Bayern 1-1 Cologne), 2H Over 0.5 (AGF Aarhus 2-1 all goals in 1H), and Dutch Eerste Divisie Over 2.0 traps.",
+      "banned_markets": ["1H_GG_NG_NO", "HCP_0_1_FAV", "2H_OVER_0_5", "EERSTE_DIVISIE_OVER_2"],
+      "active": true
+    },
+    "rule_29_zero_vig_bonus_sweet_spot": {
+      "id": 29,
+      "name": "Zero-Vig >=1.20 Multi-Bet Bonus Sweet Spot (19-25 Folds for 100x-300x)",
+      "description": "Target 19-25 disjoint legs @ 1.20-1.38 (Betradar RTP >= 96.5%) across Poisson Ceilings (1H U2.5, Match U4.5, Team Under) and Draw-Protected Shields (DC 1X/X2, 2UP) to capture SportyBet's free +55%-80% bonus with 10x-30x higher win probability than 45-fold tickets.",
+      "min_leg_odds": 1.20,
+      "max_leg_odds": 1.38,
+      "min_betradar_rtp": 0.965,
+      "active": true
     }
   },
   "dynamic_weights": {
@@ -66,5 +82,11 @@
     "home_court_boost": 1.08,
     "post_international_break_away_penalty": 0.12
   },
-  "calibration_log": []
+  "calibration_log": [
+    {
+      "date": "2026-11-21",
+      "event": "Friday Nov 20 Post-Mortem Audit",
+      "finding": "9MJSC0 (Troyes Home @2.22 -> GHS 2.61 cashout) and C36TTY (5/50 98.7% tail sweep) survived; 5 slips busted on 1H NG, Bayern -1 Hcp, Athletic Bilbao 1X2, and 2H O0.5. Enforced Rule #28 & #29 for V8/V9/V10 100x+ set."
+    }
+  ]
 }
