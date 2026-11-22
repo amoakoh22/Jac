@@ -1,7 +1,7 @@
 {
-  "version": "2.0.0-syndicate",
+  "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-16T13:29:41.389Z",
+  "last_updated": "2026-11-22T15:10:19Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -43,7 +43,7 @@
     "codehub_trap_filter": {
       "id": "CH1",
       "name": "CodeHub Asymmetric Scout Trap Filter",
-      "description": "Strip 1.02–1.07 3-way handicaps (0:3/2:0), 1st-half under traps, and bloated 40-leg lotteries. Retain only verified Tier-1 anchors.",
+      "description": "Strip 1.02\u20131.07 3-way handicaps (0:3/2:0), 1st-half under traps, and bloated 40-leg lotteries. Retain only verified Tier-1 anchors.",
       "forbidden_handicap_min_odds": 1.02,
       "forbidden_handicap_max_odds": 1.07,
       "max_codehub_legs": 15,
@@ -64,29 +64,207 @@
       "id": 28,
       "name": "Post-Mortem Fragile Market Ban (1H NG / -1 Hcp / 2H O0.5)",
       "description": "Empirically banned after Nov 20 settlements: 1H GG/NG: No (double-bust on Troyes 3-1 & Metz 2-1), -1 Handicaps on heavy favorites (Bayern 1-1 Cologne), 2H Over 0.5 (AGF Aarhus 2-1 all goals in 1H), and Dutch Eerste Divisie Over 2.0 traps.",
-      "banned_markets": ["1H_GG_NG_NO", "HCP_0_1_FAV", "2H_OVER_0_5", "EERSTE_DIVISIE_OVER_2"],
-      "active": true
+      "banned_markets": [
+        "1H_GG_NG_NO",
+        "HCP_0_1_FAV",
+        "2H_OVER_0_5",
+        "EERSTE_DIVISIE_OVER_2",
+        "1H_UNDER_2_5",
+        "PLAIN_1X2_FAV_ACCUM",
+        "1X2_1UP",
+        "UNDER_4_5"
+      ],
+      "active": true,
+      "banned_market_league_pairs": [
+        {
+          "market": "OVER_2_0",
+          "league_pattern": "Eerste Divisie",
+          "reason": "93VVCD Den Bosch 1-0"
+        },
+        {
+          "market": "UNDER_4_5",
+          "league_pattern": "Premiership",
+          "reason": "BKJ0JX Kilmarnock 2-4 Aberdeen"
+        },
+        {
+          "market": "OVER_1_5",
+          "league_pattern": "Championship",
+          "reason": "808QK6 Millwall 0-1 QPR"
+        },
+        {
+          "market": "1X2_1UP",
+          "league_pattern": "Ligue 1",
+          "reason": "Auto-banned by closed-loop learner (0W-3L, gap=-0.78)"
+        },
+        {
+          "market": "UNDER_4_5",
+          "league_pattern": "Ligue 1",
+          "reason": "Auto-banned by closed-loop learner (0W-2L, gap=-0.79)"
+        }
+      ]
     },
     "rule_29_zero_vig_bonus_sweet_spot": {
       "id": 29,
-      "name": "Zero-Vig >=1.20 Multi-Bet Bonus Sweet Spot (19-25 Folds for 100x-300x)",
-      "description": "Target 19-25 disjoint legs @ 1.20-1.38 (Betradar RTP >= 96.5%) across Poisson Ceilings (1H U2.5, Match U4.5, Team Under) and Draw-Protected Shields (DC 1X/X2, 2UP) to capture SportyBet's free +55%-80% bonus with 10x-30x higher win probability than 45-fold tickets.",
-      "min_leg_odds": 1.20,
-      "max_leg_odds": 1.38,
-      "min_betradar_rtp": 0.965,
-      "active": true
+      "name": "Zero-Vig >=1.20 Multi-Bet Bonus Sweet Spot (20-35 Folds for 100x+ +EV)",
+      "description": "Target 20-35 disjoint legs @ 1.20-1.45 with Betradar RTP >= 98.0% and true ticket EV >= 1.02 via SportyBet Multi-Bet Win Bonus (excluding Rule #28 banned markets and market-league traps).",
+      "min_leg_odds": 1.2,
+      "max_leg_odds": 1.45,
+      "min_betradar_rtp": 0.98,
+      "active": true,
+      "min_ticket_ev": 1.02
     }
   },
   "dynamic_weights": {
     "road_b2b_penalty": 0.15,
     "home_court_boost": 1.08,
-    "post_international_break_away_penalty": 0.12
+    "post_international_break_away_penalty": 0.12,
+    "market_risk_weights": {
+      "1H_GG_NG_NO": {
+        "won": 6,
+        "lost": 3,
+        "empirical_hit_rate": 0.6667,
+        "penalty": 0.2933,
+        "banned": true
+      },
+      "1H_UNDER": {
+        "won": 2,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0312,
+        "banned": false
+      },
+      "1H_UNDER_2_5": {
+        "won": 17,
+        "lost": 2,
+        "empirical_hit_rate": 0.8947,
+        "penalty": 0.0792,
+        "banned": true
+      },
+      "1X2_1UP": {
+        "won": 3,
+        "lost": 3,
+        "empirical_hit_rate": 0.5,
+        "penalty": 0.5121,
+        "banned": true
+      },
+      "1X2_2UP": {
+        "won": 5,
+        "lost": 1,
+        "empirical_hit_rate": 0.8333,
+        "penalty": 0.0469,
+        "banned": false
+      },
+      "2H_OVER_0_5": {
+        "won": 2,
+        "lost": 3,
+        "empirical_hit_rate": 0.4,
+        "penalty": 0.6548,
+        "banned": true
+      },
+      "DOUBLE_CHANCE": {
+        "won": 1,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0417,
+        "banned": false
+      },
+      "HANDICAP_OTHER": {
+        "won": 1,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0417,
+        "banned": false
+      },
+      "HCP_0_1_FAV": {
+        "won": 1,
+        "lost": 1,
+        "empirical_hit_rate": 0.5,
+        "penalty": 0.4675,
+        "banned": true
+      },
+      "OTHER_MARKET": {
+        "won": 6,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0156,
+        "banned": false
+      },
+      "OVER_1_5": {
+        "won": 10,
+        "lost": 1,
+        "empirical_hit_rate": 0.9091,
+        "penalty": 0.0288,
+        "banned": false
+      },
+      "OVER_2_0": {
+        "won": 0,
+        "lost": 1,
+        "empirical_hit_rate": 0.0,
+        "penalty": 1.11,
+        "banned": false
+      },
+      "PLAIN_1X2_FAV_ACCUM": {
+        "won": 12,
+        "lost": 11,
+        "empirical_hit_rate": 0.5217,
+        "penalty": 0.4883,
+        "banned": true
+      },
+      "TEAM_OVER_0_5": {
+        "won": 2,
+        "lost": 1,
+        "empirical_hit_rate": 0.6667,
+        "penalty": 0.3266,
+        "banned": false
+      },
+      "UNDER_1_5": {
+        "won": 1,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0417,
+        "banned": false
+      },
+      "UNDER_2_5": {
+        "won": 6,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0156,
+        "banned": false
+      },
+      "UNDER_3_5": {
+        "won": 4,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0208,
+        "banned": false
+      },
+      "UNDER_4_5": {
+        "won": 5,
+        "lost": 3,
+        "empirical_hit_rate": 0.625,
+        "penalty": 0.3587,
+        "banned": true
+      },
+      "EERSTE_DIVISIE_OVER_2": {
+        "won": 0,
+        "lost": 0,
+        "empirical_hit_rate": 0.0,
+        "penalty": 1.0,
+        "banned": true
+      }
+    }
   },
   "calibration_log": [
     {
       "date": "2026-11-21",
       "event": "Friday Nov 20 Post-Mortem Audit",
       "finding": "9MJSC0 (Troyes Home @2.22 -> GHS 2.61 cashout) and C36TTY (5/50 98.7% tail sweep) survived; 5 slips busted on 1H NG, Bayern -1 Hcp, Athletic Bilbao 1X2, and 2H O0.5. Enforced Rule #28 & #29 for V8/V9/V10 100x+ set."
+    },
+    {
+      "date": "2026-11-21",
+      "timestamp": "2026-11-21T19:21:17Z",
+      "event": "Closed-Loop Learner v3.0.0 Calibration",
+      "finding": "Audited all settled core tickets + Monster Bullets (+30 new leg post-mortems). Locked 8 banned markets, 3 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
     }
   ]
 }

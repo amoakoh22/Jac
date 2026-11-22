@@ -37,53 +37,16 @@ function runScript(relPath, envExtra = {}) {
 }
 
 function runLearningLoop() {
-  const pyCode = `
-import sqlite3, json, os
-from datetime import datetime
-db = ${JSON.stringify(DB_PATH)}
-exp_path = ${JSON.stringify(EXP_FILE)}
-c = sqlite3.connect(db)
-settled = c.execute("""
-    SELECT ticket_id, booking_code, stake, total_odds, potential_payout, status, realized_pnl
-    FROM syndicate_tickets WHERE status IN ('WON', 'LOST')
-""").fetchall()
-already = set(r[0] for r in c.execute("SELECT DISTINCT ticket_id FROM syndicate_post_mortems").fetchall())
-new_audits = 0
-for tid, code, stake, odds, pw, st, pnl in settled:
-    if tid in already:
-        continue
-    cat = 'EDGE_REALIZED' if st == 'WON' else 'VARIANCE_OR_TACTICAL_MISS'
-    summary = f"Ticket {tid} ({code}) settled {st} | Stake {stake} | Odds {odds} | PnL {pnl}"
-    rule = "Maintain uncorrelated multi-sport spread" if st == 'WON' else "Audit losing leg odds band and market type"
-    c.execute("INSERT INTO syndicate_post_mortems (ticket_id, timestamp, failure_category, tactical_summary, preventative_rule_added) VALUES (?,?,?,?,?)",
-              (tid, datetime.utcnow().isoformat(), cat, summary, rule))
-    new_audits += 1
-
-stats = c.execute("""
-    SELECT COUNT(*),
-           SUM(CASE WHEN status='WON' THEN 1 ELSE 0 END),
-           SUM(CASE WHEN status='LOST' THEN 1 ELSE 0 END),
-           SUM(CASE WHEN status='IN_PROGRESS' THEN 1 ELSE 0 END),
-           COALESCE(SUM(realized_pnl), 0)
-    FROM syndicate_tickets WHERE status IN ('WON','LOST','IN_PROGRESS')
-""").fetchone()
-c.commit(); c.close()
-
-exp = {
-    "updated_at": datetime.utcnow().isoformat(),
-    "total_tracked": stats[0],
-    "won": stats[1] or 0,
-    "lost": stats[2] or 0,
-    "in_progress": stats[3] or 0,
-    "realized_pnl_ghs": round(stats[4] or 0.0, 2),
-    "new_post_mortems_logged": new_audits
-}
-with open(exp_path, 'w') as f:
-    json.dump(exp, f, indent=2)
-print(json.dumps(exp))
-`;
-  const r = spawnSync('python3', ['-c', pyCode], { encoding: 'utf8' });
-  if (r.stdout) log(`[LearningLoop] ${r.stdout.trim()}`);
+  const r = spawnSync('python3', ['syndicate/closed_loop_learner.py'], {
+    cwd: ROOT_DIR,
+    encoding: 'utf8',
+    timeout: 120000
+  });
+  if (r.status !== 0) {
+    log(`[WARN] closed_loop_learner.py exited ${r.status}: ${(r.stderr || r.stdout || '').slice(-300)}`);
+  } else if (r.stdout) {
+    log(`[LearningLoop] ${r.stdout.trim().replace(/\s+/g, ' ').slice(0, 400)}`);
+  }
 }
 
 (async () => {
@@ -97,6 +60,7 @@ print(json.dumps(exp))
     log(`--- Cycle #${tick} starting ---`);
     try {
       // 1. Live Open/Settled Bets + Balance + Auto-Cashout + Survivor Re-Bullet + Leg-Level Learning
+      //    (monitor_syndicate_bets.js already invokes closed_loop_learner.py, creator_trust_engine.py, and render_syndicate_terminal.py)
       let monOut = runScript('syndicate/monitor_syndicate_bets.js', { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
       if (monOut.includes('Stored session invalid')) {
         log('[SessionSelfHeal] Stored session expired — running active_login_sentinel.js...');
@@ -109,10 +73,11 @@ print(json.dumps(exp))
       const balMatch = monOut.match(/Live Balance:\s*GHS\s*([0-9,.]+)/i);
       if (balMatch) log(`[Telemetry] Wallet: GHS ${balMatch[1]}`);
 
-      // 2. Self-Learning Post-Mortem & Creator Trust Calibration
-      runLearningLoop();
-      spawnSync('python3', ['syndicate/creator_trust_engine.py'], { cwd: ROOT_DIR, encoding: 'utf8' });
-      spawnSync('python3', ['syndicate/render_syndicate_terminal.py'], { cwd: ROOT_DIR, encoding: 'utf8' });
+      // 2. Ensure closed-loop learning runs even if monitor had 0 active items
+      if (monOut.includes('No IN_PROGRESS syndicate tickets')) {
+        runLearningLoop();
+        spawnSync('python3', ['syndicate/render_syndicate_terminal.py'], { cwd: ROOT_DIR, encoding: 'utf8' });
+      }
 
       // 3. Sync sanitized Syndicate Terminal to root index.html & docs/index.html inside Jac repo
       const termSrc = path.join(ROOT_DIR, 'syndicate', 'syndicate_terminal.html');

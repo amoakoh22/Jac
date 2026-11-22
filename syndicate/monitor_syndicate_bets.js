@@ -33,7 +33,9 @@ function py(code) {
 function getActivePortfolio() {
   const out = py(`
 import sqlite3, json
-c = sqlite3.connect(${JSON.stringify(DB_PATH)})
+c = sqlite3.connect(${JSON.stringify(DB_PATH)}, timeout=15.0)
+c.execute("PRAGMA journal_mode=WAL;")
+c.execute("PRAGMA busy_timeout=15000;")
 # Ensure cashout_value column exists on syndicate_codehub_bullets
 cols = [r[1] for r in c.execute("PRAGMA table_info(syndicate_codehub_bullets)").fetchall()]
 if 'cashout_value' not in cols:
@@ -61,6 +63,25 @@ for r in bullets:
 print(json.dumps({"tickets": t_list, "bullets": b_list}))
 `);
   return JSON.parse(out.trim() || '{"tickets":[],"bullets":[]}');
+}
+
+function normalizeMatchName(name) {
+  return String(name || '')
+    .toLowerCase()
+    .replace(/\b(fc|cf|afc|sc|ac|as|us|fk|sk|bk|ca|cd|ud|sd|u21|u23|1\.)\b/g, ' ')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function matchSidesOverlap(normA, normB) {
+  if (!normA || !normB) return false;
+  if (normA === normB) return true;
+  const partsA = normA.split(/\s+v(?:s)?\s+/);
+  const partsB = normB.split(/\s+v(?:s)?\s+/);
+  if (partsA.length !== 2 || partsB.length !== 2) return false;
+  const sideMatch = (a, b) => a === b || (a.length >= 4 && b.includes(a)) || (b.length >= 4 && a.includes(b));
+  return sideMatch(partsA[0], partsB[0]) && sideMatch(partsA[1], partsB[1]);
 }
 
 async function scrapeBetCards(page, mode) {
@@ -95,16 +116,18 @@ async function scrapeBetCards(page, mode) {
 
   return page.evaluate(() => {
     const selectors = '.m-order-card, .order-item, [class*="order-card"], [class*="bet-card"], [class*="bet-list-item"]';
-    let cards = Array.from(document.querySelectorAll(selectors));
-    if (cards.length === 0) {
-      cards = Array.from(document.querySelectorAll('div, li')).filter(el => {
+    let rawCards = Array.from(document.querySelectorAll(selectors));
+    if (rawCards.length === 0) {
+      rawCards = Array.from(document.querySelectorAll('div, li')).filter(el => {
         const t = el.innerText || '';
-        return t.length > 30 && t.length < 2500 && (t.includes('Stake') || t.includes('Cashout') || t.includes('Won') || t.includes('Lost')) && el.querySelectorAll('div').length < 50;
+        return t.length > 30 && t.length < 1800 && (t.includes('Stake') || t.includes('Cashout') || t.includes('Won') || t.includes('Lost')) && el.querySelectorAll('div').length < 35;
       });
     }
+    // Keep ONLY leaf bet-card elements (exclude wrapper containers holding nested cards)
+    const leafCards = rawCards.filter(el => !rawCards.some(other => other !== el && el.contains(other)));
     const bodyText = document.body ? document.body.innerText : '';
     return {
-      cards: cards.map((c, idx) => ({
+      cards: leafCards.map((c, idx) => ({
         idx,
         text: (c.innerText || '').replace(/\s+/g, ' ').trim(),
         rawLines: (c.innerText || '').split('\n').map(s => s.trim()).filter(Boolean),
@@ -117,25 +140,66 @@ async function scrapeBetCards(page, mode) {
 
 function findMatchingCard(cards, item) {
   const code = item.code || '';
-  // 1. Direct booking code match if visible
+  // 1. Direct booking code match if visible (prefer smallest leaf card)
   if (code) {
-    const byCode = cards.find(c => c.text.includes(code));
-    if (byCode) return byCode;
+    const byCode = cards
+      .filter(c => c.text.includes(code))
+      .sort((a, b) => a.text.length - b.text.length);
+    if (byCode.length > 0) return byCode[0];
   }
-  // 2. Match by exact Stake + at least one leg team keyword from item.matches
+  // 2. Match by exact Stake + at least 2 distinct match team hits (or 1 if single-leg), preferring smallest leaf card
   const stakeStr = item.stake.toFixed(2);
-  const teamKeywords = [];
+  const payoutStr = item.potential_payout ? item.potential_payout.toFixed(2) : '';
+  const matchKeywords = [];
   for (const m of (item.matches || [])) {
-    for (const side of m.split(/\s+vs\s+/i)) {
-      const clean = side.replace(/\b(FC|CF|AFC|SC|U21|CA|1\.|de|la)\b/gi, '').trim();
-      if (clean.length >= 4) teamKeywords.push(clean);
+    const sides = m.split(/\s+vs\s+/i)
+      .map(s => s.replace(/\b(FC|CF|AFC|SC|U21|CA|1\.|de|la)\b/gi, '').trim())
+      .filter(s => s.length >= 4);
+    if (sides.length > 0) matchKeywords.push(sides);
+  }
+  const minHits = matchKeywords.length >= 2 ? 2 : 1;
+  const candidates = cards
+    .filter(c => {
+      if (!c.text.includes(stakeStr)) return false;
+      if (payoutStr && c.text.includes(payoutStr)) return true;
+      let hits = 0;
+      for (const sides of matchKeywords) {
+        if (sides.some(kw => c.text.includes(kw))) hits++;
+      }
+      return hits >= minHits;
+    })
+    .sort((a, b) => a.text.length - b.text.length);
+  return candidates[0] || null;
+}
+
+function findMatchingApiOrder(liveOpenBetsApi, item) {
+  if (!Array.isArray(liveOpenBetsApi) || liveOpenBetsApi.length === 0) return null;
+  const code = (item.code || '').toUpperCase();
+  if (code) {
+    const direct = liveOpenBetsApi.find(ob =>
+      String(ob.bookingCode || ob.shareCode || ob.shortId || '').toUpperCase() === code
+    );
+    if (direct) return direct;
+  }
+  const itemNormMatches = (item.matches || []).map(normalizeMatchName).filter(Boolean);
+  let best = null;
+  let bestOverlap = 0;
+  for (const ob of liveOpenBetsApi) {
+    const obStake = parseFloat(ob.totalStake || ob.stake || ob.originStake || 0);
+    if (obStake > 0 && Math.abs(obStake - item.stake) > 0.05) continue;
+    const sels = ob.selections || [];
+    const obMatches = sels.map(s => normalizeMatchName(`${s.home || ''} vs ${s.away || ''}`));
+    let overlap = 0;
+    for (const om of obMatches) {
+      if (itemNormMatches.some(im => matchSidesOverlap(im, om))) overlap++;
+    }
+    const minRequired = Math.min(2, Math.max(1, itemNormMatches.length));
+    if (overlap >= minRequired && overlap > bestOverlap) {
+      bestOverlap = overlap;
+      best = ob;
     }
   }
-  return cards.find(c => {
-    const hasStake = c.text.includes(stakeStr);
-    if (!hasStake) return false;
-    return teamKeywords.some(kw => c.text.includes(kw));
-  });
+  return best;
 }
 
 async function extractBulletLegOutcomes(page, item) {
@@ -259,34 +323,50 @@ async function executeCashoutOnPage(page, item) {
 
   const updates = [];
   const legOutcomeUpdates = [];
-  for (const ob of liveOpenBetsApi) {
-    const sels = ob.selections || [];
-    for (const s of sels) {
-      if (s.isSettled === 1) {
-        const st = s.settleStatus === 1 ? 'WON' : (s.settleStatus === 2 ? 'LOST' : 'VOID');
-        legOutcomeUpdates.push({
-          booking_code: null,
-          matchText: `${s.home} vs ${s.away}`,
-          status: st
-        });
-      }
-    }
-  }
   let bustedBulletDetected = false;
 
   for (const item of allItems) {
     const code = item.code || '';
+    const apiOrder = findMatchingApiOrder(liveOpenBetsApi, item);
     const openMatch = findMatchingCard(openData.cards, item);
     const settledMatch = findMatchingCard(settledData.cards, item);
+
+    // Strictly bind API leg outcomes to this item's exact booking_code / ticket_id (NEVER booking_code: null)
+    if (apiOrder && Array.isArray(apiOrder.selections)) {
+      for (const s of apiOrder.selections) {
+        if (s.isSettled === 1) {
+          const st = s.settleStatus === 1 ? 'WON' : (s.settleStatus === 2 ? 'LOST' : 'VOID');
+          legOutcomeUpdates.push({
+            kind: item.kind,
+            id: item.id,
+            booking_code: code,
+            matchText: `${s.home || ''} vs ${s.away || ''}`.trim(),
+            marketText: `${s.marketName || ''} ${s.outcomeDesc || s.desc || ''}`.trim(),
+            status: st
+          });
+        }
+      }
+    }
 
     let status = 'IN_PROGRESS';
     let cashoutOffer = 0.0;
     let realizedReturn = 0.0;
     let notes = 'Active in Open Bets';
 
-    if (openMatch) {
-      const co = openMatch.text.match(/Cashout\s*(?:GHS)?\s*([0-9,]+\.[0-9]{2})/i);
-      if (co) cashoutOffer = parseFloat(co[1].replace(/,/g, ''));
+    if (apiOrder || openMatch) {
+      // Prefer exact API order cashout value first; fall back to leaf DOM card only if within sane payout bound
+      const apiCo = apiOrder ? parseFloat(apiOrder.cashoutAmount || apiOrder.maxCashOutAmount || apiOrder.cashOutAmount || 0) : 0;
+      if (apiCo > 0 && (!item.potential_payout || apiCo <= item.potential_payout * 1.01)) {
+        cashoutOffer = apiCo;
+      } else if (openMatch) {
+        const co = openMatch.text.match(/Cashout\s*(?:GHS)?\s*([0-9,]+\.[0-9]{2})/i);
+        if (co) {
+          const parsedCo = parseFloat(co[1].replace(/,/g, ''));
+          if (!item.potential_payout || parsedCo <= item.potential_payout * 1.01) {
+            cashoutOffer = parsedCo;
+          }
+        }
+      }
       const equity = item.potential_payout > 0 ? cashoutOffer / item.potential_payout : 0;
 
       // Autonomous Cashout Profit-Lock Check
@@ -322,9 +402,9 @@ async function executeCashoutOnPage(page, item) {
       notes = `Settled (${status}) | Return: GHS ${realizedReturn.toFixed(2)}`;
       console.log(`  [${item.kind} | ${code}] ${notes}`);
 
-      if (item.kind === 'BULLET') {
-        if (status === 'LOST') bustedBulletDetected = true;
-        // Extract per-leg WON / LOST / VOID statuses for creator trust attribution
+      if (item.kind === 'BULLET' || item.kind === 'TICKET') {
+        if (item.kind === 'BULLET' && status === 'LOST') bustedBulletDetected = true;
+        // Extract per-leg WON / LOST / VOID statuses strictly scoped to this booking_code
         await page.goto('https://www.sportybet.com/gh/m/my_accounts/open_bets', { waitUntil: 'domcontentloaded', timeout: 35000 });
         await page.waitForTimeout(2500);
         await page.evaluate(() => {
@@ -335,7 +415,7 @@ async function executeCashoutOnPage(page, item) {
         const legResults = await extractBulletLegOutcomes(page, item);
         console.log(`  [LegAudit | ${code}] Extracted ${legResults.length} individual leg outcomes.`);
         for (const lr of legResults) {
-          legOutcomeUpdates.push({ booking_code: code, ...lr });
+          legOutcomeUpdates.push({ kind: item.kind, id: item.id, booking_code: code, ...lr });
         }
       }
     } else {
@@ -361,10 +441,32 @@ async function executeCashoutOnPage(page, item) {
   await browser.close();
 
   py(`
-import sqlite3, json
+import sqlite3, json, re
 from datetime import datetime
+
+def norm_match(name):
+    s = re.sub(r'\\b(fc|cf|afc|sc|ac|as|us|fk|sk|bk|ca|cd|ud|sd|u21|u23|1\\.)\\b', ' ', (name or '').lower())
+    s = re.sub(r'[^a-z0-9\\s]', ' ', s)
+    return re.sub(r'\\s+', ' ', s).strip()
+
+def matches_both_sides(a, b):
+    na, nb = norm_match(a), norm_match(b)
+    if not na or not nb:
+        return False
+    if na == nb:
+        return True
+    pa = re.split(r'\\s+v(?:s)?\\s+', na)
+    pb = re.split(r'\\s+v(?:s)?\\s+', nb)
+    if len(pa) != 2 or len(pb) != 2:
+        return False
+    def side_ok(x, y):
+        return x == y or (len(x) >= 4 and x in y) or (len(y) >= 4 and y in x)
+    return side_ok(pa[0], pb[0]) and side_ok(pa[1], pb[1])
+
 now = datetime.utcnow().isoformat()
-c = sqlite3.connect(${JSON.stringify(DB_PATH)})
+c = sqlite3.connect(${JSON.stringify(DB_PATH)}, timeout=15.0)
+c.execute("PRAGMA journal_mode=WAL;")
+c.execute("PRAGMA busy_timeout=15000;")
 c.execute("UPDATE syndicate_wallets SET liquid_balance=?, last_synced=? WHERE account_label='Telecel_SportyBet_Ghana'", (${sess.balance}, now))
 
 for u in json.loads(${JSON.stringify(JSON.stringify(updates))}):
@@ -372,6 +474,8 @@ for u in json.loads(${JSON.stringify(JSON.stringify(updates))}):
         if u['status'] in ('WON', 'LOST', 'CASHED_OUT'):
             c.execute("UPDATE syndicate_tickets SET status=?, cashout_value=?, realized_pnl=?, settled_at=? WHERE ticket_id=?",
                       (u['status'], u['cashout_value'], u['realized_pnl'], now, u['id']))
+            if u['status'] == 'WON':
+                c.execute("UPDATE syndicate_legs SET outcome='WON' WHERE ticket_id=? AND outcome='PENDING'", (u['id'],))
         else:
             c.execute("UPDATE syndicate_tickets SET cashout_value=? WHERE ticket_id=?", (u['cashout_value'], u['id']))
     else:
@@ -384,16 +488,27 @@ for u in json.loads(${JSON.stringify(JSON.stringify(updates))}):
     c.execute("INSERT INTO syndicate_hedges_cashouts (ticket_id, timestamp, settled_equity, sportybet_cashout_offer, action_taken, realized_return, notes) VALUES (?,?,?,?,?,?,?)",
               (u['id'], now, u['cashout_value'], u['cashout_value'], 'HOLD' if u['status']=='IN_PROGRESS' else u['status'], u['realized_return'], u['notes']))
 
-# Apply per-leg WON/LOST/VOID outcomes to syndicate_creator_anchor_ledger
+# Apply per-leg WON/LOST/VOID outcomes strictly by (booking_code, both-sides normalized match_name, optional market/selection)
+# NEVER perform global booking_code=None updates or single-team substring matches.
 for lr in json.loads(${JSON.stringify(JSON.stringify(legOutcomeUpdates))}):
-    m_txt = lr['matchText'].lower()
-    if lr.get('booking_code'):
-        rows = c.execute("SELECT ledger_id, match_name FROM syndicate_creator_anchor_ledger WHERE booking_code=?", (lr['booking_code'],)).fetchall()
+    bcode = lr.get('booking_code')
+    if not bcode:
+        continue
+    m_txt = lr.get('matchText') or ''
+    mkt_txt = (lr.get('marketText') or '').lower()
+    if lr.get('kind') == 'TICKET' and lr.get('id'):
+        t_rows = c.execute("SELECT id, match_name, market_name, selection FROM syndicate_legs WHERE ticket_id=?", (lr['id'],)).fetchall()
+        for leg_id, mname, mkt, sel in t_rows:
+            if matches_both_sides(mname, m_txt):
+                c.execute("UPDATE syndicate_legs SET outcome=? WHERE id=?", (lr['status'], leg_id))
     else:
-        rows = c.execute("SELECT ledger_id, match_name FROM syndicate_creator_anchor_ledger WHERE LOWER(match_name)=?", (m_txt,)).fetchall()
-    for lid, mname in rows:
-        parts = [p.strip().lower() for p in mname.split(' vs ')]
-        if mname.lower() == m_txt or any(len(p) >= 4 and p in m_txt for p in parts):
+        rows = c.execute("SELECT ledger_id, match_name, selection FROM syndicate_creator_anchor_ledger WHERE booking_code=?", (bcode,)).fetchall()
+        matched = [(lid, mname, sel) for lid, mname, sel in rows if matches_both_sides(mname, m_txt)]
+        if len(matched) > 1 and mkt_txt:
+            refined = [r for r in matched if any(tok in (r[2] or '').lower() for tok in mkt_txt.split() if len(tok) >= 3)]
+            if refined:
+                matched = refined
+        for lid, _, _ in matched:
             c.execute("UPDATE syndicate_creator_anchor_ledger SET status=?, updated_at=? WHERE ledger_id=?", (lr['status'], now, lid))
 
 c.commit(); c.close()
@@ -405,6 +520,7 @@ print('[Monitor] Unified ledger synced.')
     spawnSync('node', ['syndicate/survivor_rebullet.js'], { cwd: S.ROOT_DIR, stdio: 'inherit' });
   }
 
+  spawnSync('python3', ['syndicate/closed_loop_learner.py'], { cwd: S.ROOT_DIR, stdio: 'inherit' });
   spawnSync('python3', ['syndicate/creator_trust_engine.py'], { cwd: S.ROOT_DIR, stdio: 'inherit' });
   spawnSync('python3', ['syndicate/render_syndicate_terminal.py'], { cwd: S.ROOT_DIR, stdio: 'inherit' });
 })();

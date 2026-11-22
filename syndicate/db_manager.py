@@ -13,12 +13,114 @@ from datetime import datetime
 SYNDICATE_DATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data")
 DB_PATH = os.path.join(SYNDICATE_DATA_DIR, "syndicate_ledger.sqlite")
 
-def get_connection():
-    os.makedirs(SYNDICATE_DATA_DIR, exist_ok=True)
-    return sqlite3.connect(DB_PATH)
+def get_connection(db_path=None):
+    target_path = db_path or DB_PATH
+    os.makedirs(os.path.dirname(os.path.abspath(target_path)), exist_ok=True)
+    conn = sqlite3.connect(target_path, timeout=15.0)
+    conn.execute("PRAGMA journal_mode=WAL;")
+    conn.execute("PRAGMA busy_timeout=15000;")
+    return conn
 
-def init_db():
-    conn = get_connection()
+
+def ensure_schema_upgrades(conn):
+    """
+    Backward-compatible schema upgrades for closed-loop learning:
+      1. Ensure syndicate_post_mortems supports both syndicate_tickets and
+         syndicate_codehub_bullets (no restrictive FK blocking bullet IDs)
+         and has leg-level telemetry columns.
+      2. Create syndicate_market_performance table.
+      3. Ensure cashout_value column exists on syndicate_codehub_bullets.
+    """
+    cursor = conn.cursor()
+
+    # Check if syndicate_post_mortems exists and whether it has a restrictive FK
+    tbl_row = cursor.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='syndicate_post_mortems'"
+    ).fetchone()
+
+    required_pm_cols = {
+        "source_table": "TEXT DEFAULT 'syndicate_tickets'",
+        "booking_code": "TEXT",
+        "market_key": "TEXT",
+        "league": "TEXT",
+        "match_name": "TEXT",
+        "selection": "TEXT",
+        "odds": "REAL",
+        "betradar_prob": "REAL",
+        "rtp": "REAL",
+        "auto_rule_triggered": "TEXT",
+    }
+
+    if tbl_row and "FOREIGN KEY" in (tbl_row[0] or "").upper():
+        # Recreate syndicate_post_mortems without restrictive FK while preserving all existing rows
+        existing_cols = [r[1] for r in cursor.execute("PRAGMA table_info(syndicate_post_mortems)").fetchall()]
+        cursor.execute("ALTER TABLE syndicate_post_mortems RENAME TO syndicate_post_mortems_legacy")
+        cursor.execute("""
+        CREATE TABLE syndicate_post_mortems (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            ticket_id TEXT,
+            leg_id INTEGER,
+            timestamp TEXT,
+            failure_category TEXT,
+            tactical_summary TEXT,
+            preventative_rule_added TEXT,
+            source_table TEXT DEFAULT 'syndicate_tickets',
+            booking_code TEXT,
+            market_key TEXT,
+            league TEXT,
+            match_name TEXT,
+            selection TEXT,
+            odds REAL,
+            betradar_prob REAL,
+            rtp REAL,
+            auto_rule_triggered TEXT
+        )
+        """)
+        new_cols = [r[1] for r in cursor.execute("PRAGMA table_info(syndicate_post_mortems)").fetchall()]
+        shared = [c for c in existing_cols if c in new_cols]
+        cols_csv = ", ".join(shared)
+        cursor.execute(
+            f"INSERT INTO syndicate_post_mortems ({cols_csv}) SELECT {cols_csv} FROM syndicate_post_mortems_legacy"
+        )
+        cursor.execute("DROP TABLE syndicate_post_mortems_legacy")
+    elif tbl_row:
+        existing_cols = {r[1] for r in cursor.execute("PRAGMA table_info(syndicate_post_mortems)").fetchall()}
+        for col_name, col_def in required_pm_cols.items():
+            if col_name not in existing_cols:
+                cursor.execute(f"ALTER TABLE syndicate_post_mortems ADD COLUMN {col_name} {col_def}")
+
+    # Create syndicate_market_performance per PROJECT.md Interface Contract
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS syndicate_market_performance (
+        market_key TEXT NOT NULL,
+        league TEXT NOT NULL DEFAULT 'ALL',
+        total_legs INTEGER DEFAULT 0,
+        won_legs INTEGER DEFAULT 0,
+        lost_legs INTEGER DEFAULT 0,
+        empirical_hit_rate REAL DEFAULT 0.0,
+        expected_hit_rate REAL DEFAULT 0.0,
+        calibration_gap REAL DEFAULT 0.0,
+        penalty_weight REAL DEFAULT 0.0,
+        banned INTEGER DEFAULT 0,
+        last_updated TEXT,
+        PRIMARY KEY (market_key, league)
+    )
+    """)
+
+    # Ensure cashout_value exists on syndicate_codehub_bullets
+    bullet_tbl = cursor.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='syndicate_codehub_bullets'"
+    ).fetchone()
+    if bullet_tbl:
+        b_cols = {r[1] for r in cursor.execute("PRAGMA table_info(syndicate_codehub_bullets)").fetchall()}
+        if "cashout_value" not in b_cols:
+            cursor.execute("ALTER TABLE syndicate_codehub_bullets ADD COLUMN cashout_value REAL DEFAULT 0.0")
+
+    conn.commit()
+
+
+def init_db(db_path=None):
+    conn = get_connection(db_path)
     cursor = conn.cursor()
 
     # 1. Syndicate Account & Wallets (Telecel SportyBet)
@@ -112,18 +214,26 @@ def init_db():
     )
     """)
 
-    # 6. Post-Mortem Audit & Root-Cause Failure Store
+    # 6. Post-Mortem Audit & Root-Cause Failure Store (supports tickets + bullets)
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS syndicate_post_mortems (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         ticket_id TEXT,
         leg_id INTEGER,
         timestamp TEXT,
-        failure_category TEXT, -- TACTICAL_PACE_READ_ERROR, LINEUP_INJURY_SURPRISE, PURE_VARIANCE
+        failure_category TEXT,
         tactical_summary TEXT,
         preventative_rule_added TEXT,
-        FOREIGN KEY(ticket_id) REFERENCES syndicate_tickets(ticket_id),
-        FOREIGN KEY(leg_id) REFERENCES syndicate_legs(id)
+        source_table TEXT DEFAULT 'syndicate_tickets',
+        booking_code TEXT,
+        market_key TEXT,
+        league TEXT,
+        match_name TEXT,
+        selection TEXT,
+        odds REAL,
+        betradar_prob REAL,
+        rtp REAL,
+        auto_rule_triggered TEXT
     )
     """)
 
@@ -157,7 +267,8 @@ def init_db():
         booking_code TEXT,
         created_at TEXT,
         settled_at TEXT,
-        realized_pnl REAL DEFAULT 0.0
+        realized_pnl REAL DEFAULT 0.0,
+        cashout_value REAL DEFAULT 0.0
     )
     """)
 
@@ -182,9 +293,10 @@ def init_db():
         VALUES ('Telecel_SportyBet_Ghana', 250.00, 'GHS', 0.24, 20.00, ?)
         """, (datetime.utcnow().isoformat(),))
 
+    ensure_schema_upgrades(conn)
     conn.commit()
     conn.close()
-    return DB_PATH
+    return db_path or DB_PATH
 
 def save_cycle_and_tickets(cycle_info, tickets):
     conn = get_connection()

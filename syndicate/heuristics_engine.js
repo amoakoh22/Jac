@@ -10,7 +10,7 @@ const path = require('path');
 const HEURISTICS_FILE = path.resolve(__dirname, '..', 'data', 'syndicate_heuristics.json');
 
 const DEFAULT_SYNDICATE_HEURISTICS = {
-  version: '2.0.0-syndicate',
+  version: '3.0.0',
   name: 'Hermes Asymmetric Multi-Week Syndicate Heuristics Store',
   last_updated: new Date().toISOString(),
   rules: {
@@ -74,15 +74,47 @@ const DEFAULT_SYNDICATE_HEURISTICS = {
       id: 'ARB1',
       name: 'Chronological Arbitrage & Live Hedge Lock',
       description: 'Trigger Principal Protection or Equalized Arbitrage Lock when potential payout reaches >= 5x cycle exposure.',
-      min_payout_multiplier_trigger: 5.0, // 5x cycle exposure (e.g. >= GHS 100 on GHS 20 deployment)
-      cashout_equity_ratio_trigger: 0.92, // 92% of mathematical equity
+      min_payout_multiplier_trigger: 5.0,
+      cashout_equity_ratio_trigger: 0.92,
+      active: true
+    },
+    // Rule #28: Post-Mortem Fragile Market & Market-League Ban
+    rule_28_friday_postmortem_market_ban: {
+      id: 28,
+      name: 'Post-Mortem Fragile Market Ban (1H NG / -1 Hcp / 2H O0.5 / 1H U2.5)',
+      description: 'Empirically banned markets and market-league traps from closed-loop post-mortem audit.',
+      banned_markets: [
+        '1H_GG_NG_NO',
+        'HCP_0_1_FAV',
+        '2H_OVER_0_5',
+        '1H_UNDER_2_5',
+        'PLAIN_1X2_FAV_ACCUM',
+        'EERSTE_DIVISIE_OVER_2'
+      ],
+      banned_market_league_pairs: [
+        { market: 'OVER_2_0', league_pattern: 'Eerste Divisie', reason: '93VVCD Den Bosch 1-0' },
+        { market: 'UNDER_4_5', league_pattern: 'Premiership', reason: 'BKJ0JX Kilmarnock 2-4 Aberdeen' },
+        { market: 'OVER_1_5', league_pattern: 'Championship', reason: '808QK6 Millwall 0-1 QPR' }
+      ],
+      active: true
+    },
+    // Rule #29: Zero-Vig >= 1.20 Multi-Bet Bonus Sweet Spot
+    rule_29_zero_vig_bonus_sweet_spot: {
+      id: 29,
+      name: 'Zero-Vig >=1.20 Multi-Bet Bonus Sweet Spot (20-35 Folds for 100x+ +EV)',
+      description: 'Target 20-35 disjoint legs @ 1.20-1.45 with Betradar RTP >= 98.0% and true ticket EV >= 1.02 via SportyBet Multi-Bet Win Bonus.',
+      min_leg_odds: 1.20,
+      max_leg_odds: 1.45,
+      min_betradar_rtp: 0.980,
+      min_ticket_ev: 1.02,
       active: true
     }
   },
   dynamic_weights: {
     road_b2b_penalty: 0.15,
     home_court_boost: 1.08,
-    post_international_break_away_penalty: 0.12
+    post_international_break_away_penalty: 0.12,
+    market_risk_weights: {}
   },
   calibration_log: []
 };
@@ -90,6 +122,11 @@ const DEFAULT_SYNDICATE_HEURISTICS = {
 class SyndicateHeuristicsEngine {
   constructor() {
     this.heuristics = this.load();
+  }
+
+  reload() {
+    this.heuristics = this.load();
+    return this.heuristics;
   }
 
   load() {
@@ -301,6 +338,191 @@ class SyndicateHeuristicsEngine {
       rationale
     };
   }
+
+  /**
+   * Normalize a leg object (from scanner, API, or DB) into a canonical market tag
+   * matching data/syndicate_heuristics.json v3.0.0.
+   */
+  canonicalizeMarketKey(leg = {}) {
+    const explicitRaw = String(leg.marketKey || leg.market_key || '').trim();
+    const explicit = explicitRaw.toUpperCase();
+    if (explicit && /^[A-Z0-9_]+$/.test(explicit)) return explicit;
+
+    const marketId = String(leg.marketId || leg.market_id || '');
+    const specifier = String(leg.specifier || '').toLowerCase();
+    const outcomeId = String(leg.outcomeId || leg.outcome_id || '');
+    const raw = `${explicitRaw} ${leg.market_name || leg.marketName || ''} ${leg.selection || leg.outcomeDesc || ''}`.trim();
+    const low = raw.toLowerCase();
+
+    // Exact SportyBet marketId/specifier/outcomeId shortcuts
+    if (marketId === '75' && (low.includes('no') || outcomeId === '76')) return '1H_GG_NG_NO';
+    if (marketId === '14' && (specifier.includes('hcp=0:1') || specifier.includes('hcp=1:0'))) return 'HCP_0_1_FAV';
+    if (marketId === '90' && specifier.includes('total=0.5') && (outcomeId === '12' || low.includes('over'))) return '2H_OVER_0_5';
+    if (marketId === '68' && specifier.includes('total=2.5') && (outcomeId === '13' || low.includes('under'))) return '1H_UNDER_2_5';
+
+    // Text-based canonicalization (including shorthand aliases)
+    if (
+      ((low.includes('1st half') || low.includes('1h')) && (low.includes('gg/ng') || low.includes('btts')) && low.includes('no')) ||
+      /\b1h\b.*\bng\b/.test(low)
+    ) {
+      return '1H_GG_NG_NO';
+    }
+    if (
+      (low.includes('handicap') && (low.includes('0:1') || low.includes('1:0') || low.includes('-1'))) ||
+      /\bhcp\b.*(0:1|1:0|-1)/.test(low)
+    ) {
+      return 'HCP_0_1_FAV';
+    }
+    if (
+      ((low.includes('2nd half') || low.includes('2h')) && low.includes('over 0.5')) ||
+      /\b2h\b.*\bo\s*0\.5/.test(low)
+    ) {
+      return '2H_OVER_0_5';
+    }
+    if ((low.includes('1st half') || low.includes('1h')) && low.includes('under 2.5')) {
+      return '1H_UNDER_2_5';
+    }
+    if ((low.includes('1st half') || low.includes('1h')) && low.includes('under')) {
+      return '1H_UNDER';
+    }
+    const mOu = low.match(/\b(over|under)\s+(\d+(?:\.\d+)?)\b/);
+    if (mOu) {
+      const dir = mOu[1].toUpperCase();
+      const numStr = mOu[2];
+      const line = numStr.includes('.') ? numStr.replace('.', '_') : `${numStr}_0`;
+      return `${dir}_${line}`;
+    }
+    if (low.includes('2up')) return '1X2_2UP';
+    if (low.includes('1up')) return '1X2_1UP';
+    if (low.includes('double chance') || /\b(1x|x2|12)\b/.test(low)) return 'DOUBLE_CHANCE';
+    if (low === 'home' || low === 'away' || low === 'draw' || low.includes('1x2') || marketId === '1') {
+      return 'PLAIN_1X2_FAV_ACCUM';
+    }
+    return 'OTHER_MARKET';
+  }
+
+  /**
+   * Unified Pre-Execution Leg Validator (v3.0.0)
+   * Enforces Rules #22-#24, CH1, Rule #28 (banned_markets + banned_market_league_pairs),
+   * Rule #29 (odds band & Betradar RTP floor for bonus_arb_ev), and dynamic market_risk_weights.
+   *
+   * @param {object} leg
+   * @param {'bonus_arb_ev'|'fortress_98pct'|'single'} [profile='bonus_arb_ev']
+   * @returns {{ allowed: boolean, reasons: string[], penalty: number, marketKey: string }}
+   */
+  validateLegAgainstHeuristics(leg = {}, profile = 'bonus_arb_ev') {
+    const reasons = [];
+    let penalty = 0.0;
+
+    const rules = (this.heuristics && this.heuristics.rules) || DEFAULT_SYNDICATE_HEURISTICS.rules;
+    const dynWeights = (this.heuristics && this.heuristics.dynamic_weights) || {};
+    const marketRiskWeights = dynWeights.market_risk_weights || {};
+
+    const marketKey = this.canonicalizeMarketKey(leg);
+    const league = String(leg.league || '');
+    const leagueLow = league.toLowerCase();
+    const odds = typeof leg.odds === 'number' ? leg.odds : parseFloat(leg.odds);
+    const prob = typeof leg.prob === 'number' ? leg.prob : (leg.betradar_prob != null ? parseFloat(leg.betradar_prob) : null);
+    const rtp = typeof leg.rtp === 'number'
+      ? leg.rtp
+      : (Number.isFinite(odds) && Number.isFinite(prob) && prob > 0 ? odds * prob : null);
+
+    // 1. Rules #22, #23, #24
+    const r22Res = this.validateNBASpread({ ...leg, league });
+    if (!r22Res.valid) reasons.push(r22Res.reason);
+
+    const r23Res = this.validateHandicapStretching(leg);
+    if (!r23Res.valid) reasons.push(r23Res.reason);
+
+    const r24Res = this.validateMotivation(leg);
+    if (!r24Res.valid) reasons.push(r24Res.reason);
+
+    // 2. CH1 First-Half Under ban
+    const ch1 = rules.codehub_trap_filter;
+    if (ch1 && ch1.active && ch1.disallow_first_half_unders) {
+      if (marketKey === '1H_UNDER_2_5' || marketKey === '1H_UNDER') {
+        reasons.push(`CH1 Violation: First-half under market (${marketKey}) is disallowed.`);
+      }
+    }
+
+    // 3. Rule #28: Banned Markets & Banned Market-League Pairs
+    const r28 = rules.rule_28_friday_postmortem_market_ban;
+    if (r28 && r28.active) {
+      const bannedMarkets = new Set((r28.banned_markets || []).map(m => String(m).toUpperCase()));
+      if (bannedMarkets.has(marketKey)) {
+        reasons.push(`Rule #28 Violation: Market '${marketKey}' is in banned_markets.`);
+      }
+      if (marketKey === 'OVER_2_0' && leagueLow.includes('eerste divisie') && bannedMarkets.has('EERSTE_DIVISIE_OVER_2')) {
+        reasons.push(`Rule #28 Violation: Eerste Divisie Over 2.0 is banned (EERSTE_DIVISIE_OVER_2).`);
+      }
+
+      const bannedPairs = r28.banned_market_league_pairs || [];
+      for (const pair of bannedPairs) {
+        const pairMkt = String(pair.market || '').toUpperCase();
+        const pairLeaguePat = String(pair.league_pattern || '').toLowerCase();
+        if (pairMkt === marketKey && pairLeaguePat && leagueLow.includes(pairLeaguePat)) {
+          reasons.push(
+            `Rule #28 Market-League Ban: '${marketKey}' in '${league}' matches banned pair (${pair.market} @ ${pair.league_pattern}: ${pair.reason || 'historical loss'}).`
+          );
+        }
+      }
+    }
+
+    // 4. Dynamic empirical market_risk_weights penalty & auto-ban check
+    const weightInfo = marketRiskWeights[marketKey];
+    if (weightInfo) {
+      if (typeof weightInfo.penalty === 'number') {
+        penalty = Number((penalty + weightInfo.penalty).toFixed(4));
+      }
+      if (weightInfo.banned === true && !reasons.some(r => r.includes(marketKey))) {
+        reasons.push(`Empirical Auto-Ban: Market '${marketKey}' is flagged banned in market_risk_weights.`);
+      }
+    }
+
+    // 5. Rule #29: Zero-Vig Bonus Sweet Spot (for bonus_arb_ev profile)
+    const r29 = rules.rule_29_zero_vig_bonus_sweet_spot;
+    if (profile === 'bonus_arb_ev' && r29 && r29.active) {
+      const minOdds = r29.min_leg_odds != null ? r29.min_leg_odds : 1.20;
+      const maxOdds = r29.max_leg_odds != null ? r29.max_leg_odds : 1.45;
+      const minRtp = r29.min_betradar_rtp != null ? r29.min_betradar_rtp : 0.980;
+
+      if (Number.isFinite(odds)) {
+        if (odds < minOdds) {
+          reasons.push(`Rule #29 Violation: Odds ${odds} below bonus_arb_ev floor ${minOdds}.`);
+        }
+        if (odds > maxOdds) {
+          reasons.push(`Rule #29 Violation: Odds ${odds} above bonus_arb_ev ceiling ${maxOdds}.`);
+        }
+      } else {
+        reasons.push('Rule #29 Violation: Missing or invalid numeric leg odds.');
+      }
+
+      if (rtp !== null && Number.isFinite(rtp)) {
+        if (rtp < minRtp) {
+          reasons.push(`Rule #29 Violation: Betradar RTP ${rtp.toFixed(4)} below floor ${minRtp.toFixed(3)}.`);
+        }
+      } else {
+        reasons.push(`Rule #29 Violation: Missing Betradar RTP / probability (required >= ${minRtp.toFixed(3)} for bonus_arb_ev).`);
+      }
+    } else if (profile === 'fortress_98pct') {
+      if (!Number.isFinite(odds) || odds < 1.01) {
+        reasons.push(`Fortress Profile Violation: Invalid leg odds ${leg.odds}.`);
+      }
+    } else if (profile === 'single') {
+      const pRes = this.validatePricing(leg, true);
+      if (!pRes.valid) reasons.push(pRes.reason);
+    }
+
+    return {
+      allowed: reasons.length === 0,
+      reasons,
+      penalty,
+      marketKey
+    };
+  }
 }
 
-module.exports = new SyndicateHeuristicsEngine();
+const instance = new SyndicateHeuristicsEngine();
+instance.SyndicateHeuristicsEngine = SyndicateHeuristicsEngine;
+module.exports = instance;
+
