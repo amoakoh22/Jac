@@ -66,6 +66,70 @@ def load_data():
             "legs": legs
         })
 
+    # Load live SportyBet API telemetry (scores, live match periods, exact selection status) if available
+    live_audit_path = os.path.join(BASE_DIR, "runtime", "live_api_audit_latest.json")
+    live_open_by_code_stake = {}
+    live_sel_by_code = {}
+    if os.path.exists(live_audit_path):
+        try:
+            import re as _re
+            def _norm(s):
+                s = (s or "").lower()
+                s = _re.sub(r"\b(fc|cf|afc|sc|ac|1|istanbul|city|pr|pa|ca)\b", " ", s)
+                return _re.sub(r"[^a-z0-9]", "", s)
+
+            with open(live_audit_path, "r", encoding="utf-8") as af:
+                aj = json.load(af)
+            open_list = (aj.get("open") or {}).get("data", {}).get("cashAbleBets") or []
+            unsettled_list = (aj.get("unsettled") or {}).get("data", {}).get("entityList") or []
+            settled_list = (aj.get("settled") or {}).get("data", {}).get("entityList") or []
+            for ob in open_list + unsettled_list:
+                sc = ob.get("shareCode")
+                st_val = round(float(ob.get("stake") or ob.get("originStake") or 0.0), 2)
+                if sc:
+                    live_open_by_code_stake[(sc, st_val)] = ob
+                    if sc not in live_sel_by_code:
+                        live_sel_by_code[sc] = []
+                        for s in (ob.get("selections") or []):
+                            live_sel_by_code[sc].append({
+                                "h": _norm(s.get("home", "")),
+                                "a": _norm(s.get("away", "")),
+                                "matchStatus": s.get("matchStatus") or "Not start",
+                                "isSettled": s.get("isSettled", 0),
+                                "status": s.get("status", 0),
+                                "score": s.get("setScore") or s.get("score") or "",
+                                "clock": s.get("playedSeconds") or "",
+                            })
+            for sb_api in settled_list:
+                sc = sb_api.get("shareCode")
+                if sc and sc not in live_sel_by_code:
+                    live_sel_by_code[sc] = []
+                    for s in (sb_api.get("selections") or []):
+                        live_sel_by_code[sc].append({
+                            "h": _norm(s.get("home", "")),
+                            "a": _norm(s.get("away", "")),
+                            "matchStatus": s.get("matchStatus") or "Ended",
+                            "isSettled": s.get("isSettled", 1),
+                            "status": s.get("status", 0),
+                            "score": s.get("setScore") or s.get("score") or "",
+                            "clock": "",
+                        })
+        except Exception:
+            pass
+
+    def _match_live_sel(code_str, match_str):
+        import re as _re
+        sels = live_sel_by_code.get(code_str) or []
+        parts = _re.split(r"\s+vs?\s+", match_str or "", maxsplit=1)
+        if len(parts) != 2:
+            return None
+        ph = _re.sub(r"[^a-z0-9]", "", _re.sub(r"\b(fc|cf|afc|sc|ac|1|istanbul|city|pr|pa|ca)\b", " ", parts[0].lower()))
+        pa = _re.sub(r"[^a-z0-9]", "", _re.sub(r"\b(fc|cf|afc|sc|ac|1|istanbul|city|pr|pa|ca)\b", " ", parts[1].lower()))
+        for s in sels:
+            if ph and pa and (ph in s["h"] or s["h"] in ph) and (pa in s["a"] or s["a"] in pa):
+                return s
+        return None
+
     # Active CodeHub Bullets (IN_PROGRESS)
     b_cols_existing = {r[1] for r in cursor.execute("PRAGMA table_info(syndicate_codehub_bullets)").fetchall()}
     role_expr = "COALESCE(ticket_role, 'SOLO')" if "ticket_role" in b_cols_existing else "'SOLO'"
@@ -74,21 +138,105 @@ def load_data():
     bullet_rows = cursor.fetchall()
     bullets = []
     for b in bullet_rows:
+        b_id = b[0]
         b_code = b[7] or "N/A"
         cursor.execute("""
-            SELECT match_name, selection, kickoff_gmt, GROUP_CONCAT(creator_name || ' (' || source_code || ')', ', '), status
+            SELECT match_name, selection, kickoff_gmt, GROUP_CONCAT(DISTINCT creator_name || ' (' || source_code || ')'), status
             FROM syndicate_creator_anchor_ledger
-            WHERE booking_code=?
+            WHERE bullet_id=?
             GROUP BY match_name, selection, kickoff_gmt
             ORDER BY kickoff_gmt ASC
-        """, (b_code,))
-        b_legs = [{
-            "match": r[0], "selection": r[1], "kickoff": r[2], "creators": r[3] or "Consensus", "status": r[4]
-        } for r in cursor.fetchall()]
+        """, (b_id,))
+        leg_rows_b = cursor.fetchall()
+        if not leg_rows_b:
+            cursor.execute("""
+                SELECT match_name, selection, kickoff_gmt, GROUP_CONCAT(DISTINCT creator_name || ' (' || source_code || ')'), status
+                FROM syndicate_creator_anchor_ledger
+                WHERE booking_code=?
+                GROUP BY match_name, selection, kickoff_gmt
+                ORDER BY kickoff_gmt ASC
+            """, (b_code,))
+            leg_rows_b = cursor.fetchall()
+
+        b_legs = []
+        won_c = lost_c = void_c = live_c = pend_c = 0
+        next_ko = ""
+        next_match = ""
+        live_summaries = []
+
+        for r in leg_rows_b:
+            m_name, sel_txt, ko_gmt, creators_txt, db_st = r[0], r[1], r[2] or "", r[3] or "Consensus", r[4] or "IN_PROGRESS"
+            ls = _match_live_sel(b_code, m_name)
+            score_txt = ""
+            display_st = db_st
+            if ls:
+                if ls["status"] == 1:
+                    display_st = "WON"
+                    score_txt = f"FT {ls['score']}" if ls["score"] else ""
+                elif ls["status"] == 2:
+                    display_st = "LOST"
+                    score_txt = f"FT {ls['score']}" if ls["score"] else ""
+                elif ls["status"] == 3:
+                    display_st = "VOID"
+                    score_txt = "VOID @1.00"
+                elif ls["matchStatus"] not in ("Not start", "", None):
+                    display_st = "LIVE"
+                    clk = f" {ls['clock']}" if ls["clock"] else ""
+                    score_txt = f"{ls['matchStatus']} {ls['score']}{clk}".strip()
+                    live_summaries.append(f"{m_name} ({score_txt})")
+                else:
+                    display_st = "PENDING"
+            else:
+                if db_st == "IN_PROGRESS":
+                    display_st = "PENDING"
+
+            if display_st == "WON":
+                won_c += 1
+            elif display_st == "LOST":
+                lost_c += 1
+            elif display_st == "VOID":
+                void_c += 1
+            elif display_st == "LIVE":
+                live_c += 1
+            else:
+                pend_c += 1
+                if not next_ko or ko_gmt < next_ko:
+                    next_ko = ko_gmt
+                    next_match = m_name
+
+            b_legs.append({
+                "match": m_name, "selection": sel_txt, "kickoff": ko_gmt,
+                "creators": creators_txt, "status": display_st, "score": score_txt
+            })
+
+        total_l = b[5] or len(b_legs) or 1
+        prog_pct = min(100.0, round((won_c / total_l) * 100.0, 1))
+        if lost_c > 0:
+            slip_state = "AT_RISK"
+            slip_badge_label = f"BUSTING ({won_c}W · {lost_c}L)"
+            slip_badge_cls = "status-lost"
+        elif live_c > 0:
+            slip_state = "LIVE_IN_PLAY"
+            slip_badge_label = f"LIVE IN-PLAY ({won_c}/{total_l} WON · {live_c} LIVE)"
+            slip_badge_cls = "status-live"
+        elif won_c > 0:
+            slip_state = "UNDEFEATED"
+            slip_badge_label = f"ALIVE & UNDEFEATED ({won_c}/{total_l} WON)"
+            slip_badge_cls = "status-won"
+        else:
+            slip_state = "PRE_MATCH"
+            slip_badge_label = f"PRE-MATCH READY (0/{total_l} · {pend_c} UPCOMING)"
+            slip_badge_cls = "status-ready"
+
         bullets.append({
-            "id": b[0], "source_code": b[1], "stake": b[2], "odds": b[3],
-            "payout": b[4], "legs": b[5], "status": b[6], "code": b_code,
+            "id": b_id, "source_code": b[1], "stake": b[2], "odds": b[3],
+            "payout": b[4], "legs": total_l, "status": b[6], "code": b_code,
             "cashout": b[8] or 0.0, "role": b[9] or "SOLO", "pair_stake": b[10] or 0.0,
+            "won_legs": won_c, "lost_legs": lost_c, "void_legs": void_c,
+            "live_legs": live_c, "pending_legs": pend_c, "progress_pct": prog_pct,
+            "next_kickoff": next_ko, "next_match": next_match,
+            "live_summary": " | ".join(live_summaries[:2]),
+            "slip_state": slip_state, "slip_badge_label": slip_badge_label, "slip_badge_cls": slip_badge_cls,
             "leg_details": b_legs
         })
 
@@ -116,12 +264,20 @@ def load_data():
                 GROUP BY booking_code, match_name, selection
             )
         """, (b_code,)).fetchone()
+        pm_row = cursor.execute(
+            "SELECT match_name, market_key FROM syndicate_post_mortems WHERE booking_code=? ORDER BY id ASC LIMIT 1",
+            (b_code,)
+        ).fetchone()
+        fatal_note = f"Busted on: {pm_row[0]} ({pm_row[1]})" if (pm_row and sb[6] == "LOST") else (
+            "Cashed Out Early (Principal Preserved)" if sb[6] == "CASHED_OUT" else "Settled"
+        )
         settled_bullets.append({
             "id": sb[0], "code": b_code, "stake": sb[2] or 0.0, "odds": sb[3] or 0.0,
             "payout": sb[4] or 0.0, "legs": sb[5] or 0, "status": sb[6],
             "pnl": sb[7] or 0.0, "created_at": (sb[8] or "")[:10], "settled_at": (sb[9] or "")[:10],
             "won_legs": (leg_counts[0] or 0) if leg_counts else 0,
             "lost_legs": (leg_counts[1] or 0) if leg_counts else 0,
+            "fatal_note": fatal_note,
         })
 
     # Historical Post-Mortems
@@ -564,6 +720,91 @@ def generate_html():
             font-size: 10px;
             font-family: var(--mono-font);
         }}
+        .status-won {{
+            background: rgba(16, 185, 129, 0.20);
+            color: #34d399;
+            border: 1px solid #10b981;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }}
+        .status-live {{
+            background: rgba(251, 191, 36, 0.22);
+            color: #fde047;
+            border: 1px solid #fbbf24;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }}
+        .status-ready {{
+            background: rgba(0, 243, 255, 0.14);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 243, 255, 0.55);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }}
+        .status-lost {{
+            background: rgba(239, 68, 68, 0.18);
+            color: #f87171;
+            border: 1px solid var(--accent-red);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }}
+        .status-cashed {{
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }}
+        .status-pending {{
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--text-muted);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            white-space: nowrap;
+            display: inline-block;
+        }}
+        .prog-track {{
+            width: 100%;
+            min-width: 90px;
+            height: 7px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }}
+        .prog-fill {{
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #00f3ff);
+            border-radius: 4px;
+        }}
     </style>
 </head>
 <body>
@@ -648,6 +889,153 @@ def generate_html():
             <div class="stat-label">Aggregate Return Potential</div>
             <div class="stat-value" style="color: var(--accent-green);">{total_potential_returns:,.2f} GHS</div>
             <div class="stat-sub">Across {len(bullets)} Live Monster Accumulators ({sum(b['legs'] for b in bullets)} Active Legs)</div>
+        </div>
+    </div>
+
+    <!-- MASTER SLIP STATUS COMMAND BOARD (ALL ACTIVE & SETTLED SLIPS AT A GLANCE) -->
+    <div class="section-title">Master Slip Status Command Board — {len(bullets)} Active Live Orders &amp; {len(settled_bullets) + len([t for t in tickets if t['status'] != 'IN_PROGRESS'])} Settled Slips</div>
+    <div class="ticket-card" style="margin-bottom: 26px; border-top: 3px solid var(--accent-cyan);">
+        <div class="ticket-header">
+            <h3>1. Live Open Slips Scoreboard (Tap Any Booking Code to Jump to Full Leg Breakdown)</h3>
+            <span class="ticket-meta">ACTIVE ORDERS: <strong style="color:var(--accent-green);">{len(bullets)}</strong> | TOTAL STAKED: <strong>{total_active_exposure:.2f} GHS</strong> | LIVE CASHOUT SUM: <strong style="color:var(--accent-cyan);">{sum(b['cashout'] for b in bullets):.2f} GHS</strong> | TOTAL UPSIDE: <strong style="color:var(--accent-green);">{total_potential_returns:,.2f} GHS</strong></span>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="legs-table">
+                <thead>
+                    <tr>
+                        <th>Booking Code &amp; Role</th>
+                        <th>Live Slip Status</th>
+                        <th>Leg Progress (W-L-Live-Pend)</th>
+                        <th>Stake &rarr; Potential Win</th>
+                        <th>Live Cashout Offer</th>
+                        <th>Next Kickoff (GMT) / Live Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+    """
+
+    for b in bullets:
+        r_lbl = b.get("role", "SOLO")
+        r_pill = ""
+        if r_lbl == "HARVESTER":
+            r_pill = '<span class="tier-elite" style="margin-left:6px;">HARVESTER</span>'
+        elif r_lbl == "MOONSHOT":
+            r_pill = '<span class="tier-sharp" style="margin-left:6px;">MOONSHOT</span>'
+        elif r_lbl == "VAULT_STEP":
+            r_pill = '<span class="tier-probation" style="margin-left:6px;">VAULT STEP 1</span>'
+        elif b["legs"] >= 45:
+            r_pill = '<span class="tier-sharp" style="margin-left:6px;">50F FORTRESS</span>'
+
+        co_val = b.get("cashout", 0.0)
+        if co_val > 0 and b["stake"] > 0:
+            co_pct = (co_val / b["stake"]) * 100.0
+            co_col = "var(--accent-green)" if co_pct >= 100.0 else "var(--accent-cyan)"
+            co_disp = f'<strong style="color:{co_col};">{co_val:.2f} GHS</strong> <span style="color:var(--text-muted); font-size:10px;">({co_pct:.0f}% of stake)</span>'
+        else:
+            co_disp = '<span style="color:var(--text-muted);">Paused / Unavailable</span>'
+
+        eff_m = (b["payout"] / b["stake"]) if b["stake"] > 0 else b["odds"]
+        if b["live_summary"]:
+            next_disp = f'<strong style="color:var(--accent-gold);">LIVE: {b["live_summary"]}</strong>'
+        elif b["next_kickoff"]:
+            ko_short = b["next_kickoff"].replace("2026-", "")
+            next_disp = f'<span style="color:var(--accent-cyan); font-family:var(--mono-font);">{ko_short}</span> &mdash; {b["next_match"]}'
+        else:
+            next_disp = '<span style="color:var(--text-muted);">All legs completed</span>'
+
+        html += f"""
+                    <tr>
+                        <td>
+                            <a href="#slip-{b['id']}" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">{b['code']}</span></a>{r_pill}
+                        </td>
+                        <td><span class="{b['slip_badge_cls']}">● {b['slip_badge_label']}</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">{b['won_legs']}W</strong> &middot;
+                                <span style="color:var(--accent-red);">{b['lost_legs']}L</span> &middot;
+                                <span style="color:var(--accent-gold);">{b['live_legs']}Live</span> &middot;
+                                <span style="color:var(--text-muted);">{b['pending_legs']}P</span>
+                                <span style="float:right; color:var(--accent-cyan);">{b['progress_pct']:.0f}%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:{b['progress_pct']}%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            {b['stake']:.2f} &rarr; <strong style="color:var(--accent-green);">{b['payout']:,.2f} GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">({eff_m:,.1f}x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);">{co_disp}</td>
+                        <td style="font-size:11px;">{next_disp}</td>
+                    </tr>
+        """
+
+    cashed_cnt = sum(1 for sb in settled_bullets if sb["status"] == "CASHED_OUT")
+    lost_cnt = sum(1 for sb in settled_bullets if sb["status"] == "LOST") + sum(1 for t in tickets if t["status"] == "LOST")
+    won_cnt = sum(1 for sb in settled_bullets if sb["status"] == "WON") + sum(1 for t in tickets if t["status"] == "WON")
+
+    html += f"""
+                </tbody>
+            </table>
+        </div>
+        <div class="ticket-header" style="border-top: 1px solid var(--card-border); margin-top: 6px;">
+            <h3>2. Settled Slips Quick Status Summary ({won_cnt} Won &middot; {cashed_cnt} Cashed Out &middot; {lost_cnt} Lost)</h3>
+            <span class="ticket-meta">EVERY HISTORICAL SLIP STATUS &amp; SINGLE-LEG ROOT CAUSE</span>
+        </div>
+        <div style="max-height: 240px; overflow-y: auto;">
+            <table class="legs-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Slip Code</th>
+                        <th>Folds &amp; Stake</th>
+                        <th>Final Status</th>
+                        <th>Leg Tally</th>
+                        <th>Realized PnL</th>
+                        <th>Outcome / Busted Leg Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+    """
+
+    for sb in settled_bullets:
+        if sb["status"] == "WON":
+            s_cls, s_txt = "status-won", "✓ WON"
+        elif sb["status"] == "CASHED_OUT":
+            s_cls, s_txt = "status-cashed", "⇄ CASHED OUT"
+        else:
+            s_cls, s_txt = "status-lost", "✕ LOST"
+        p_col = "var(--accent-green)" if sb["pnl"] > 0 else ("var(--accent-red)" if sb["pnl"] < 0 else "var(--accent-gold)")
+        html += f"""
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">{sb['settled_at'] or sb['created_at']}</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">{sb['code']}</span></td>
+                        <td style="font-family:var(--mono-font);">{sb['legs']}F &middot; {sb['stake']:.2f} GHS</td>
+                        <td><span class="{s_cls}">{s_txt}</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">{sb['won_legs']}W - {sb['lost_legs']}L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:{p_col};">{sb['pnl']:+.2f} GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">{sb['fatal_note']}</td>
+                    </tr>
+        """
+
+    for ct in tickets:
+        if ct["status"] == "IN_PROGRESS":
+            continue
+        s_cls = "status-won" if ct["status"] == "WON" else ("status-cashed" if ct["status"] == "CASHED_OUT" else "status-lost")
+        p_col = "var(--accent-green)" if ct["pnl"] > 0 else ("var(--accent-red)" if ct["pnl"] < 0 else "var(--accent-gold)")
+        html += f"""
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">{ct['code']}</span></td>
+                        <td style="font-family:var(--mono-font);">{len(ct['legs'])}F &middot; {ct['stake']:.2f} GHS</td>
+                        <td><span class="{s_cls}">✕ {ct['status']}</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">Cycle 1 Core</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:{p_col};">{ct['pnl']:+.2f} GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">{ct['title']} (Pre-v4.0 Straight 1X2/ML)</td>
+                    </tr>
+        """
+
+    html += f"""
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -736,7 +1124,7 @@ def generate_html():
 
     for b in bullets:
         role_label = b.get("role", "SOLO")
-        co_str = f"{b['cashout']:.2f} GHS" if b.get("cashout", 0) > 0 else "Suspended/In-Play"
+        co_str = f"{b['cashout']:.2f} GHS" if b.get("cashout", 0) > 0 else "Paused / Unavailable"
         role_badge = ""
         if role_label == "HARVESTER":
             role_badge = f'<span class="tier-elite" style="margin-left:8px;">HARVESTER // AUTO-LOCK &ge; {b["pair_stake"]*1.02:.2f} GHS</span>'
@@ -744,11 +1132,25 @@ def generate_html():
             role_badge = '<span class="tier-sharp" style="margin-left:8px;">MOONSHOT // 100% FREE-ROLL AFTER W1</span>'
         elif role_label == "VAULT_STEP":
             role_badge = '<span class="tier-probation" style="margin-left:8px;">MODE C // INTEGER PUSH VAULT STEP 1</span>'
+        next_banner = (
+            f'LIVE NOW: <strong style="color:var(--accent-gold);">{b["live_summary"]}</strong>'
+            if b["live_summary"]
+            else (
+                f'NEXT KICKOFF: <strong style="color:var(--accent-cyan);">{b["next_kickoff"].replace("2026-", "")} GMT</strong> ({b["next_match"]})'
+                if b["next_kickoff"]
+                else "ALL LEGS PLAYED"
+            )
+        )
         html += f"""
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-{b['id']}" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>{b["legs"]}-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: {b["code"]}</span>{role_badge}</h3>
+                <h3>{b["legs"]}-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: {b["code"]}</span>{role_badge} <span class="{b['slip_badge_cls']}" style="margin-left:8px;">● {b['slip_badge_label']}</span></h3>
                 <span class="ticket-meta">STAKE: {b["stake"]:.2f} GHS | BASE ODDS: {b["odds"]:,.2f}x | CASHOUT: <strong style="color: var(--accent-cyan);">{co_str}</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">{b["payout"]:,.2f} GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">{b['won_legs']} WON</strong> &middot; <span style="color:var(--accent-red);">{b['lost_legs']} LOST</span> &middot; <span style="color:var(--accent-gold);">{b['live_legs']} LIVE</span> &middot; <span style="color:var(--text-muted);">{b['pending_legs']} PENDING</span> ({b['progress_pct']:.1f}%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:{b['progress_pct']}%;"></div></div></div>
+                <div>{next_banner}</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -757,28 +1159,40 @@ def generate_html():
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         """
         for idx, leg in enumerate(b["leg_details"], 1):
+            lst = leg["status"]
+            sc_suffix = f" ({leg['score']})" if leg.get("score") else ""
+            if lst == "WON":
+                l_cls, l_txt, r_style = "status-won", f"✓ WON{sc_suffix}", "background: rgba(16, 185, 129, 0.05);"
+            elif lst == "LIVE":
+                l_cls, l_txt, r_style = "status-live", f"● LIVE{sc_suffix}", "background: rgba(251, 191, 36, 0.07);"
+            elif lst == "LOST":
+                l_cls, l_txt, r_style = "status-lost", f"✕ LOST{sc_suffix}", "background: rgba(239, 68, 68, 0.08);"
+            elif lst == "VOID":
+                l_cls, l_txt, r_style = "status-ready", f"↺ PUSH{sc_suffix}", ""
+            else:
+                l_cls, l_txt, r_style = "status-pending", "⏳ PENDING", ""
             html += f"""
-                    <tr>
+                    <tr style="{r_style}">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">{idx}</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">{leg["kickoff"].replace("2026-", "")}</td>
                         <td class="match-cell">{leg["match"]}</td>
                         <td class="selection-cell">{leg["selection"]}</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">{leg["creators"]}</td>
-                        <td><span class="anchor-pill">{leg["status"]}</span></td>
+                        <td><span class="{l_cls}">{l_txt}</span></td>
                     </tr>
             """
         html += f"""
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">{b["code"]}</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">{b["source_code"]}</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">{b["code"]}</strong> // Status: <span class="{b['slip_badge_cls']}">{b['slip_badge_label']}</span> // Cluster: <span style="color: var(--accent-cyan);">{b["source_code"]}</span></div>
                 <div>Total Potential Win: <span class="payout-val">{b["payout"]:,.2f} GHS</span></div>
             </div>
         </div>

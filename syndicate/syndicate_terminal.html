@@ -306,6 +306,91 @@
             font-size: 10px;
             font-family: var(--mono-font);
         }
+        .status-won {
+            background: rgba(16, 185, 129, 0.20);
+            color: #34d399;
+            border: 1px solid #10b981;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .status-live {
+            background: rgba(251, 191, 36, 0.22);
+            color: #fde047;
+            border: 1px solid #fbbf24;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .status-ready {
+            background: rgba(0, 243, 255, 0.14);
+            color: var(--accent-cyan);
+            border: 1px solid rgba(0, 243, 255, 0.55);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .status-lost {
+            background: rgba(239, 68, 68, 0.18);
+            color: #f87171;
+            border: 1px solid var(--accent-red);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .status-cashed {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            font-weight: 700;
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .status-pending {
+            background: rgba(148, 163, 184, 0.12);
+            color: var(--text-muted);
+            border: 1px solid rgba(148, 163, 184, 0.35);
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: var(--mono-font);
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .prog-track {
+            width: 100%;
+            min-width: 90px;
+            height: 7px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+        .prog-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #00f3ff);
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
@@ -346,6 +431,435 @@
             <div class="stat-label">Aggregate Return Potential</div>
             <div class="stat-value" style="color: var(--accent-green);">1,743.40 GHS</div>
             <div class="stat-sub">Across 7 Live Monster Accumulators (145 Active Legs)</div>
+        </div>
+    </div>
+
+    <!-- MASTER SLIP STATUS COMMAND BOARD (ALL ACTIVE & SETTLED SLIPS AT A GLANCE) -->
+    <div class="section-title">Master Slip Status Command Board — 7 Active Live Orders &amp; 22 Settled Slips</div>
+    <div class="ticket-card" style="margin-bottom: 26px; border-top: 3px solid var(--accent-cyan);">
+        <div class="ticket-header">
+            <h3>1. Live Open Slips Scoreboard (Tap Any Booking Code to Jump to Full Leg Breakdown)</h3>
+            <span class="ticket-meta">ACTIVE ORDERS: <strong style="color:var(--accent-green);">7</strong> | TOTAL STAKED: <strong>18.00 GHS</strong> | LIVE CASHOUT SUM: <strong style="color:var(--accent-cyan);">19.84 GHS</strong> | TOTAL UPSIDE: <strong style="color:var(--accent-green);">1,743.40 GHS</strong></span>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="legs-table">
+                <thead>
+                    <tr>
+                        <th>Booking Code &amp; Role</th>
+                        <th>Live Slip Status</th>
+                        <th>Leg Progress (W-L-Live-Pend)</th>
+                        <th>Stake &rarr; Potential Win</th>
+                        <th>Live Cashout Offer</th>
+                        <th>Next Kickoff (GMT) / Live Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr>
+                        <td>
+                            <a href="#slip-CH_MONSTER_20261121_V10_HYBRID_200X" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">9121S3</span></a>
+                        </td>
+                        <td><span class="status-won">● ALIVE & UNDEFEATED (6/25 WON)</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">6W</strong> &middot;
+                                <span style="color:var(--accent-red);">0L</span> &middot;
+                                <span style="color:var(--accent-gold);">0Live</span> &middot;
+                                <span style="color:var(--text-muted);">19P</span>
+                                <span style="float:right; color:var(--accent-cyan);">24%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:24.0%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            3.00 &rarr; <strong style="color:var(--accent-green);">674.44 GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">(224.8x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">8.05 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(268% of stake)</span></td>
+                        <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-24 20:00</span> &mdash; Feyenoord vs Porto</td>
+                    </tr>
+        
+                    <tr>
+                        <td>
+                            <a href="#slip-CH_ANOINTED_V18_TWIN_HARVESTER" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">FK88QC</span></a><span class="tier-elite" style="margin-left:6px;">HARVESTER</span>
+                        </td>
+                        <td><span class="status-ready">● PRE-MATCH READY (0/21 · 21 UPCOMING)</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">0W</strong> &middot;
+                                <span style="color:var(--accent-red);">0L</span> &middot;
+                                <span style="color:var(--accent-gold);">0Live</span> &middot;
+                                <span style="color:var(--text-muted);">21P</span>
+                                <span style="float:right; color:var(--accent-cyan);">0%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:0.0%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            3.00 &rarr; <strong style="color:var(--accent-green);">401.66 GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">(133.9x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">3.00 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(100% of stake)</span></td>
+                        <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-24 09:30</span> &mdash; Admiral Vladivostok vs Ak Bars Kazan</td>
+                    </tr>
+        
+                    <tr>
+                        <td>
+                            <a href="#slip-CH_MONSTER_20261123_V16_UCL_SHIELD_130X" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">F9QK8B</span></a>
+                        </td>
+                        <td><span class="status-ready">● PRE-MATCH READY (0/24 · 24 UPCOMING)</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">0W</strong> &middot;
+                                <span style="color:var(--accent-red);">0L</span> &middot;
+                                <span style="color:var(--accent-gold);">0Live</span> &middot;
+                                <span style="color:var(--text-muted);">24P</span>
+                                <span style="float:right; color:var(--accent-cyan);">0%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:0.0%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            3.00 &rarr; <strong style="color:var(--accent-green);">388.31 GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">(129.4x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-cyan);">1.79 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(60% of stake)</span></td>
+                        <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-24 12:15</span> &mdash; Shanghai Port FC vs Buriram United</td>
+                    </tr>
+        
+                    <tr>
+                        <td>
+                            <a href="#slip-CH_ANOINTED_V18_TWIN_MOONSHOT" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">FK88QC</span></a><span class="tier-sharp" style="margin-left:6px;">MOONSHOT</span>
+                        </td>
+                        <td><span class="status-ready">● PRE-MATCH READY (0/21 · 21 UPCOMING)</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">0W</strong> &middot;
+                                <span style="color:var(--accent-red);">0L</span> &middot;
+                                <span style="color:var(--accent-gold);">0Live</span> &middot;
+                                <span style="color:var(--text-muted);">21P</span>
+                                <span style="float:right; color:var(--accent-cyan);">0%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:0.0%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            2.00 &rarr; <strong style="color:var(--accent-green);">267.77 GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">(133.9x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">2.00 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(100% of stake)</span></td>
+                        <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-24 09:30</span> &mdash; Admiral Vladivostok vs Ak Bars Kazan</td>
+                    </tr>
+        
+                    <tr>
+                        <td>
+                            <a href="#slip-CH_ANOINTED_V20_VAULT_STEP1" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">ELVXWA</span></a><span class="tier-probation" style="margin-left:6px;">VAULT STEP 1</span>
+                        </td>
+                        <td><span class="status-ready">● PRE-MATCH READY (0/3 · 3 UPCOMING)</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">0W</strong> &middot;
+                                <span style="color:var(--accent-red);">0L</span> &middot;
+                                <span style="color:var(--accent-gold);">0Live</span> &middot;
+                                <span style="color:var(--text-muted);">3P</span>
+                                <span style="float:right; color:var(--accent-cyan);">0%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:0.0%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            3.00 &rarr; <strong style="color:var(--accent-green);">5.91 GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">(2.0x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">3.00 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(100% of stake)</span></td>
+                        <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-24 20:00</span> &mdash; Arsenal vs Borussia Dortmund</td>
+                    </tr>
+        
+                    <tr>
+                        <td>
+                            <a href="#slip-CH_MONSTER_20261119_V7_50F_99PCT" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">C36TTY</span></a><span class="tier-sharp" style="margin-left:6px;">50F FORTRESS</span>
+                        </td>
+                        <td><span class="status-won">● ALIVE & UNDEFEATED (28/50 WON)</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">28W</strong> &middot;
+                                <span style="color:var(--accent-red);">0L</span> &middot;
+                                <span style="color:var(--accent-gold);">0Live</span> &middot;
+                                <span style="color:var(--text-muted);">22P</span>
+                                <span style="float:right; color:var(--accent-cyan);">56%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:56.0%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            2.00 &rarr; <strong style="color:var(--accent-green);">3.29 GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">(1.6x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);"><span style="color:var(--text-muted);">Paused / Unavailable</span></td>
+                        <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-24 20:00</span> &mdash; Man City vs Napoli</td>
+                    </tr>
+        
+                    <tr>
+                        <td>
+                            <a href="#slip-CH_QUANT_V11_FORTRESS_98PCT_20261121_C3GCWW" style="text-decoration:none;"><span class="code-tag" style="font-size:11px; padding:2px 7px;">C3GCWW</span></a>
+                        </td>
+                        <td><span class="status-ready">● PRE-MATCH READY (0/1 · 1 UPCOMING)</span></td>
+                        <td style="min-width: 150px;">
+                            <div style="font-family:var(--mono-font); font-size:11px;">
+                                <strong style="color:var(--accent-green);">0W</strong> &middot;
+                                <span style="color:var(--accent-red);">0L</span> &middot;
+                                <span style="color:var(--accent-gold);">0Live</span> &middot;
+                                <span style="color:var(--text-muted);">1P</span>
+                                <span style="float:right; color:var(--accent-cyan);">0%</span>
+                            </div>
+                            <div class="prog-track"><div class="prog-fill" style="width:0.0%;"></div></div>
+                        </td>
+                        <td style="font-family:var(--mono-font);">
+                            2.00 &rarr; <strong style="color:var(--accent-green);">2.02 GHS</strong>
+                            <span style="color:var(--text-muted); font-size:10px;">(1.0x)</span>
+                        </td>
+                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">2.00 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(100% of stake)</span></td>
+                        <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-26 17:45</span> &mdash; Besiktas Istanbul vs Hapoel Be`er Sheva FC</td>
+                    </tr>
+        
+                </tbody>
+            </table>
+        </div>
+        <div class="ticket-header" style="border-top: 1px solid var(--card-border); margin-top: 6px;">
+            <h3>2. Settled Slips Quick Status Summary (0 Won &middot; 5 Cashed Out &middot; 17 Lost)</h3>
+            <span class="ticket-meta">EVERY HISTORICAL SLIP STATUS &amp; SINGLE-LEG ROOT CAUSE</span>
+        </div>
+        <div style="max-height: 240px; overflow-y: auto;">
+            <table class="legs-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Slip Code</th>
+                        <th>Folds &amp; Stake</th>
+                        <th>Final Status</th>
+                        <th>Leg Tally</th>
+                        <th>Realized PnL</th>
+                        <th>Outcome / Busted Leg Summary</th>
+                    </tr>
+                </thead>
+                <tbody>
+    
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-23</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">DKT3A3</span></td>
+                        <td style="font-family:var(--mono-font);">25F &middot; 3.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">2W - 2L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-3.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Brentford vs Everton (UNDER_2_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-23</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">FDT8WA</span></td>
+                        <td style="font-family:var(--mono-font);">26F &middot; 3.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">2W - 1L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-3.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Gimnasia y Esgrima La Plata vs Newell´s Old Boys (UNDER_3_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-22</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">D40MWN</span></td>
+                        <td style="font-family:var(--mono-font);">23F &middot; 3.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">4W - 1L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-3.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Marseille vs Le Mans FC (UNDER_4_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-22</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">F4JQ4M</span></td>
+                        <td style="font-family:var(--mono-font);">22F &middot; 3.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">9W - 2L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-3.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Go Ahead Eagles vs Fortuna Sittard (DOUBLE_CHANCE)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-22</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">EPVDTJ</span></td>
+                        <td style="font-family:var(--mono-font);">24F &middot; 3.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">3W - 1L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-3.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Atalanta vs Inter (1H_UNDER_2_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">9MJSC0</span></td>
+                        <td style="font-family:var(--mono-font);">21F &middot; 2.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">11W - 9L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-2.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Monaco vs Auxerre (PLAIN_1X2_FAV_ACCUM)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">BKJ0JX</span></td>
+                        <td style="font-family:var(--mono-font);">23F &middot; 3.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">13W - 3L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-3.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Kilmarnock FC vs Aberdeen (UNDER_4_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">808QK6</span></td>
+                        <td style="font-family:var(--mono-font);">22F &middot; 3.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">13W - 4L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-3.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Millwall FC vs Queens Park Rangers (OVER_1_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">8YLKVR</span></td>
+                        <td style="font-family:var(--mono-font);">43F &middot; 2.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">29W - 11L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-2.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Metz vs US Boulogne (1H_GG_NG_NO)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">CMYT2L</span></td>
+                        <td style="font-family:var(--mono-font);">35F &middot; 2.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">27W - 4L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-2.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Aston Villa vs Sunderland AFC (2H_OVER_0_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">D8WJHX</span></td>
+                        <td style="font-family:var(--mono-font);">20F &middot; 2.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">13W - 7L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-2.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Aston Villa vs Sunderland (PLAIN_1X2_FAV_ACCUM)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">93VVCD</span></td>
+                        <td style="font-family:var(--mono-font);">45F &middot; 2.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">35W - 6L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-2.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: AGF Aarhus vs Lyngby BK (2H_OVER_0_5)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-21</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">CHBJ6E</span></td>
+                        <td style="font-family:var(--mono-font);">44F &middot; 2.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">21W - 6L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-2.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Busted on: Bayern Munich vs Cologne (HCP_0_1_FAV)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">CLB3UK</span></td>
+                        <td style="font-family:var(--mono-font);">5F &middot; 1.00 GHS</td>
+                        <td><span class="status-cashed">⇄ CASHED OUT</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">0W - 0L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-gold);">+0.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Cashed Out Early (Principal Preserved)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">C0RDDH</span></td>
+                        <td style="font-family:var(--mono-font);">5F &middot; 1.00 GHS</td>
+                        <td><span class="status-cashed">⇄ CASHED OUT</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">0W - 0L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-gold);">+0.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Cashed Out Early (Principal Preserved)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">DD8GDQ</span></td>
+                        <td style="font-family:var(--mono-font);">5F &middot; 1.00 GHS</td>
+                        <td><span class="status-cashed">⇄ CASHED OUT</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">0W - 0L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-gold);">+0.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Cashed Out Early (Principal Preserved)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">EPUVUU</span></td>
+                        <td style="font-family:var(--mono-font);">5F &middot; 1.00 GHS</td>
+                        <td><span class="status-cashed">⇄ CASHED OUT</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">0W - 0L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-gold);">+0.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Cashed Out Early (Principal Preserved)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">9A9YK1</span></td>
+                        <td style="font-family:var(--mono-font);">5F &middot; 1.00 GHS</td>
+                        <td><span class="status-cashed">⇄ CASHED OUT</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--accent-cyan);">0W - 0L</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-gold);">+0.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Cashed Out Early (Principal Preserved)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">C6QSSB</span></td>
+                        <td style="font-family:var(--mono-font);">8F &middot; 5.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">Cycle 1 Core</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-5.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Ticket 1: Live Cross-Sport Accumulator (Pre-v4.0 Straight 1X2/ML)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">D2X3PV</span></td>
+                        <td style="font-family:var(--mono-font);">7F &middot; 5.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">Cycle 1 Core</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-5.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Ticket 2: Live Cross-Sport Accumulator (Pre-v4.0 Straight 1X2/ML)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">BD8Y44</span></td>
+                        <td style="font-family:var(--mono-font);">7F &middot; 5.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">Cycle 1 Core</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-5.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Ticket 3: Live Cross-Sport Accumulator (Pre-v4.0 Straight 1X2/ML)</td>
+                    </tr>
+        
+                    <tr>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">2026-11-16</td>
+                        <td><span class="code-tag" style="font-size:10px; padding:2px 6px;">ASL92A</span></td>
+                        <td style="font-family:var(--mono-font);">7F &middot; 5.00 GHS</td>
+                        <td><span class="status-lost">✕ LOST</span></td>
+                        <td style="font-family:var(--mono-font); color:var(--text-muted);">Cycle 1 Core</td>
+                        <td style="font-family:var(--mono-font); font-weight:bold; color:var(--accent-red);">-5.00 GHS</td>
+                        <td style="font-size:11px; color:var(--text-muted);">Ticket 4: Live Cross-Sport Accumulator (Pre-v4.0 Straight 1X2/ML)</td>
+                    </tr>
+        
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -920,10 +1434,15 @@
     <div class="section-title">Active Syndicate Accumulators &amp; Anointed Twin-Wave Slips (9121S3 & FK88QC & F9QK8B & FK88QC & ELVXWA & C36TTY & C3GCWW)</div>
     <div style="margin-bottom: 28px;">
     
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-CH_MONSTER_20261121_V10_HYBRID_200X" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>25-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: 9121S3</span></h3>
-                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 152.42x | CASHOUT: <strong style="color: var(--accent-cyan);">Suspended/In-Play</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">674.44 GHS</strong></span>
+                <h3>25-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: 9121S3</span> <span class="status-won" style="margin-left:8px;">● ALIVE & UNDEFEATED (6/25 WON)</span></h3>
+                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 152.42x | CASHOUT: <strong style="color: var(--accent-cyan);">8.05 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">674.44 GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">6 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">19 PENDING</span> (24.0%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:24.0%;"></div></div></div>
+                <div>NEXT KICKOFF: <strong style="color:var(--accent-cyan);">11-24 20:00 GMT</strong> (Feyenoord vs Porto)</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -932,249 +1451,254 @@
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 12:30</td>
                         <td class="match-cell">Norwich vs Cardiff City</td>
                         <td class="selection-cell">Cardiff City Over/Under: Under 2.5 @1.20 (Prob 81.1%, RTP 97.3%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Away Under 2.5) (England - Championship)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 13:00</td>
                         <td class="match-cell">Galatasaray Istanbul vs Samsunspor</td>
                         <td class="selection-cell">Samsunspor Over/Under: Under 1.5 @1.21 (Prob 80.3%, RTP 97.2%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Away Under 1.5) (Turkiye - Super Lig)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">3</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 20:00</td>
                         <td class="match-cell">FC Groningen vs SC Heerenveen</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.22 (Prob 79.9%, RTP 97.5%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:3)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">4</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 13:30</td>
                         <td class="match-cell">Ajax vs ADO Den Haag</td>
                         <td class="selection-cell">ADO Den Haag Over/Under: Under 1.5 @1.20 (Prob 80.9%, RTP 97.1%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Away Under 1.5) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 3:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">5</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 13:30</td>
                         <td class="match-cell">Sparta Rotterdam vs Alkmaar</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.21 (Prob 80.4%, RTP 97.2%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:5)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">6</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 14:30</td>
                         <td class="match-cell">Augsburg vs Mainz</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.23 (Prob 79.4%, RTP 97.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Germany - Bundesliga)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 3:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">7</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">Feyenoord vs Porto</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.24 (Prob 78.9%, RTP 97.9%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">8</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 20:00</td>
                         <td class="match-cell">Sporting vs Man Utd</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.25 (Prob 78.4%, RTP 98.0%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">9</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 17:45</td>
                         <td class="match-cell">Union Gilloise vs KKS Lech Poznan</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.22 (Prob 80.0%, RTP 97.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">10</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 17:45</td>
                         <td class="match-cell">Viktoria Plzen vs Benfica</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.22 (Prob 79.8%, RTP 97.4%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">Crystal Palace vs Real Sociedad</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.24 (Prob 78.8%, RTP 97.7%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">12</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">Freiburg vs FC Twente Enschede</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.20 (Prob 81.1%, RTP 97.4%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (International Clubs - UEFA Conference League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">13</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">PFC CSKA Sofia vs Trabzonspor</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.22 (Prob 80.1%, RTP 97.8%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (International Clubs - UEFA Conference League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">14</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-27 19:30</td>
                         <td class="match-cell">Werder Bremen vs Borussia M´gladbach</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.21 (Prob 80.6%, RTP 97.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Germany - Bundesliga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">15</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 13:00</td>
                         <td class="match-cell">Betis vs Rayo Vallecano</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.25 (Prob 78.3%, RTP 97.9%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (Spain - LaLiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">16</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 14:00</td>
                         <td class="match-cell">Frosinone vs Parma Calcio</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.22 (Prob 79.9%, RTP 97.5%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">17</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 15:00</td>
                         <td class="match-cell">Man Utd vs Brentford</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.24 (Prob 79.0%, RTP 98.0%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (England - Premier League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">18</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 15:30</td>
                         <td class="match-cell">Excelsior Rotterdam vs SC Telstar</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.22 (Prob 79.9%, RTP 97.5%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">19</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 16:15</td>
                         <td class="match-cell">Angers vs Lens</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.22 (Prob 80.1%, RTP 97.7%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (France - Ligue 1)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">20</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 20:00</td>
                         <td class="match-cell">SC Cambuur vs Sparta Rotterdam</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.21 (Prob 80.6%, RTP 97.5%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">21</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 14:00</td>
                         <td class="match-cell">AJ Auxerre vs Marseille</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.22 (Prob 79.9%, RTP 97.5%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (France - Ligue 1)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">22</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 14:00</td>
                         <td class="match-cell">Sassuolo vs Napoli</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.25 (Prob 78.3%, RTP 97.9%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">23</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 14:30</td>
                         <td class="match-cell">Freiburg vs RB Leipzig</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.22 (Prob 80.0%, RTP 97.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Germany - Bundesliga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">24</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 16:15</td>
                         <td class="match-cell">Toulouse vs Rennes</td>
                         <td class="selection-cell">Over/Under: Under 4.5 @1.24 (Prob 78.9%, RTP 97.9%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (Under 4.5 Goals) (France - Ligue 1)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">25</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 18:30</td>
                         <td class="match-cell">Borussia Dortmund vs Bayer Leverkusen</td>
                         <td class="selection-cell">1st Half - Over/Under: Under 2.5 @1.21 (Prob 80.6%, RTP 97.5%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem (1H Under 2.5) (Germany - Bundesliga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">9121S3</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">POSTMORTEM_ZERO_VIG_HYBRID_200X_25F_BONUS0PCT</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">9121S3</strong> // Status: <span class="status-won">ALIVE & UNDEFEATED (6/25 WON)</span> // Cluster: <span style="color: var(--accent-cyan);">POSTMORTEM_ZERO_VIG_HYBRID_200X_25F_BONUS0PCT</span></div>
                 <div>Total Potential Win: <span class="payout-val">674.44 GHS</span></div>
             </div>
         </div>
         
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-CH_ANOINTED_V18_TWIN_HARVESTER" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>21-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: FK88QC</span><span class="tier-elite" style="margin-left:8px;">HARVESTER // AUTO-LOCK &ge; 5.10 GHS</span></h3>
-                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 82.65x | CASHOUT: <strong style="color: var(--accent-cyan);">Suspended/In-Play</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">401.66 GHS</strong></span>
+                <h3>21-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: FK88QC</span><span class="tier-elite" style="margin-left:8px;">HARVESTER // AUTO-LOCK &ge; 5.10 GHS</span> <span class="status-ready" style="margin-left:8px;">● PRE-MATCH READY (0/21 · 21 UPCOMING)</span></h3>
+                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 82.65x | CASHOUT: <strong style="color: var(--accent-cyan);">3.00 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">401.66 GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">0 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">21 PENDING</span> (0.0%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:0.0%;"></div></div></div>
+                <div>NEXT KICKOFF: <strong style="color:var(--accent-cyan);">11-24 09:30 GMT</strong> (Admiral Vladivostok vs Ak Bars Kazan)</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -1183,213 +1707,218 @@
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 09:30</td>
                         <td class="match-cell">Admiral Vladivostok vs Ak Bars Kazan</td>
                         <td class="selection-cell">[Ice Hockey] Admiral Vladivostok Over/Under: Under 3.5 @1.20 (Surv 81.1%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL), Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 14:00</td>
                         <td class="match-cell">Metallurg Magnitogorsk vs HC Dinamo Minsk</td>
                         <td class="selection-cell">[Ice Hockey] HC Dinamo Minsk Over/Under: Under 3.5 @1.20 (Surv 81.1%, RTP 97.3%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL), Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">3</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 14:00</td>
                         <td class="match-cell">Salavat Yulaev UFA vs Neftekhimik Nizhnekamsk</td>
                         <td class="selection-cell">[Ice Hockey] Salavat Yulaev UFA Over/Under: Under 4.5 @1.21 (Surv 80.5%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL), Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">4</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 16:30</td>
                         <td class="match-cell">Vaasan Sport vs Kiekko-Espoo</td>
                         <td class="selection-cell">[Ice Hockey] Handicap (incl. overtime and penalties): Home (+2.5) @1.20 (Surv 81.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Finland - Liiga), Anointed-v4.0 (MOONSHOT) (Finland - Liiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Finland - Liiga)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">5</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 17:00</td>
                         <td class="match-cell">Besiktas JK vs Paris Basketball</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) -10.5: Away (+10.5) @1.20 (Surv 81.7%, RTP 98.0%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">6</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 18:45</td>
                         <td class="match-cell">EV Zug vs EHC Kloten</td>
                         <td class="selection-cell">[Ice Hockey] EV Zug Over/Under: Under 5.5 @1.20 (Surv 81.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League), Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">7</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 18:45</td>
                         <td class="match-cell">HC Fribourg-Gotteron vs ZSC Lions Zurich</td>
                         <td class="selection-cell">[Ice Hockey] HC Fribourg-Gotteron Over/Under: Under 3.5 @1.23 (Surv 79.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League), Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">8</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 18:45</td>
                         <td class="match-cell">HC Lugano vs EHC Biel</td>
                         <td class="selection-cell">[Ice Hockey] HC Lugano Over/Under: Under 4.5 @1.22 (Surv 79.9%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League), Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">9</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:00</td>
                         <td class="match-cell">Bayern Munich vs Maccabi Tel-Aviv</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) -12.5: Away (+12.5) @1.22 (Surv 80.4%, RTP 98.0%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">10</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:30</td>
                         <td class="match-cell">Valencia Basket vs Panathinaikos BC</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 9.5: Home (+9.5) @1.20 (Surv 81.6%, RTP 98.0%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:45</td>
                         <td class="match-cell">ASVEL Lyon-Villeurbanne vs Olimpia Milano</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 10.5: Home (+10.5) @1.21 (Surv 80.9%, RTP 97.9%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">12</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">FC Barcelona vs Fenerbahce Istanbul</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 12.5: Home (+12.5) @1.20 (Surv 81.1%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">13</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 00:00</td>
                         <td class="match-cell">Orlando Magic vs Detroit Pistons</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 14.5: Home (+14.5) @1.20 (Surv 81.7%, RTP 98.1%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">14</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 01:00</td>
                         <td class="match-cell">Edmonton Oilers vs Vegas Golden Knights</td>
                         <td class="selection-cell">[Ice Hockey] Vegas Golden Knights Over/Under: Under 4.5 @1.23 (Surv 79.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NHL), Anointed-v4.0 (MOONSHOT) (USA - NHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">15</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 01:00</td>
                         <td class="match-cell">Washington Wizards vs Boston Celtics</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Away @1.22 (Surv 80.3%, RTP 97.9%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">16</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 03:00</td>
                         <td class="match-cell">Denver Nuggets vs Dallas Mavericks</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) -18.5: Away (+18.5) @1.22 (Surv 80.3%, RTP 97.9%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">17</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 16:00</td>
                         <td class="match-cell">Dubai Basketball vs KK Partizan Belgrade</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Home @1.37 (Surv 71.2%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">18</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 16:30</td>
                         <td class="match-cell">Karpat Oulu vs Pelicans Lahti</td>
                         <td class="selection-cell">[Ice Hockey] Pelicans Lahti Over/Under: Under 3.5 @1.21 (Surv 80.6%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Finland - Liiga), Anointed-v4.0 (MOONSHOT) (Finland - Liiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Finland - Liiga)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">19</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 19:15</td>
                         <td class="match-cell">BC Olympiakos Piraeus vs Hapoel Tel-Aviv</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Home @1.33 (Surv 73.3%, RTP 97.6%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">20</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 19:30</td>
                         <td class="match-cell">Baskonia Vitoria-Gasteiz vs Anadolu Efes SK</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 6.5: Home (+6.5) @1.41 (Surv 69.0%, RTP 97.3%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">21</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 01:30</td>
                         <td class="match-cell">Houston Rockets vs Phoenix Suns</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Home @1.26 (Surv 77.3%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">FK88QC</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">ANOINTED_V4_100X_TWIN_HARVESTER_21F</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">FK88QC</strong> // Status: <span class="status-ready">PRE-MATCH READY (0/21 · 21 UPCOMING)</span> // Cluster: <span style="color: var(--accent-cyan);">ANOINTED_V4_100X_TWIN_HARVESTER_21F</span></div>
                 <div>Total Potential Win: <span class="payout-val">401.66 GHS</span></div>
             </div>
         </div>
         
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-CH_MONSTER_20261123_V16_UCL_SHIELD_130X" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>24-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: F9QK8B</span></h3>
-                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 89.27x | CASHOUT: <strong style="color: var(--accent-cyan);">Suspended/In-Play</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">388.31 GHS</strong></span>
+                <h3>24-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: F9QK8B</span> <span class="status-ready" style="margin-left:8px;">● PRE-MATCH READY (0/24 · 24 UPCOMING)</span></h3>
+                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 89.27x | CASHOUT: <strong style="color: var(--accent-cyan);">1.79 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">388.31 GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">0 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">24 PENDING</span> (0.0%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:0.0%;"></div></div></div>
+                <div>NEXT KICKOFF: <strong style="color:var(--accent-cyan);">11-24 12:15 GMT</strong> (Shanghai Port FC vs Buriram United)</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -1398,240 +1927,245 @@
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 12:15</td>
                         <td class="match-cell">Shanghai Port FC vs Buriram United</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.21 (Prob 80.0%, RTP 96.8%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (International Clubs - AFC Champions League Elite)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:45</td>
                         <td class="match-cell">Bromley FC vs Wycombe Wanderers</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.4%, RTP 96.5%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (England - League One)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">3</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:45</td>
                         <td class="match-cell">Hibernian FC vs Dundee FC</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.21 (Prob 80.0%, RTP 96.8%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Scotland - Premiership)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">4</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:45</td>
                         <td class="match-cell">Norwich vs Queens Park Rangers</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.21 (Prob 80.7%, RTP 97.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (England - Championship)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">5</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 21:00</td>
                         <td class="match-cell">Chapecoense SC vs SE Palmeiras SP</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.3%, RTP 96.4%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Brazil - Brasileiro Serie A)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">6</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 19:45</td>
                         <td class="match-cell">Bolton Wanderers vs West Bromwich</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.23 (Prob 79.2%, RTP 97.4%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (England - Championship)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">7</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 19:45</td>
                         <td class="match-cell">Burnley vs Birmingham City</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.22 (Prob 79.5%, RTP 97.0%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (England - Championship)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">8</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 15:05</td>
                         <td class="match-cell">Abha Club vs Al-Shabab FC (SA)</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 79.9%, RTP 95.8%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Saudi Arabia - Saudi Pro League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">9</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 17:45</td>
                         <td class="match-cell">KF Egnatia Rrogozhine vs Lincoln Red Imps</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.5%, RTP 96.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (International Clubs - UEFA Conference League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">10</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">Juventus vs AC Omonia Nicosia</td>
                         <td class="selection-cell">1X2 - 2UP: Home @1.20 (Prob 81.5%, RTP 97.8%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (1X2 - 2UP Home) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">SCU Torreense vs Celtic</td>
                         <td class="selection-cell">Double Chance: Draw or Away @1.21 (Prob 79.6%, RTP 96.3%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Double Chance X2) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">12</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">Sparta Prague vs Alkmaar</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.5%, RTP 96.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">13</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-27 12:00</td>
                         <td class="match-cell">Maccabi Petah Tikva FC vs Hapoel Tel Aviv FC</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.3%, RTP 96.3%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Israel - Premier League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">14</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 11:00</td>
                         <td class="match-cell">FC Dynamo Kyiv vs FC Chernomorets Odessa</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.3%, RTP 96.4%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Ukraine - Premier League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">15</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 12:00</td>
                         <td class="match-cell">Dynamo Dresden vs FC St. Pauli</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.21 (Prob 79.7%, RTP 96.4%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Germany - 2. Bundesliga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">16</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 15:00</td>
                         <td class="match-cell">Aberdeen vs Dundee FC</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.5%, RTP 96.7%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Scotland - Premiership)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">17</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 15:00</td>
                         <td class="match-cell">Millwall FC vs Burnley</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.21 (Prob 79.9%, RTP 96.7%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (England - Championship)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">18</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 15:00</td>
                         <td class="match-cell">Queens Park Rangers vs Sheffield United</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.21 (Prob 80.1%, RTP 96.9%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (England - Championship)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">19</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 15:00</td>
                         <td class="match-cell">Wigan Athletic vs Plymouth Argyle</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.2%, RTP 96.2%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (England - League One)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">20</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 16:00</td>
                         <td class="match-cell">Gaziantep FK vs Amed Sportif Faaliyetler</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.5%, RTP 96.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Turkiye - Super Lig)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">21</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 17:15</td>
                         <td class="match-cell">Cercle Brugge vs Yellow-Red KV Mechelen</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.20 (Prob 80.2%, RTP 96.2%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Belgium - Pro League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">22</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 17:45</td>
                         <td class="match-cell">Motherwell FC vs Hibernian FC</td>
                         <td class="selection-cell">Over/Under: Over 1.5 @1.21 (Prob 80.0%, RTP 96.8%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (Over 1.5 Goals) (Scotland - Premiership)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">23</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 17:45</td>
                         <td class="match-cell">PSV Eindhoven vs Go Ahead Eagles</td>
                         <td class="selection-cell">1X2 - 2UP: Home @1.20 (Prob 79.8%, RTP 95.8%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (1X2 - 2UP Home) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">24</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 19:45</td>
                         <td class="match-cell">PSG vs Lorient</td>
                         <td class="selection-cell">1X2 - 2UP: Home @1.21 (Prob 80.1%, RTP 97.0%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-PostMortem-v3.1 (1X2 - 2UP Home) (France - Ligue 1)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">F9QK8B</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">UCL_MIDWEEK_2UP_DC_SHIELD_130X_24F</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">F9QK8B</strong> // Status: <span class="status-ready">PRE-MATCH READY (0/24 · 24 UPCOMING)</span> // Cluster: <span style="color: var(--accent-cyan);">UCL_MIDWEEK_2UP_DC_SHIELD_130X_24F</span></div>
                 <div>Total Potential Win: <span class="payout-val">388.31 GHS</span></div>
             </div>
         </div>
         
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-CH_ANOINTED_V18_TWIN_MOONSHOT" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>21-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: FK88QC</span><span class="tier-sharp" style="margin-left:8px;">MOONSHOT // 100% FREE-ROLL AFTER W1</span></h3>
-                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 82.65x | CASHOUT: <strong style="color: var(--accent-cyan);">Suspended/In-Play</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">267.77 GHS</strong></span>
+                <h3>21-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: FK88QC</span><span class="tier-sharp" style="margin-left:8px;">MOONSHOT // 100% FREE-ROLL AFTER W1</span> <span class="status-ready" style="margin-left:8px;">● PRE-MATCH READY (0/21 · 21 UPCOMING)</span></h3>
+                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 82.65x | CASHOUT: <strong style="color: var(--accent-cyan);">2.00 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">267.77 GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">0 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">21 PENDING</span> (0.0%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:0.0%;"></div></div></div>
+                <div>NEXT KICKOFF: <strong style="color:var(--accent-cyan);">11-24 09:30 GMT</strong> (Admiral Vladivostok vs Ak Bars Kazan)</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -1640,213 +2174,218 @@
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 09:30</td>
                         <td class="match-cell">Admiral Vladivostok vs Ak Bars Kazan</td>
                         <td class="selection-cell">[Ice Hockey] Admiral Vladivostok Over/Under: Under 3.5 @1.20 (Surv 81.1%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL), Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 14:00</td>
                         <td class="match-cell">Metallurg Magnitogorsk vs HC Dinamo Minsk</td>
                         <td class="selection-cell">[Ice Hockey] HC Dinamo Minsk Over/Under: Under 3.5 @1.20 (Surv 81.1%, RTP 97.3%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL), Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">3</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 14:00</td>
                         <td class="match-cell">Salavat Yulaev UFA vs Neftekhimik Nizhnekamsk</td>
                         <td class="selection-cell">[Ice Hockey] Salavat Yulaev UFA Over/Under: Under 4.5 @1.21 (Surv 80.5%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Russia - KHL), Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Russia - KHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">4</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 16:30</td>
                         <td class="match-cell">Vaasan Sport vs Kiekko-Espoo</td>
                         <td class="selection-cell">[Ice Hockey] Handicap (incl. overtime and penalties): Home (+2.5) @1.20 (Surv 81.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Finland - Liiga), Anointed-v4.0 (MOONSHOT) (Finland - Liiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Finland - Liiga)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">5</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 17:00</td>
                         <td class="match-cell">Besiktas JK vs Paris Basketball</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) -10.5: Away (+10.5) @1.20 (Surv 81.7%, RTP 98.0%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">6</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 18:45</td>
                         <td class="match-cell">EV Zug vs EHC Kloten</td>
                         <td class="selection-cell">[Ice Hockey] EV Zug Over/Under: Under 5.5 @1.20 (Surv 81.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League), Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">7</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 18:45</td>
                         <td class="match-cell">HC Fribourg-Gotteron vs ZSC Lions Zurich</td>
                         <td class="selection-cell">[Ice Hockey] HC Fribourg-Gotteron Over/Under: Under 3.5 @1.23 (Surv 79.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League), Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">8</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 18:45</td>
                         <td class="match-cell">HC Lugano vs EHC Biel</td>
                         <td class="selection-cell">[Ice Hockey] HC Lugano Over/Under: Under 4.5 @1.22 (Surv 79.9%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Switzerland - National League), Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Switzerland - National League)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">9</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:00</td>
                         <td class="match-cell">Bayern Munich vs Maccabi Tel-Aviv</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) -12.5: Away (+12.5) @1.22 (Surv 80.4%, RTP 98.0%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">10</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:30</td>
                         <td class="match-cell">Valencia Basket vs Panathinaikos BC</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 9.5: Home (+9.5) @1.20 (Surv 81.6%, RTP 98.0%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 19:45</td>
                         <td class="match-cell">ASVEL Lyon-Villeurbanne vs Olimpia Milano</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 10.5: Home (+10.5) @1.21 (Surv 80.9%, RTP 97.9%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">12</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">FC Barcelona vs Fenerbahce Istanbul</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 12.5: Home (+12.5) @1.20 (Surv 81.1%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">13</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 00:00</td>
                         <td class="match-cell">Orlando Magic vs Detroit Pistons</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 14.5: Home (+14.5) @1.20 (Surv 81.7%, RTP 98.1%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">14</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 01:00</td>
                         <td class="match-cell">Edmonton Oilers vs Vegas Golden Knights</td>
                         <td class="selection-cell">[Ice Hockey] Vegas Golden Knights Over/Under: Under 4.5 @1.23 (Surv 79.2%, RTP 97.4%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NHL), Anointed-v4.0 (MOONSHOT) (USA - NHL)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (USA - NHL)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">15</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 01:00</td>
                         <td class="match-cell">Washington Wizards vs Boston Celtics</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Away @1.22 (Surv 80.3%, RTP 97.9%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">16</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 03:00</td>
                         <td class="match-cell">Denver Nuggets vs Dallas Mavericks</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) -18.5: Away (+18.5) @1.22 (Surv 80.3%, RTP 97.9%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">17</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 16:00</td>
                         <td class="match-cell">Dubai Basketball vs KK Partizan Belgrade</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Home @1.37 (Surv 71.2%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">18</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 16:30</td>
                         <td class="match-cell">Karpat Oulu vs Pelicans Lahti</td>
                         <td class="selection-cell">[Ice Hockey] Pelicans Lahti Over/Under: Under 3.5 @1.21 (Surv 80.6%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (Finland - Liiga), Anointed-v4.0 (MOONSHOT) (Finland - Liiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (Finland - Liiga)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">19</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 19:15</td>
                         <td class="match-cell">BC Olympiakos Piraeus vs Hapoel Tel-Aviv</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Home @1.33 (Surv 73.3%, RTP 97.6%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">20</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 19:30</td>
                         <td class="match-cell">Baskonia Vitoria-Gasteiz vs Anadolu Efes SK</td>
                         <td class="selection-cell">[Basketball] Handicap (incl. overtime) 6.5: Home (+6.5) @1.41 (Surv 69.0%, RTP 97.3%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (International - Euroleague), Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (International - Euroleague)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">21</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 01:30</td>
                         <td class="match-cell">Houston Rockets vs Phoenix Suns</td>
                         <td class="selection-cell">[Basketball] Winner (incl. overtime): Home @1.26 (Surv 77.3%, RTP 97.5%)</td>
-                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (HARVESTER) (USA - NBA), Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (MOONSHOT) (USA - NBA)</td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">FK88QC</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">ANOINTED_V4_100X_TWIN_MOONSHOT_21F</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">FK88QC</strong> // Status: <span class="status-ready">PRE-MATCH READY (0/21 · 21 UPCOMING)</span> // Cluster: <span style="color: var(--accent-cyan);">ANOINTED_V4_100X_TWIN_MOONSHOT_21F</span></div>
                 <div>Total Potential Win: <span class="payout-val">267.77 GHS</span></div>
             </div>
         </div>
         
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-CH_ANOINTED_V20_VAULT_STEP1" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>3-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: ELVXWA</span><span class="tier-probation" style="margin-left:8px;">MODE C // INTEGER PUSH VAULT STEP 1</span></h3>
-                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 1.92x | CASHOUT: <strong style="color: var(--accent-cyan);">Suspended/In-Play</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">5.91 GHS</strong></span>
+                <h3>3-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: ELVXWA</span><span class="tier-probation" style="margin-left:8px;">MODE C // INTEGER PUSH VAULT STEP 1</span> <span class="status-ready" style="margin-left:8px;">● PRE-MATCH READY (0/3 · 3 UPCOMING)</span></h3>
+                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 1.92x | CASHOUT: <strong style="color: var(--accent-cyan);">3.00 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">5.91 GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">0 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">3 PENDING</span> (0.0%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:0.0%;"></div></div></div>
+                <div>NEXT KICKOFF: <strong style="color:var(--accent-cyan);">11-24 20:00 GMT</strong> (Arsenal vs Borussia Dortmund)</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -1855,51 +2394,56 @@
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">Arsenal vs Borussia Dortmund</td>
                         <td class="selection-cell">[Football] Over/Under: Under 4 @1.23 (Surv 83.2%, Push 16%, RTP 98.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (VAULT_STEP) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">Como 1907 vs AEK Athens</td>
                         <td class="selection-cell">[Football] Over/Under: Under 5 @1.23 (Surv 82.9%, Push 15%, RTP 98.6%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (VAULT_STEP) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">3</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">RB Leipzig vs Lens</td>
                         <td class="selection-cell">[Football] Over/Under: Under 5 @1.27 (Surv 81.0%, Push 15%, RTP 98.9%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Anointed-v4.0 (VAULT_STEP) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">ELVXWA</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">MODE_C_INTEGER_PUSH_VAULT_STEP1_3F</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">ELVXWA</strong> // Status: <span class="status-ready">PRE-MATCH READY (0/3 · 3 UPCOMING)</span> // Cluster: <span style="color: var(--accent-cyan);">MODE_C_INTEGER_PUSH_VAULT_STEP1_3F</span></div>
                 <div>Total Potential Win: <span class="payout-val">5.91 GHS</span></div>
             </div>
         </div>
         
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-CH_MONSTER_20261119_V7_50F_99PCT" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>50-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: C36TTY</span></h3>
-                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 1.64x | CASHOUT: <strong style="color: var(--accent-cyan);">Suspended/In-Play</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">3.29 GHS</strong></span>
+                <h3>50-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: C36TTY</span> <span class="status-won" style="margin-left:8px;">● ALIVE & UNDEFEATED (28/50 WON)</span></h3>
+                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 1.64x | CASHOUT: <strong style="color: var(--accent-cyan);">Paused / Unavailable</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">3.29 GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">28 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">22 PENDING</span> (56.0%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:56.0%;"></div></div></div>
+                <div>NEXT KICKOFF: <strong style="color:var(--accent-cyan);">11-24 20:00 GMT</strong> (Man City vs Napoli)</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -1908,474 +2452,479 @@
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-20 10:00</td>
                         <td class="match-cell">Kashima Antlers vs Shimizu S-Pulse</td>
                         <td class="selection-cell">2nd Half - Shimizu S-Pulse Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-2H-Ceiling) (Japan - J1 League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">2</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 05:00</td>
                         <td class="match-cell">Machida Zelvia vs V-Varen Nagasaki</td>
                         <td class="selection-cell">2nd Half - V-Varen Nagasaki Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-2H-Ceiling) (Japan - J1 League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 0:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">3</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 05:00</td>
                         <td class="match-cell">Tokyo Verdy vs Nagoya Grampus</td>
                         <td class="selection-cell">1st half - Tokyo Verdy Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.66%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Japan - J1 League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 0:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">4</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 06:00</td>
                         <td class="match-cell">Cerezo Osaka vs FC Tokyo</td>
                         <td class="selection-cell">1st half - Cerezo Osaka Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Japan - J1 League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 0:3)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">5</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 06:00</td>
                         <td class="match-cell">Kawasaki Frontale vs Avispa Fukuoka</td>
                         <td class="selection-cell">1st half - Avispa Fukuoka Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Japan - J1 League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">6</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 12:30</td>
                         <td class="match-cell">Southampton vs Derby County</td>
                         <td class="selection-cell">Derby County Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (England - Championship)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">7</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 13:00</td>
                         <td class="match-cell">Alaves vs RC Deportivo de A Coruna</td>
                         <td class="selection-cell">1st half - RC Deportivo de A Coruna Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Spain - LaLiga)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 3:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">8</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 13:00</td>
                         <td class="match-cell">Galatasaray Istanbul vs Samsunspor</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.86%, RTP 99.85%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (Turkiye - Super Lig)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">9</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:00</td>
                         <td class="match-cell">Como 1907 vs Cagliari</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.60%, RTP 99.59%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">10</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:00</td>
                         <td class="match-cell">Lazio vs Lecce</td>
                         <td class="selection-cell">2nd Half - Lecce Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-2H-Ceiling) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 3:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:30</td>
                         <td class="match-cell">Bayer Leverkusen vs Paderborn</td>
                         <td class="selection-cell">Paderborn Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.66%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (Germany - Bundesliga)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 4:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">12</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 14:30</td>
                         <td class="match-cell">Borussia M´gladbach vs Borussia Dortmund</td>
                         <td class="selection-cell">1st half - Borussia M´gladbach Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Germany - Bundesliga)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 0:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">13</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
                         <td class="match-cell">Aston Villa vs Sunderland AFC</td>
                         <td class="selection-cell">1st half - Sunderland AFC Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (England - Premier League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 0:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">14</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
                         <td class="match-cell">Bournemouth vs Nottingham Forest</td>
                         <td class="selection-cell">1st half - Nottingham Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (England - Premier League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">15</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
                         <td class="match-cell">Celtic vs St Mirren FC</td>
                         <td class="selection-cell">2nd Half - St Mirren FC Over/Under: Under 2.5 @1.01 (Prob 98.69%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-2H-Ceiling) (Scotland - Premiership)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 4:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">16</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
                         <td class="match-cell">Chelsea vs Leeds United</td>
                         <td class="selection-cell">1st half - Leeds United Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (England - Premier League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:4)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">17</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
                         <td class="match-cell">Middlesbrough FC vs Bristol City</td>
                         <td class="selection-cell">Bristol City Over/Under: Under 3.5 @1.01 (Prob 98.67%, RTP 99.66%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (England - Championship)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">18</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 15:00</td>
                         <td class="match-cell">Wolves vs Charlton Athletic</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.60%, RTP 99.58%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (England - Championship)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">19</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 16:15</td>
                         <td class="match-cell">Nice vs PSG</td>
                         <td class="selection-cell">1st half - Nice Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.66%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (France - Ligue 1)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:3)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">20</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 17:00</td>
                         <td class="match-cell">Parma Calcio vs Roma</td>
                         <td class="selection-cell">Home Team to Win Both Halves: No @1.01 (Prob 98.61%, RTP 99.59%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:5)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">21</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 17:45</td>
                         <td class="match-cell">Feyenoord vs Excelsior Rotterdam</td>
                         <td class="selection-cell">2nd Half - Excelsior Rotterdam Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-2H-Ceiling) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:3)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">22</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 19:45</td>
                         <td class="match-cell">Napoli vs Torino</td>
                         <td class="selection-cell">Torino Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">23</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-21 20:00</td>
                         <td class="match-cell">Motherwell FC vs Rangers</td>
                         <td class="selection-cell">1st half - Motherwell FC Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Scotland - Premiership)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 1:2)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">24</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 13:00</td>
                         <td class="match-cell">Barcelona vs Villarreal</td>
                         <td class="selection-cell">1st half - Villarreal Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Spain - LaLiga)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 3:2)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">25</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 13:30</td>
                         <td class="match-cell">Ajax vs ADO Den Haag</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.87%, RTP 99.86%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (Netherlands - Eredivisie)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 3:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">26</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 14:00</td>
                         <td class="match-cell">Hull City vs Brighton</td>
                         <td class="selection-cell">Hull City Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (England - Premier League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 2:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">27</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 14:00</td>
                         <td class="match-cell">Paris FC vs Angers</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.60%, RTP 99.59%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (France - Ligue 1)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 4:0)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="background: rgba(16, 185, 129, 0.05);">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">28</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-22 15:00</td>
                         <td class="match-cell">KV Kortrijk vs Union Gilloise</td>
                         <td class="selection-cell">2nd Half - KV Kortrijk Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-2H-Ceiling) (Belgium - Pro League)</td>
-                        <td><span class="anchor-pill">WON</span></td>
+                        <td><span class="status-won">✓ WON (FT 0:1)</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">29</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">Man City vs Napoli</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.86%, RTP 99.85%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">30</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">Real Madrid vs PSV Eindhoven</td>
                         <td class="selection-cell">1st half - PSV Eindhoven Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">31</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-24 20:00</td>
                         <td class="match-cell">Slovan Bratislava vs Betis</td>
                         <td class="selection-cell">Home Team to Win Both Halves: No @1.01 (Prob 98.86%, RTP 99.85%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">32</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 17:45</td>
                         <td class="match-cell">Sabah Masazir vs Barcelona</td>
                         <td class="selection-cell">Sabah Masazir Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.66%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">33</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-25 20:00</td>
                         <td class="match-cell">PSG vs Roma</td>
                         <td class="selection-cell">1st half - Roma Over/Under: Under 2.5 @1.01 (Prob 98.69%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (International Clubs - UEFA Champions League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">34</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 17:45</td>
                         <td class="match-cell">Ajax vs FC Thun</td>
                         <td class="selection-cell">FC Thun Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (International Clubs - UEFA Conference League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">35</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 17:45</td>
                         <td class="match-cell">Celta vs Bournemouth</td>
                         <td class="selection-cell">1st half - Celta Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">36</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 17:45</td>
                         <td class="match-cell">Marseille vs PFC Levski Sofia</td>
                         <td class="selection-cell">2nd Half - PFC Levski Sofia Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-2H-Ceiling) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">37</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">FK Borac Banja Luka vs Atalanta</td>
                         <td class="selection-cell">1st half - FK Borac Banja Luka Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (International Clubs - UEFA Conference League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">38</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">OFI Crete vs RSC Anderlecht</td>
                         <td class="selection-cell">1st half - OFI Crete Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">39</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 20:00</td>
                         <td class="match-cell">Sunderland AFC vs Jagiellonia Bialystok</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.87%, RTP 99.86%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">40</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 14:00</td>
                         <td class="match-cell">Frosinone vs Parma Calcio</td>
                         <td class="selection-cell">1st half - Parma Calcio Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">41</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 14:30</td>
                         <td class="match-cell">Hamburg vs Bayern Munich</td>
                         <td class="selection-cell">Hamburg Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (Germany - Bundesliga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">42</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 17:30</td>
                         <td class="match-cell">Elche CF vs Atletico Madrid</td>
                         <td class="selection-cell">1st half - Elche CF Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Spain - LaLiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">43</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 19:45</td>
                         <td class="match-cell">Inter vs Genoa</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.87%, RTP 99.85%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">44</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-28 19:45</td>
                         <td class="match-cell">Nice vs Troyes</td>
                         <td class="selection-cell">1st half - Troyes Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (France - Ligue 1)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">45</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 13:00</td>
                         <td class="match-cell">Valencia vs Osasuna</td>
                         <td class="selection-cell">1st half - Osasuna Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Spain - LaLiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">46</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 14:05</td>
                         <td class="match-cell">Brighton vs Newcastle</td>
                         <td class="selection-cell">1st half - Newcastle Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (England - Premier League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">47</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 14:05</td>
                         <td class="match-cell">Crystal Palace vs Hull City</td>
                         <td class="selection-cell">1st half - Hull City Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.66%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (England - Premier League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">48</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 15:15</td>
                         <td class="match-cell">RC Deportivo de A Coruna vs Barcelona</td>
                         <td class="selection-cell">1st half - RC Deportivo de A Coruna Over/Under: Under 2.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-1H-Ceiling) (Spain - LaLiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">49</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-29 17:00</td>
                         <td class="match-cell">Roma vs Monza</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.86%, RTP 99.85%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Joint-Half-Impossibility) (Italy - Serie A)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">50</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-30 20:00</td>
                         <td class="match-cell">Espanyol vs Getafe</td>
                         <td class="selection-cell">Getafe Over/Under: Under 3.5 @1.01 (Prob 98.68%, RTP 99.67%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">Hermes-Quant (Poisson-FT-4Goal-Tail) (Spain - LaLiga)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">C36TTY</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">SCIENTIFIC_99PCT_TAIL_FORTRESS_50F_AVG98.70PCT</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">C36TTY</strong> // Status: <span class="status-won">ALIVE & UNDEFEATED (28/50 WON)</span> // Cluster: <span style="color: var(--accent-cyan);">SCIENTIFIC_99PCT_TAIL_FORTRESS_50F_AVG98.70PCT</span></div>
                 <div>Total Potential Win: <span class="payout-val">3.29 GHS</span></div>
             </div>
         </div>
         
-        <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
+        <div id="slip-CH_QUANT_V11_FORTRESS_98PCT_20261121_C3GCWW" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>1-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: C3GCWW</span></h3>
-                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 1.01x | CASHOUT: <strong style="color: var(--accent-cyan);">Suspended/In-Play</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">2.02 GHS</strong></span>
+                <h3>1-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: C3GCWW</span> <span class="status-ready" style="margin-left:8px;">● PRE-MATCH READY (0/1 · 1 UPCOMING)</span></h3>
+                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 1.01x | CASHOUT: <strong style="color: var(--accent-cyan);">2.00 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">2.02 GHS</strong></span>
+            </div>
+            <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
+                <div>PROGRESS: <strong style="color:var(--accent-green);">0 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">1 PENDING</span> (0.0%)</div>
+                <div style="flex: 1; min-width: 140px; max-width: 280px;"><div class="prog-track" style="margin-top:0;"><div class="prog-fill" style="width:0.0%;"></div></div></div>
+                <div>NEXT KICKOFF: <strong style="color:var(--accent-cyan);">11-26 17:45 GMT</strong> (Besiktas Istanbul vs Hapoel Be`er Sheva FC)</div>
             </div>
             <table class="legs-table">
                 <thead>
@@ -2384,25 +2933,25 @@
                         <th>Kickoff (GMT)</th>
                         <th>Fixture</th>
                         <th>Selection (Multi-Market)</th>
-                        <th>Endorsing CodeHub Creators (Source Slips)</th>
-                        <th>Status</th>
+                        <th>Strategy / Source</th>
+                        <th>Leg Status &amp; Score</th>
                     </tr>
                 </thead>
                 <tbody>
         
-                    <tr>
+                    <tr style="">
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">1</td>
                         <td style="font-family: var(--mono-font); color: var(--text-muted);">11-26 17:45</td>
                         <td class="match-cell">Besiktas Istanbul vs Hapoel Be`er Sheva FC</td>
                         <td class="selection-cell">Away Team to Win Both Halves: No @1.01 (Prob 98.87%, RTP 99.86%)</td>
                         <td style="font-family: var(--mono-font); font-size: 10px; color: var(--accent-gold);">QUANT_V11_FORTRESS_98PCT (International Clubs - UEFA Europa League)</td>
-                        <td><span class="anchor-pill">IN_PROGRESS</span></td>
+                        <td><span class="status-pending">⏳ PENDING</span></td>
                     </tr>
             
                 </tbody>
             </table>
             <div class="card-footer">
-                <div>Booking Code: <strong style="color: var(--accent-gold);">C3GCWW</strong> // Derived Consensus Cluster: <span style="color: var(--accent-cyan);">QUANT_V11_FORTRESS_98PCT_1F_RTP99.86PCT_B0.0PCT</span></div>
+                <div>Booking Code: <strong style="color: var(--accent-gold);">C3GCWW</strong> // Status: <span class="status-ready">PRE-MATCH READY (0/1 · 1 UPCOMING)</span> // Cluster: <span style="color: var(--accent-cyan);">QUANT_V11_FORTRESS_98PCT_1F_RTP99.86PCT_B0.0PCT</span></div>
                 <div>Total Potential Win: <span class="payout-val">2.02 GHS</span></div>
             </div>
         </div>
