@@ -1,14 +1,11 @@
 {
-  "name": "bermesi",
+  "name": "jac-syndicate",
   "version": "1.0.0",
-  "description": "Bermesi Autonomous Betting Agent Harness (Hermes Engine 4.2) with DPAPI Vault & Playwright/CDP Dual Browser Automation",
-  "main": "bin/bermesi_cli.js",
+  "description": "Jac Syndicate Closed-Loop Quantitative Betting & +EV Execution Engine",
+  "main": "syndicate/quant/index.js",
   "scripts": {
-    "test": "node test/engine_test.js",
-    "test:browser": "node test/playwright_test.js",
-    "status": "node bin/bermesi_cli.js status",
-    "slate": "node bin/bermesi_cli.js slate",
-    "daemon": "node daemon/bermesi_daemon.js"
+    "test": "node --test test/*.test.js",
+    "quant:dryrun": "node syndicate/quant/index.js --mode=both --dry-run --input=runtime/postmortem_100x_universe.json --fortress-input=runtime/fortress_50fold_99pct_candidates.json"
   },
   "dependencies": {
     "playwright-core": "^1.65.1"

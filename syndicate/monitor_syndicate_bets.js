@@ -38,9 +38,10 @@ c.execute("PRAGMA journal_mode=WAL;")
 c.execute("PRAGMA busy_timeout=15000;")
 # Ensure cashout_value column exists on syndicate_codehub_bullets
 cols = [r[1] for r in c.execute("PRAGMA table_info(syndicate_codehub_bullets)").fetchall()]
-if 'cashout_value' not in cols:
-    c.execute("ALTER TABLE syndicate_codehub_bullets ADD COLUMN cashout_value REAL DEFAULT 0.0")
-    c.commit()
+for cname, cdef in [('cashout_value','REAL DEFAULT 0.0'),('wave_group_id',"TEXT DEFAULT ''"),('ticket_role',"TEXT DEFAULT 'SOLO'"),('pair_total_stake','REAL DEFAULT 0.0'),('wave_plan_json',"TEXT DEFAULT ''")]:
+    if cname not in cols:
+        c.execute(f"ALTER TABLE syndicate_codehub_bullets ADD COLUMN {cname} {cdef}")
+c.commit()
 
 tickets = c.execute("""
     SELECT ticket_id, ticket_number, booking_code, stake, total_odds, potential_payout
@@ -49,16 +50,16 @@ tickets = c.execute("""
 t_list = []
 for r in tickets:
     legs = [x[0] for x in c.execute("SELECT match_name FROM syndicate_legs WHERE ticket_id=?", (r[0],)).fetchall()]
-    t_list.append(dict(kind="TICKET", id=r[0], number=r[1], code=r[2], stake=r[3], total_odds=r[4], potential_payout=r[5], matches=legs))
+    t_list.append(dict(kind="TICKET", id=r[0], number=r[1], code=r[2], stake=r[3], total_odds=r[4], potential_payout=r[5], role="SOLO", pair_total_stake=0.0, matches=legs))
 
 bullets = c.execute("""
-    SELECT bullet_id, booking_code, stake, total_odds, potential_payout, legs_count
+    SELECT bullet_id, booking_code, stake, total_odds, potential_payout, legs_count, COALESCE(ticket_role,'SOLO'), COALESCE(pair_total_stake,0.0), COALESCE(wave_group_id,'')
     FROM syndicate_codehub_bullets WHERE status='IN_PROGRESS'
 """).fetchall()
 b_list = []
 for r in bullets:
     legs = [x[0] for x in c.execute("SELECT DISTINCT match_name FROM syndicate_creator_anchor_ledger WHERE booking_code=?", (r[1],)).fetchall()]
-    b_list.append(dict(kind="BULLET", id=r[0], number=r[5], code=r[1], stake=r[2], total_odds=r[3], potential_payout=r[4], matches=legs))
+    b_list.append(dict(kind="BULLET", id=r[0], number=r[5], code=r[1], stake=r[2], total_odds=r[3], potential_payout=r[4], role=r[6], pair_total_stake=r[7], wave_group_id=r[8], matches=legs))
 
 print(json.dumps({"tickets": t_list, "bullets": b_list}))
 `);
@@ -176,6 +177,12 @@ function findMatchingApiOrder(liveOpenBetsApi, item) {
   if (!Array.isArray(liveOpenBetsApi) || liveOpenBetsApi.length === 0) return null;
   const code = (item.code || '').toUpperCase();
   if (code) {
+    const byCodeAndStake = liveOpenBetsApi.find(ob => {
+      const sc = String(ob.bookingCode || ob.shareCode || ob.shortId || '').toUpperCase();
+      const obStake = parseFloat(ob.totalStake || ob.stake || ob.originStake || 0);
+      return sc === code && (obStake <= 0 || Math.abs(obStake - item.stake) <= 0.05);
+    });
+    if (byCodeAndStake) return byCodeAndStake;
     const direct = liveOpenBetsApi.find(ob =>
       String(ob.bookingCode || ob.shareCode || ob.shortId || '').toUpperCase() === code
     );
@@ -210,7 +217,7 @@ async function extractBulletLegOutcomes(page, item) {
     const target = els.find(el => {
       const t = el.innerText || '';
       if (t.length >= 2500 || el.querySelectorAll('div').length >= 50) return false;
-      if (code && t.includes(code)) return true;
+      if (code && t.includes(code) && t.includes(stakeStr)) return true;
       return t.includes(stakeStr) && keywords.some(k => t.includes(k));
     });
     if (target) {
@@ -254,7 +261,7 @@ async function executeCashoutOnPage(page, item) {
     const card = els.find(el => {
       const t = el.innerText || '';
       if (t.length >= 2500 || el.querySelectorAll('div').length >= 50) return false;
-      if (code && t.includes(code)) return true;
+      if (code && t.includes(code) && t.includes(stakeStr)) return true;
       return t.includes(stakeStr) && keywords.some(k => t.includes(k));
     });
     if (!card) return false;
@@ -368,11 +375,21 @@ async function executeCashoutOnPage(page, item) {
         }
       }
       const equity = item.potential_payout > 0 ? cashoutOffer / item.potential_payout : 0;
+      const anyLiveLeg = apiOrder && Array.isArray(apiOrder.selections)
+        ? apiOrder.selections.some(s => s.isSettled === 0 && s.matchStatus && s.matchStatus !== 'Not start')
+        : false;
+      const role = String(item.role || 'SOLO').toUpperCase();
+      const pairTarget = Number(item.pair_total_stake || 0) > 0
+        ? Number(item.pair_total_stake) * 1.02
+        : Number(item.stake || 3.0) * 1.75;
 
-      // Autonomous Cashout Profit-Lock Check
+      // Role-Aware Autonomous Cashout Check:
+      //  - HARVESTER: Lock 100%+ of BOTH Twin-Pair stakes + instant profit once Wave 1 clears & 0 legs are live!
+      //  - MOONSHOT / SOLO: Hold for x100+ Jackpot unless >= 85% equity on final wave or >= GHS 150!
       const triggerCashout = AUTO_CASHOUT && cashoutOffer > 0 && (
         (item.kind === 'TICKET' && (equity >= 0.92 || cashoutOffer >= 100.0)) ||
-        (item.kind === 'BULLET' && cashoutOffer >= 150.0)
+        (item.kind === 'BULLET' && role === 'HARVESTER' && !anyLiveLeg && cashoutOffer >= pairTarget) ||
+        (item.kind === 'BULLET' && role !== 'HARVESTER' && (equity >= 0.85 || cashoutOffer >= 150.0))
       );
 
       if (triggerCashout) {

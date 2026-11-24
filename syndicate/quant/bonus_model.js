@@ -290,6 +290,124 @@ function quarterKellyStake(trueExpectedRtp, effectiveMultiplier, bankroll, opts 
   return +bounded.toFixed(2);
 }
 
+/**
+ * Exact O(N^2) Dynamic Programming evaluator for Push-Shielded Integer Asian / DNB / O-U lines.
+ * Computes exact expected return across all 2^N win/push combinations where pushed legs
+ * settle at 1.00x and reduce qualifyingCount by 1 without killing the accumulator!
+ */
+function evaluatePushAwareTicketMath(legs, plan = getDefaultBonusPlan(), stake = 1.0) {
+  const list = Array.isArray(legs) ? legs : [];
+  const p = parseBonusPlan(plan);
+  const folds = list.length;
+  const numericStake = Number(stake);
+
+  if (folds === 0) {
+    return {
+      ...evaluateTicketMath([], plan, stake),
+      combinedNonLossProb: 0,
+      pushShieldedLegsCount: 0
+    };
+  }
+
+  const hasAnyPush = list.some(l => Number(l?.pPush || 0) > 0);
+  if (!hasAnyPush) {
+    const base = evaluateTicketMath(list, p, numericStake);
+    return {
+      ...base,
+      combinedNonLossProb: base.combinedWinProb,
+      pushShieldedLegsCount: list.filter(l => l?.isPushShielded).length
+    };
+  }
+
+  let baseOdds = 1.0;
+  let allWinProb = 1.0;
+  let nonLossProbProd = 1.0;
+  let singleRtpProd = 1.0;
+  let pushShieldedLegsCount = 0;
+
+  // dp[m] = expected base-odds payout with exactly m winning qualifying (>=1.20) legs and 0 losses
+  let dp = new Float64Array(folds + 1);
+  dp[0] = 1.0;
+
+  const qualifyingFactors = [];
+
+  for (const leg of list) {
+    const od = Number(leg.odds || 1);
+    const pPush = Math.max(0, Math.min(0.95, Number(leg.pPush || 0)));
+    const pWin = leg.pWin !== undefined
+      ? Number(leg.pWin)
+      : Number(leg.prob || 0) * (1 - pPush);
+    const nonLoss = Math.min(1, pWin + pPush);
+    const sRtp = od * pWin + 1.0 * pPush;
+
+    if (pPush > 0 || leg.isPushShielded) pushShieldedLegsCount += 1;
+    baseOdds *= od;
+    allWinProb *= pWin;
+    nonLossProbProd *= nonLoss;
+    singleRtpProd *= sRtp;
+
+    const isQual = od >= p.qualifyingOdds - 1e-9;
+    if (isQual) qualifyingFactors.push(getSportFactor(leg.sportId, leg.tournamentId, p));
+
+    const nextDp = new Float64Array(folds + 1);
+    if (isQual) {
+      for (let m = 0; m <= folds; m++) {
+        if (dp[m] === 0) continue;
+        if (pPush > 0) nextDp[m] += dp[m] * pPush;
+        if (m + 1 <= folds) nextDp[m + 1] += dp[m] * (od * pWin);
+      }
+    } else {
+      const mult = pPush + od * pWin;
+      for (let m = 0; m <= folds; m++) {
+        nextDp[m] = dp[m] * mult;
+      }
+    }
+    dp = nextDp;
+  }
+
+  const effFactor = qualifyingFactors.length > 0 ? Math.min(...qualifyingFactors) : 0.50;
+  let trueExpectedRtp = 0;
+  for (let m = 0; m <= folds; m++) {
+    if (dp[m] === 0) continue;
+    let bPct = 0;
+    if (m >= 2) {
+      const k = Math.min(m, p.maxSelectionsKey || 50);
+      const rEntry = p.ratiosByN.get(k) || { max: 0 };
+      bPct = +(rEntry.max * effFactor).toFixed(6);
+    }
+    trueExpectedRtp += dp[m] * (1 + bPct);
+  }
+
+  const { qualifyingCount, bonusPct } = computeBonusPct(list, p);
+  const effectiveMultiplier = baseOdds * (1 + bonusPct);
+  const potentialPayout = numericStake * effectiveMultiplier;
+  const geometricMeanRtp = Math.pow(singleRtpProd, 1 / folds);
+  const expectedValueGhs = numericStake * (trueExpectedRtp - 1);
+
+  return {
+    folds,
+    qualifyingCount,
+    baseOdds: +baseOdds.toFixed(6),
+    bonusPct: +bonusPct.toFixed(6),
+    effectiveMultiplier: +effectiveMultiplier.toFixed(6),
+    potentialPayout: +potentialPayout.toFixed(2),
+    combinedWinProb: +allWinProb.toFixed(8),
+    combinedNonLossProb: +nonLossProbProd.toFixed(8),
+    pushShieldedLegsCount,
+    geometricMeanRtp: +geometricMeanRtp.toFixed(6),
+    trueExpectedRtp: +trueExpectedRtp.toFixed(6),
+    expectedValueGhs: +expectedValueGhs.toFixed(4),
+    isPositiveEv: trueExpectedRtp > 1.0
+  };
+}
+
+function sportAwareMinLegRtp(sportId, tournamentId, plan = getDefaultBonusPlan()) {
+  const f = getSportFactor(sportId, tournamentId, plan);
+  if (f >= 0.999) return 0.972; // 1.00x bonus sports break even at 0.9687-0.9738 for 20-30F!
+  if (f >= 0.749) return 0.975;
+  return 0.978; // Football 0.50x
+}
+
 module.exports = {
   FALLBACK_BONUS_PLAN_RAW,
   parseBonusPlan,
@@ -297,6 +415,8 @@ module.exports = {
   getSportFactor,
   computeBonusPct,
   evaluateTicketMath,
+  evaluatePushAwareTicketMath,
+  sportAwareMinLegRtp,
   breakEvenRtp,
   quarterKellyStake
 };

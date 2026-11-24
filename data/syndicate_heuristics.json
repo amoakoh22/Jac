@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-23T21:44:22Z",
+  "last_updated": "2026-11-24T06:35:57Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -28,7 +28,7 @@
     "rule_25_zero_correlation_firewall": {
       "id": 25,
       "name": "Strict Zero-Correlation Firewall",
-      "description": "Zero fixture overlap across active slips. Every single ticket in a deployment cycle must contain 100% mutually exclusive matches.",
+      "description": "Zero fixture overlap across distinct active slip groups. Intentional Twin-Pair (HARVESTER + MOONSHOT) shares one wave_group_id while maintaining 0% overlap with all other tickets.",
       "allow_fixture_overlap": false,
       "active": true
     },
@@ -62,8 +62,8 @@
     },
     "rule_28_friday_postmortem_market_ban": {
       "id": 28,
-      "name": "Post-Mortem Fragile Market Ban (1H NG / -1 Hcp / 2H O0.5)",
-      "description": "Empirically banned after Nov 20 settlements: 1H GG/NG: No (double-bust on Troyes 3-1 & Metz 2-1), -1 Handicaps on heavy favorites (Bayern 1-1 Cologne), 2H Over 0.5 (AGF Aarhus 2-1 all goals in 1H), and Dutch Eerste Divisie Over 2.0 traps.",
+      "name": "Post-Mortem Fragile Binary Market Ban (Half-Goal & Half-Specific Traps)",
+      "description": "Empirically banned across 17 settled losses: 1H GG/NG: No, -1 Handicaps, 2H Over 0.5, 1H Under 2.5 (Atalanta 4-4), Under 4.5 (Marseille 2-3, Kilmarnock 2-4), Under 3.5 (Gimnasia 2-2), and Favorite Team Under 2.5 (Brentford 3-0).",
       "banned_markets": [
         "1H_GG_NG_NO",
         "HCP_0_1_FAV",
@@ -72,7 +72,11 @@
         "1H_UNDER_2_5",
         "PLAIN_1X2_FAV_ACCUM",
         "1X2_1UP",
-        "UNDER_4_5"
+        "UNDER_4_5",
+        "UNDER_3_5",
+        "UNDER_5_5",
+        "HOME_UNDER_2_5",
+        "AWAY_UNDER_2_5"
       ],
       "active": true,
       "banned_market_league_pairs": [
@@ -92,14 +96,24 @@
           "reason": "808QK6 Millwall 0-1 QPR"
         },
         {
+          "market": "OVER_1_5",
+          "league_pattern": "Brasileiro Serie A",
+          "reason": "808QK6 & F4JQ4M Bragantino 1-0 Vasco"
+        },
+        {
+          "market": "DOUBLE_CHANCE_1X",
+          "league_pattern": "Eredivisie",
+          "reason": "808QK6 & F4JQ4M Go Ahead Eagles 0-1 Fortuna"
+        },
+        {
           "market": "1X2_1UP",
           "league_pattern": "Ligue 1",
-          "reason": "Auto-banned by closed-loop learner (0W-3L, gap=-0.78)"
+          "reason": "Auto-banned by closed-loop learner (1W-2L, gap=-0.45)"
         },
         {
           "market": "UNDER_4_5",
           "league_pattern": "Ligue 1",
-          "reason": "Auto-banned by closed-loop learner (0W-2L, gap=-0.79)"
+          "reason": "Auto-banned by closed-loop learner (1W-2L, gap=-0.45)"
         }
       ]
     },
@@ -110,8 +124,26 @@
       "min_leg_odds": 1.2,
       "max_leg_odds": 1.45,
       "min_betradar_rtp": 0.98,
+      "min_full_bonus_sport_rtp": 0.972,
       "active": true,
       "min_ticket_ev": 1.02
+    },
+    "rule_30_micro_bet_hard_ban": {
+      "id": 30,
+      "name": "Permanent Hard Ban on 1-Leg @1.01 & <1.25x Micro-Bets",
+      "description": "Never place 1-leg or <1.25x micro-payout slips (C3GCWW GHS 2.00 -> 2.02 lesson). Minimum 2 legs and >= 1.25x effective multiplier on all syndicate tickets.",
+      "min_folds": 2,
+      "min_ticket_multiplier": 1.25,
+      "active": true
+    },
+    "rule_31_anointed_twin_wave_push_shield": {
+      "id": 31,
+      "name": "4-Wave Chronological Staggering + Twin-Ticket Harvester Principal Lock",
+      "description": "Partition x100+ legs into chronological waves (<=72h span, >=135m Wave-1 clean cashout gap). Pair HARVESTER (GHS 3) + MOONSHOT (GHS 2) so Wave-1 settlement locks back >102% of combined pair stake while MOONSHOT rides 100% risk-free.",
+      "max_horizon_hours": 72,
+      "min_wave1_gap_minutes": 135,
+      "harvester_pair_recovery_ratio": 1.02,
+      "active": true
     }
   },
   "dynamic_weights": {
@@ -190,10 +222,10 @@
         "banned": false
       },
       "OVER_1_5": {
-        "won": 28,
+        "won": 30,
         "lost": 4,
-        "empirical_hit_rate": 0.875,
-        "penalty": 0.0331,
+        "empirical_hit_rate": 0.8824,
+        "penalty": 0.0312,
         "banned": false
       },
       "OVER_2_0": {
@@ -233,9 +265,9 @@
       },
       "UNDER_2_5": {
         "won": 7,
-        "lost": 1,
-        "empirical_hit_rate": 0.875,
-        "penalty": 0.1421,
+        "lost": 2,
+        "empirical_hit_rate": 0.7778,
+        "penalty": 0.2621,
         "banned": false
       },
       "UNDER_3_5": {
@@ -246,10 +278,10 @@
         "banned": false
       },
       "UNDER_4_5": {
-        "won": 30,
+        "won": 32,
         "lost": 3,
-        "empirical_hit_rate": 0.9091,
-        "penalty": 0.025,
+        "empirical_hit_rate": 0.9143,
+        "penalty": 0.0236,
         "banned": false
       },
       "UNDER_5_5": {
@@ -291,6 +323,12 @@
       "timestamp": "2026-11-23T21:44:22Z",
       "event": "Closed-Loop Learner v3.0.0 Calibration",
       "finding": "Audited all settled core tickets + Monster Bullets (+6 new leg post-mortems). Locked 8 banned markets, 5 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
+    },
+    {
+      "date": "2026-11-24",
+      "timestamp": "2026-11-24T06:35:57Z",
+      "event": "Closed-Loop Learner v3.0.0 Calibration",
+      "finding": "Audited all settled core tickets + Monster Bullets (+1 new leg post-mortems). Locked 12 banned markets, 7 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
     }
   ]
 }

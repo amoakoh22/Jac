@@ -107,14 +107,37 @@ def ensure_schema_upgrades(conn):
     )
     """)
 
-    # Ensure cashout_value exists on syndicate_codehub_bullets
+    # Ensure cashout_value and v4.0 Wave/Twin/Vault columns exist on syndicate_codehub_bullets
     bullet_tbl = cursor.execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='syndicate_codehub_bullets'"
     ).fetchone()
     if bullet_tbl:
         b_cols = {r[1] for r in cursor.execute("PRAGMA table_info(syndicate_codehub_bullets)").fetchall()}
-        if "cashout_value" not in b_cols:
-            cursor.execute("ALTER TABLE syndicate_codehub_bullets ADD COLUMN cashout_value REAL DEFAULT 0.0")
+        extra_b_cols = {
+            "cashout_value": "REAL DEFAULT 0.0",
+            "wave_group_id": "TEXT DEFAULT ''",
+            "ticket_role": "TEXT DEFAULT 'SOLO'",
+            "pair_total_stake": "REAL DEFAULT 0.0",
+            "wave_plan_json": "TEXT DEFAULT ''",
+        }
+        for cname, cdef in extra_b_cols.items():
+            if cname not in b_cols:
+                cursor.execute(f"ALTER TABLE syndicate_codehub_bullets ADD COLUMN {cname} {cdef}")
+
+    # Create Mode C Push-Protected Sequential Compounding Vault table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS syndicate_vault_ladders (
+        ladder_id TEXT PRIMARY KEY,
+        seed_stake REAL DEFAULT 3.0,
+        current_equity REAL DEFAULT 3.0,
+        banked_profit REAL DEFAULT 0.0,
+        current_step INTEGER DEFAULT 1,
+        target_multiplier REAL DEFAULT 100.0,
+        active_booking_code TEXT DEFAULT '',
+        status TEXT DEFAULT 'ACTIVE',
+        updated_at TEXT
+    )
+    """)
 
     conn.commit()
 

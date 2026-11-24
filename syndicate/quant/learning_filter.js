@@ -409,6 +409,22 @@ function loadLearningContext(opts = {}) {
         }
       }
 
+      // 2b. Live API Audit Firewall: ingest exact eventIds from runtime/live_api_audit_latest.json
+      const liveAuditPath = opts.liveAuditPath || path.join(ROOT_DIR, 'runtime', 'live_api_audit_latest.json');
+      if (!opts.dbPath && fs.existsSync(liveAuditPath)) {
+        try {
+          const auditJson = JSON.parse(fs.readFileSync(liveAuditPath, 'utf8'));
+          const openBets = auditJson?.open?.data?.cashAbleBets || [];
+          const unsettledBets = auditJson?.unsettled?.data?.entityList || [];
+          for (const b of openBets.concat(unsettledBets)) {
+            if (b?.shareCode) activeBookingCodes.add(String(b.shareCode));
+            for (const s of (b?.selections || [])) {
+              if (s?.eventId) activeEventIds.add(String(s.eventId));
+            }
+          }
+        } catch {}
+      }
+
       // 3. Empirical Loss-Rate Model: syndicate_market_performance (preferred if populated)
       let loadedFromPerfTable = false;
       if (tableExists(db, 'syndicate_market_performance')) {

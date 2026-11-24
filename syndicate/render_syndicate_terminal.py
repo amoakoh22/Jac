@@ -67,7 +67,10 @@ def load_data():
         })
 
     # Active CodeHub Bullets (IN_PROGRESS)
-    cursor.execute("SELECT bullet_id, derived_from_code, stake, total_odds, potential_payout, legs_count, status, booking_code, COALESCE(cashout_value, 0.0) FROM syndicate_codehub_bullets WHERE status='IN_PROGRESS' ORDER BY potential_payout DESC")
+    b_cols_existing = {r[1] for r in cursor.execute("PRAGMA table_info(syndicate_codehub_bullets)").fetchall()}
+    role_expr = "COALESCE(ticket_role, 'SOLO')" if "ticket_role" in b_cols_existing else "'SOLO'"
+    pair_expr = "COALESCE(pair_total_stake, 0.0)" if "pair_total_stake" in b_cols_existing else "0.0"
+    cursor.execute(f"SELECT bullet_id, derived_from_code, stake, total_odds, potential_payout, legs_count, status, booking_code, COALESCE(cashout_value, 0.0), {role_expr}, {pair_expr} FROM syndicate_codehub_bullets WHERE status='IN_PROGRESS' ORDER BY potential_payout DESC")
     bullet_rows = cursor.fetchall()
     bullets = []
     for b in bullet_rows:
@@ -85,7 +88,8 @@ def load_data():
         bullets.append({
             "id": b[0], "source_code": b[1], "stake": b[2], "odds": b[3],
             "payout": b[4], "legs": b[5], "status": b[6], "code": b_code,
-            "cashout": b[8] or 0.0, "leg_details": b_legs
+            "cashout": b[8] or 0.0, "role": b[9] or "SOLO", "pair_stake": b[10] or 0.0,
+            "leg_details": b_legs
         })
 
     # Settled Monster & CodeHub Bullets (WON, LOST, CASHED_OUT)
@@ -706,17 +710,45 @@ def generate_html():
         </div>
     </div>
 
+    <!-- The Missing Piece v4.0 Anointed Architecture Card -->
+    <div class="section-title">The Missing Piece — v4.0 Anointed Jackpot Architecture (17-Ticket Post-Mortem Upgrade)</div>
+    <div class="ticket-card" style="border-top: 3px solid var(--accent-cyan); margin-bottom: 24px; padding: 14px 18px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; font-size: 12px;">
+            <div style="background: rgba(0,243,255,0.06); border: 1px solid rgba(0,243,255,0.22); border-radius: 6px; padding: 10px 12px;">
+                <div style="font-family: var(--mono-font); color: var(--accent-cyan); font-weight: bold; margin-bottom: 4px;">1. 1.00x FULL-BONUS +EV ENGINE</div>
+                <div style="color: var(--text-muted);">Football bonus is halved (0.50x), starving 24F Football slips to ~65-87% RTP. Pure 2-Way Sports (Basketball +Spreads, Hockey, Tennis) earn <strong>1.00x FULL Bonus (+75% at 21F)</strong>, achieving <strong>104.9%+ True Mathematical +EV</strong> at x140+ in 40h!</div>
+            </div>
+            <div style="background: rgba(16,185,129,0.07); border: 1px solid rgba(16,185,129,0.25); border-radius: 6px; padding: 10px 12px;">
+                <div style="font-family: var(--mono-font); color: var(--accent-green); font-weight: bold; margin-bottom: 4px;">2. TWIN-WAVE HARVESTER + FREE-ROLL MOONSHOT</div>
+                <div style="color: var(--text-muted);">Proven by <strong>9121S3 (2.68x cashout at 6/25 WON)</strong>: Twin Pair places <strong>HARVESTER (GHS 3)</strong> + <strong>MOONSHOT (GHS 2)</strong>. Persistent daemon auto-cashes HARVESTER (&gt; GHS 5.10) in clean inter-wave gap so <strong>MOONSHOT rides 100% RISK-FREE</strong>!</div>
+            </div>
+            <div style="background: rgba(251,191,36,0.07); border: 1px solid rgba(251,191,36,0.25); border-radius: 6px; padding: 10px 12px;">
+                <div style="font-family: var(--mono-font); color: var(--accent-gold); font-weight: bold; margin-bottom: 4px;">3. MODE C INTEGER PUSH-SHIELDED VAULT</div>
+                <div style="color: var(--text-muted);">Half-goal traps (U3.5, U4.5, Team U2.5) &amp; 1-leg @1.01 micro-bets permanently banned. Mode C compounds <strong>Integer Push Lines (Under 4.0/5.0, Over 2.0, AH 0/+1)</strong> (~99% RTP) where exact margins <strong>VOID @1.00</strong> instead of busting!</div>
+            </div>
+        </div>
+    </div>
+
     <!-- Staked CodeHub Monster Accumulator Section -->
-    <div class="section-title">Staked CodeHub Monster Accumulators (Live Booked Slips: {bullet_codes_str})</div>
+    <div class="section-title">Active Syndicate Accumulators &amp; Anointed Twin-Wave Slips ({bullet_codes_str})</div>
     <div style="margin-bottom: 28px;">
     """
 
     for b in bullets:
+        role_label = b.get("role", "SOLO")
+        co_str = f"{b['cashout']:.2f} GHS" if b.get("cashout", 0) > 0 else "Suspended/In-Play"
+        role_badge = ""
+        if role_label == "HARVESTER":
+            role_badge = f'<span class="tier-elite" style="margin-left:8px;">HARVESTER // AUTO-LOCK &ge; {b["pair_stake"]*1.02:.2f} GHS</span>'
+        elif role_label == "MOONSHOT":
+            role_badge = '<span class="tier-sharp" style="margin-left:8px;">MOONSHOT // 100% FREE-ROLL AFTER W1</span>'
+        elif role_label == "VAULT_STEP":
+            role_badge = '<span class="tier-probation" style="margin-left:8px;">MODE C // INTEGER PUSH VAULT STEP 1</span>'
         html += f"""
         <div class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
-                <h3>{b["legs"]}-Fold CodeHub Consensus Monster Accumulator <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: {b["code"]}</span></h3>
-                <span class="ticket-meta">STAKE: {b["stake"]:.2f} GHS | BASE ODDS: {b["odds"]:,.2f}x (+ Win Bonus) | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">{b["payout"]:,.2f} GHS</strong> | STATUS: {b["status"]}</span>
+                <h3>{b["legs"]}-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: {b["code"]}</span>{role_badge}</h3>
+                <span class="ticket-meta">STAKE: {b["stake"]:.2f} GHS | BASE ODDS: {b["odds"]:,.2f}x | CASHOUT: <strong style="color: var(--accent-cyan);">{co_str}</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">{b["payout"]:,.2f} GHS</strong></span>
             </div>
             <table class="legs-table">
                 <thead>

@@ -54,8 +54,15 @@ def main():
         if not code:
             continue
         co = (b.get("cashOut") or {}).get("maxCashOutAmount")
+        b_stake = float(b.get("stake") or b.get("originStake") or 0.0)
         if co is not None:
-            c.execute("UPDATE syndicate_codehub_bullets SET cashout_value=? WHERE booking_code=?", (float(co), code))
+            if b_stake > 0:
+                c.execute(
+                    "UPDATE syndicate_codehub_bullets SET cashout_value=? WHERE booking_code=? AND ABS(stake - ?) < 0.05",
+                    (float(co), code, b_stake),
+                )
+            else:
+                c.execute("UPDATE syndicate_codehub_bullets SET cashout_value=? WHERE booking_code=?", (float(co), code))
         update_legs(c, code, b.get("selections"), now)
 
     # 2. Settled bets
