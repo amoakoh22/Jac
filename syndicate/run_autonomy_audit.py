@@ -238,20 +238,27 @@ def measure_all():
         "evidence": "AUTO_CASHOUT=0 monitor_syndicate_bets.js evaluated 5 open slips (C36TTY,9121S3,C3GCWW,F9QK8B,C2P3EB): 0 fires, 0 wrong-fires"
     })
 
-    # Learning loop: settled lost/won/cashed_out tickets ingested
-    settled_lost = conn.execute("SELECT COUNT(*) FROM syndicate_codehub_bullets WHERE status='LOST'").fetchone()[0] + \
-                   conn.execute("SELECT COUNT(*) FROM syndicate_tickets WHERE status='LOST'").fetchone()[0]
-    pm_distinct = conn.execute("SELECT COUNT(DISTINCT ticket_id) FROM syndicate_post_mortems").fetchone()[0]
+    # Learning loop: distinct lost booking_codes ingested into syndicate_post_mortems
+    # (disambiguates Twin orders like FK88QC which share one booking_code across Harvester+Moonshot)
+    settled_lost = conn.execute("""
+        SELECT COUNT(DISTINCT booking_code) FROM (
+            SELECT booking_code FROM syndicate_codehub_bullets WHERE status='LOST' AND booking_code IS NOT NULL
+            UNION
+            SELECT booking_code FROM syndicate_tickets WHERE status='LOST' AND booking_code IS NOT NULL
+        )
+    """).fetchone()[0]
+    pm_distinct = conn.execute("SELECT COUNT(DISTINCT booking_code) FROM syndicate_post_mortems WHERE booking_code IS NOT NULL").fetchone()[0]
+    pm_rows = conn.execute("SELECT COUNT(*) FROM syndicate_post_mortems").fetchone()[0]
     conn.close()
     learn_pct = round(min(pm_distinct, settled_lost) / settled_lost * 100.0, 2) if settled_lost > 0 else 0.0
     metrics.append({
         "category": "4. Betting-Engine Correctness",
         "name": "Closed-Loop Learning Ingestion (Lost Tickets)",
-        "formula": "distinct_tickets_in_post_mortems / total_settled_lost_tickets",
-        "n_str": f"N={settled_lost} lost slips",
+        "formula": "distinct_lost_codes_in_post_mortems / distinct_settled_lost_codes",
+        "n_str": f"N={settled_lost} lost codes",
         "pct": learn_pct,
         "status": "PASS" if learn_pct >= 98.0 else "FAIL",
-        "evidence": f"syndicate_post_mortems has {pm_distinct} distinct tickets / {settled_lost} total LOST tickets (70 PM rows)"
+        "evidence": f"syndicate_post_mortems covers {pm_distinct}/{settled_lost} distinct LOST booking_codes ({pm_rows} PM rows; Twin FK88QC counted once)"
     })
 
     # --- 5. KPI Page Freshness ---
