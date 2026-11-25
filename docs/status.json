@@ -1,10 +1,10 @@
 {
-  "last_synced_utc": "2026-11-25T22:31:33Z",
-  "source": "local_daemon",
-  "consecutive_cloud_failures": 5,
-  "last_cloud_run_utc": "2026-11-25T17:14:32Z",
-  "last_cloud_status": "billing_locked",
-  "last_cloud_error": "GitHub Actions account locked due to a billing issue (verified on runs 45445939353..45584471896)",
-  "alert_active": true,
-  "alert_message": "CLOUD CRON ALERT: 5 consecutive GitHub Actions failures (billing_locked) \u2014 GitHub Actions account locked due to a billing issue (verified on runs 45445939353..45584471896)"
+  "last_synced_utc": "2026-11-25T22:33:59Z",
+  "source": "github_actions",
+  "consecutive_cloud_failures": 0,
+  "last_cloud_run_utc": "2026-11-25T22:33:59Z",
+  "last_cloud_status": "ok",
+  "last_cloud_error": "",
+  "alert_active": false,
+  "alert_message": ""
 }
