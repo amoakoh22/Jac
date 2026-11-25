@@ -48,6 +48,12 @@ function syncAndPush() {
     fs.copyFileSync(statusSrc, path.join(ROOT_DIR, 'docs', 'status.json'));
   }
 
+  // Self-heal any wedged rebase state before touching git
+  if (fs.existsSync(path.join(ROOT_DIR, '.git', 'rebase-merge')) || fs.existsSync(path.join(ROOT_DIR, '.git', 'rebase-apply'))) {
+    log('[GitSync] Detected stuck rebase directory — running git rebase --abort...');
+    runCmd('git', ['rebase', '--abort'], {}, 15000);
+  }
+
   const files = [
     'index.html', 'docs/index.html', 'status.json', 'docs/status.json',
     'syndicate/syndicate_terminal.html', 'data/syndicate_ledger.sqlite', 'data/syndicate_heuristics.json'
@@ -61,8 +67,12 @@ function syncAndPush() {
   }
   const c = runCmd('git', ['commit', '-m', 'chore(jac-daemon): live terminal, status & ledger telemetry sync'], {}, 30000);
   if (c.status !== 0) return;
-  const rb = runCmd('git', ['pull', '--rebase', '--autostash', 'origin', 'main'], {}, 45000);
-  if (rb.status !== 0) return;
+  const rb = runCmd('git', ['pull', '--rebase', '--autostash', '-X', 'theirs', 'origin', 'main'], {}, 45000);
+  if (rb.status !== 0) {
+    log('[GitSync] Rebase conflict — aborting rebase to keep repo unwedged.');
+    runCmd('git', ['rebase', '--abort'], {}, 15000);
+    return;
+  }
   const p = runCmd('git', ['push', 'origin', 'main'], {}, 45000);
   if (p.status === 0) {
     const sha = (spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT_DIR, encoding: 'utf8' }).stdout || '').trim();
