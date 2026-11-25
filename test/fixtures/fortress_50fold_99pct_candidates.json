@@ -1,0 +1,82 @@
+{
+  "candidates": [
+    {
+      "eventId": "sr:match:99000100",
+      "gameId": "99100",
+      "home": "Ajax",
+      "away": "ADO Den Haag",
+      "match": "Ajax vs ADO Den Haag",
+      "sportId": "sr:sport:1",
+      "sportName": "Football",
+      "country": "Netherlands",
+      "league": "Eredivisie",
+      "marketId": "54",
+      "specifier": null,
+      "marketDesc": "Away Team to Win Both Halves",
+      "outcomeId": "76",
+      "outcomeDesc": "No",
+      "odds": 1.01,
+      "prob": 0.996,
+      "rtp": 1.00596,
+      "startTime": 1800000000000,
+      "wap_item": {
+        "key": "sr:match:99000100|54||76",
+        "eventId": "sr:match:99000100",
+        "marketInfo": { "id": "54", "specifier": null, "desc": "Away Team to Win Both Halves" },
+        "outcomeInfo": { "id": "76", "desc": "No", "odds": "1.01" }
+      }
+    },
+    {
+      "eventId": "sr:match:99000101",
+      "gameId": "99101",
+      "home": "Real Madrid",
+      "away": "Getafe",
+      "match": "Real Madrid vs Getafe",
+      "sportId": "sr:sport:1",
+      "sportName": "Football",
+      "country": "Spain",
+      "league": "LaLiga",
+      "marketId": "54",
+      "specifier": null,
+      "marketDesc": "Away Team to Win Both Halves",
+      "outcomeId": "76",
+      "outcomeDesc": "No",
+      "odds": 1.01,
+      "prob": 0.996,
+      "rtp": 1.00596,
+      "startTime": 1800000000000,
+      "wap_item": {
+        "key": "sr:match:99000101|54||76",
+        "eventId": "sr:match:99000101",
+        "marketInfo": { "id": "54", "specifier": null, "desc": "Away Team to Win Both Halves" },
+        "outcomeInfo": { "id": "76", "desc": "No", "odds": "1.01" }
+      }
+    },
+    {
+      "eventId": "sr:match:99000102",
+      "gameId": "99102",
+      "home": "Bayern Munich",
+      "away": "Bochum",
+      "match": "Bayern Munich vs Bochum",
+      "sportId": "sr:sport:1",
+      "sportName": "Football",
+      "country": "Germany",
+      "league": "Bundesliga",
+      "marketId": "54",
+      "specifier": null,
+      "marketDesc": "Away Team to Win Both Halves",
+      "outcomeId": "76",
+      "outcomeDesc": "No",
+      "odds": 1.01,
+      "prob": 0.995,
+      "rtp": 1.00495,
+      "startTime": 1800000000000,
+      "wap_item": {
+        "key": "sr:match:99000102|54||76",
+        "eventId": "sr:match:99000102",
+        "marketInfo": { "id": "54", "specifier": null, "desc": "Away Team to Win Both Halves" },
+        "outcomeInfo": { "id": "76", "desc": "No", "odds": "1.01" }
+      }
+    }
+  ]
+}

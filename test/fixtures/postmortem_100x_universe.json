@@ -1,0 +1,30 @@
+{
+  "candidates": [
+    {
+      "eventId": "sr:match:99000001",
+      "gameId": "99001",
+      "home": "Arsenal",
+      "away": "Brentford",
+      "match": "Arsenal vs Brentford",
+      "sportId": "sr:sport:1",
+      "sportName": "Football",
+      "country": "England",
+      "league": "Premier League",
+      "marketId": "18",
+      "specifier": "total=4",
+      "marketDesc": "Over/Under",
+      "outcomeId": "13",
+      "outcomeDesc": "Under 4",
+      "odds": 1.24,
+      "prob": 0.798,
+      "rtp": 0.9895,
+      "startTime": 1800000000000,
+      "wap_item": {
+        "key": "sr:match:99000001|18|total=4|13",
+        "eventId": "sr:match:99000001",
+        "marketInfo": { "id": "18", "specifier": "total=4", "desc": "Over/Under" },
+        "outcomeInfo": { "id": "13", "desc": "Under 4", "odds": "1.24" }
+      }
+    }
+  ]
+}

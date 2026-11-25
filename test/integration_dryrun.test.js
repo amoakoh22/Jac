@@ -62,10 +62,12 @@ describe('integration_dryrun — offline end-to-end quant pipeline & API client 
   });
 
   it('runs offline dry-run CLI on cached runtime JSON fixtures and validates exported schema', () => {
-    const u100Path = path.join(ROOT_DIR, 'runtime', 'postmortem_100x_universe.json');
-    const f50Path = path.join(ROOT_DIR, 'runtime', 'fortress_50fold_99pct_candidates.json');
-    assert.ok(fs.existsSync(u100Path), 'cached postmortem_100x_universe.json must exist');
-    assert.ok(fs.existsSync(f50Path), 'cached fortress_50fold_99pct_candidates.json must exist');
+    const rt100 = path.join(ROOT_DIR, 'runtime', 'postmortem_100x_universe.json');
+    const rt50 = path.join(ROOT_DIR, 'runtime', 'fortress_50fold_99pct_candidates.json');
+    const u100Path = fs.existsSync(rt100) ? rt100 : path.join(ROOT_DIR, 'test', 'fixtures', 'postmortem_100x_universe.json');
+    const f50Path = fs.existsSync(rt50) ? rt50 : path.join(ROOT_DIR, 'test', 'fixtures', 'fortress_50fold_99pct_candidates.json');
+    assert.ok(fs.existsSync(u100Path), 'postmortem_100x_universe.json fixture must exist');
+    assert.ok(fs.existsSync(f50Path), 'fortress_50fold_99pct_candidates.json fixture must exist');
 
     const stdout = execFileSync(process.execPath, [
       path.join(ROOT_DIR, 'syndicate', 'quant', 'index.js'),

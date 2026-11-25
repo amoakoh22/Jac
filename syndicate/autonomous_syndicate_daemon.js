@@ -48,17 +48,25 @@ function syncAndPush() {
     fs.copyFileSync(statusSrc, path.join(ROOT_DIR, 'docs', 'status.json'));
   }
 
-  const pushCmd = [
-    'git add index.html docs/index.html status.json docs/status.json syndicate/syndicate_terminal.html data/syndicate_ledger.sqlite data/syndicate_heuristics.json',
-    'if ! git diff --staged --quiet; then',
-    '  git commit -m "chore(jac-daemon): live terminal, status & ledger telemetry sync"',
-    '  git pull --rebase origin main',
-    '  git push origin main',
-    'fi'
-  ].join(' && ');
-  const r = runCmd('bash', ['-c', pushCmd], {}, 60000);
-  if (r.status === 0) {
-    log('[GitSync] Verified commit/push to origin/main.');
+  const files = [
+    'index.html', 'docs/index.html', 'status.json', 'docs/status.json',
+    'syndicate/syndicate_terminal.html', 'data/syndicate_ledger.sqlite', 'data/syndicate_heuristics.json'
+  ].filter(f => fs.existsSync(path.join(ROOT_DIR, f)));
+
+  runCmd('git', ['add', ...files], {}, 30000);
+  const diffCheck = spawnSync('git', ['diff', '--staged', '--quiet'], { cwd: ROOT_DIR, timeout: 15000 });
+  if (diffCheck.status === 0) {
+    log('[GitSync] No staged changes to push.');
+    return;
+  }
+  const c = runCmd('git', ['commit', '-m', 'chore(jac-daemon): live terminal, status & ledger telemetry sync'], {}, 30000);
+  if (c.status !== 0) return;
+  const rb = runCmd('git', ['pull', '--rebase', '--autostash', 'origin', 'main'], {}, 45000);
+  if (rb.status !== 0) return;
+  const p = runCmd('git', ['push', 'origin', 'main'], {}, 45000);
+  if (p.status === 0) {
+    const sha = (spawnSync('git', ['rev-parse', '--short', 'HEAD'], { cwd: ROOT_DIR, encoding: 'utf8' }).stdout || '').trim();
+    log(`[GitSync] Pushed ${sha} to origin/main.`);
   }
 }
 
