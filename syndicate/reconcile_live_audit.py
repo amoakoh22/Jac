@@ -65,42 +65,52 @@ def main():
                 c.execute("UPDATE syndicate_codehub_bullets SET cashout_value=? WHERE booking_code=?", (float(co), code))
         update_legs(c, code, b.get("selections"), now)
 
-    # 2. Settled bets
+    # 2. Settled bets (disambiguate Twin orders like FK88QC by booking_code + stake)
     settled_bets = (d.get("settled") or {}).get("data", {}).get("entityList") or []
     for s in settled_bets:
         code = s.get("shareCode")
         if not code:
             continue
-        row = c.execute(
-            "SELECT bullet_id, stake, status FROM syndicate_codehub_bullets WHERE booking_code=?", (code,)
-        ).fetchone()
+        s_stake = float(s.get("totalStake") or s.get("stake") or s.get("originStake") or 0.0)
+        row = None
+        if s_stake > 0:
+            row = c.execute(
+                "SELECT bullet_id, stake, status FROM syndicate_codehub_bullets WHERE booking_code=? AND ABS(stake - ?) < 0.05",
+                (code, s_stake),
+            ).fetchone()
+        if not row:
+            row = c.execute(
+                "SELECT bullet_id, stake, status FROM syndicate_codehub_bullets WHERE booking_code=?",
+                (code,),
+            ).fetchone()
         if not row:
             continue
         bid, stake, cur_status = row
         ws = s.get("winningStatus")
         # SportyBet winningStatus: 20 = WON, 30 = LOST, 40 = VOID/CASHED
-        new_status = {20: "WON", 30: "LOST"}.get(ws)
+        new_status = {20: "WON", 30: "LOST", 40: "CASHED_OUT"}.get(ws)
         if new_status and cur_status == "IN_PROGRESS":
             win_amt = float(s.get("totalWinnings") or 0.0)
             pnl = round(win_amt - float(stake or 0.0), 2)
             c.execute(
-                "UPDATE syndicate_codehub_bullets SET status=?, settled_at=?, realized_pnl=?, cashout_value=0.0 WHERE booking_code=?",
-                (new_status, now, pnl, code),
+                "UPDATE syndicate_codehub_bullets SET status=?, settled_at=?, realized_pnl=?, cashout_value=0.0 WHERE bullet_id=?",
+                (new_status, now, pnl, bid),
             )
-            print(f"[SETTLED] {code} ({bid}) -> {new_status} | PnL: {pnl:+.2f} GHS")
+            print(f"[SETTLED] {code} ({bid}, stake={stake:.2f}) -> {new_status} | Win: {win_amt:.2f} | PnL: {pnl:+.2f} GHS")
         update_legs(c, code, s.get("selections"), now)
 
     c.commit()
     print("\n--- Active / Recently Updated Tickets ---")
     for r in c.execute(
-        "SELECT b.booking_code, b.status, b.cashout_value, b.realized_pnl, "
+        "SELECT b.bullet_id, b.booking_code, b.stake, b.status, b.cashout_value, b.realized_pnl, "
         "SUM(CASE WHEN l.status='WON' THEN 1 ELSE 0 END) as w, "
         "SUM(CASE WHEN l.status='LOST' THEN 1 ELSE 0 END) as l, "
         "SUM(CASE WHEN l.status='IN_PROGRESS' THEN 1 ELSE 0 END) as p "
         "FROM syndicate_codehub_bullets b "
         "LEFT JOIN syndicate_creator_anchor_ledger l ON b.booking_code = l.booking_code "
-        "WHERE b.booking_code IN ('9121S3','EPVDTJ','D40MWN','F4JQ4M','C36TTY','C3GCWW') "
-        "GROUP BY b.booking_code"
+        "WHERE b.booking_code IN ('FK88QC','ELVXWA','F9QK8B','9121S3','C36TTY','C3GCWW') "
+        "GROUP BY b.bullet_id "
+        "ORDER BY b.bullet_id"
     ):
         print(r)
 

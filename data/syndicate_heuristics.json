@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-24T06:35:57Z",
+  "last_updated": "2026-11-25T17:11:45Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -114,6 +114,11 @@
           "market": "UNDER_4_5",
           "league_pattern": "Ligue 1",
           "reason": "Auto-banned by closed-loop learner (1W-2L, gap=-0.45)"
+        },
+        {
+          "market": "1X2_2UP",
+          "league_pattern": "Premier League",
+          "reason": "Auto-banned by closed-loop learner (0W-2L, gap=-0.78)"
         }
       ]
     },
@@ -166,10 +171,10 @@
         "banned": false
       },
       "1H_UNDER_2_5": {
-        "won": 34,
+        "won": 38,
         "lost": 4,
-        "empirical_hit_rate": 0.8947,
-        "penalty": 0.0281,
+        "empirical_hit_rate": 0.9048,
+        "penalty": 0.0256,
         "banned": true
       },
       "1X2_1UP": {
@@ -180,10 +185,10 @@
         "banned": false
       },
       "1X2_2UP": {
-        "won": 8,
-        "lost": 3,
-        "empirical_hit_rate": 0.7273,
-        "penalty": 0.2072,
+        "won": 11,
+        "lost": 5,
+        "empirical_hit_rate": 0.6875,
+        "penalty": 0.2576,
         "banned": false
       },
       "2H_OVER_0_5": {
@@ -194,38 +199,38 @@
         "banned": true
       },
       "DOUBLE_CHANCE": {
-        "won": 10,
+        "won": 11,
         "lost": 3,
-        "empirical_hit_rate": 0.7692,
-        "penalty": 0.1577,
+        "empirical_hit_rate": 0.7857,
+        "penalty": 0.1331,
         "banned": false
       },
       "HANDICAP_OTHER": {
-        "won": 2,
-        "lost": 0,
-        "empirical_hit_rate": 1.0,
-        "penalty": 0.0312,
+        "won": 5,
+        "lost": 1,
+        "empirical_hit_rate": 0.8333,
+        "penalty": 0.0469,
         "banned": false
       },
       "HCP_0_1_FAV": {
-        "won": 1,
+        "won": 4,
         "lost": 1,
-        "empirical_hit_rate": 0.5,
-        "penalty": 0.4675,
+        "empirical_hit_rate": 0.8,
+        "penalty": 0.0536,
         "banned": true
       },
       "OTHER_MARKET": {
-        "won": 6,
+        "won": 8,
         "lost": 0,
         "empirical_hit_rate": 1.0,
-        "penalty": 0.0156,
+        "penalty": 0.0125,
         "banned": false
       },
       "OVER_1_5": {
-        "won": 30,
-        "lost": 4,
-        "empirical_hit_rate": 0.8824,
-        "penalty": 0.0312,
+        "won": 41,
+        "lost": 5,
+        "empirical_hit_rate": 0.8913,
+        "penalty": 0.0286,
         "banned": false
       },
       "OVER_2_0": {
@@ -243,10 +248,10 @@
         "banned": false
       },
       "PLAIN_1X2_FAV_ACCUM": {
-        "won": 24,
+        "won": 25,
         "lost": 16,
-        "empirical_hit_rate": 0.6,
-        "penalty": 0.3764,
+        "empirical_hit_rate": 0.6098,
+        "penalty": 0.3623,
         "banned": true
       },
       "TEAM_OVER_0_5": {
@@ -264,31 +269,45 @@
         "banned": false
       },
       "UNDER_2_5": {
-        "won": 7,
+        "won": 8,
         "lost": 2,
-        "empirical_hit_rate": 0.7778,
-        "penalty": 0.2621,
+        "empirical_hit_rate": 0.8,
+        "penalty": 0.219,
         "banned": false
       },
       "UNDER_3_5": {
-        "won": 5,
-        "lost": 1,
-        "empirical_hit_rate": 0.8333,
-        "penalty": 0.214,
+        "won": 8,
+        "lost": 2,
+        "empirical_hit_rate": 0.8,
+        "penalty": 0.1943,
+        "banned": false
+      },
+      "UNDER_4_0": {
+        "won": 1,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0417,
         "banned": false
       },
       "UNDER_4_5": {
-        "won": 32,
-        "lost": 3,
-        "empirical_hit_rate": 0.9143,
-        "penalty": 0.0236,
+        "won": 39,
+        "lost": 4,
+        "empirical_hit_rate": 0.907,
+        "penalty": 0.025,
+        "banned": false
+      },
+      "UNDER_5_0": {
+        "won": 2,
+        "lost": 0,
+        "empirical_hit_rate": 1.0,
+        "penalty": 0.0312,
         "banned": false
       },
       "UNDER_5_5": {
-        "won": 0,
+        "won": 1,
         "lost": 1,
-        "empirical_hit_rate": 0.0,
-        "penalty": 1.12,
+        "empirical_hit_rate": 0.5,
+        "penalty": 0.5225,
         "banned": false
       },
       "EERSTE_DIVISIE_OVER_2": {
@@ -329,6 +348,12 @@
       "timestamp": "2026-11-24T06:35:57Z",
       "event": "Closed-Loop Learner v3.0.0 Calibration",
       "finding": "Audited all settled core tickets + Monster Bullets (+1 new leg post-mortems). Locked 12 banned markets, 7 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
+    },
+    {
+      "date": "2026-11-25",
+      "timestamp": "2026-11-25T17:11:45Z",
+      "event": "Closed-Loop Learner v3.0.0 Calibration",
+      "finding": "Audited all settled core tickets + Monster Bullets (+6 new leg post-mortems). Locked 12 banned markets, 8 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
     }
   ]
 }
