@@ -405,8 +405,8 @@
             <div class="status-badge">
                 ● 24/7 DAEMON + CREATOR TRUST ENGINE ACTIVE
             </div>
-            <div id="jac-last-synced" data-utc="2026-11-25T17:33:40Z" style="font-family:var(--mono-font); font-size:11px; color:var(--accent-cyan); background:rgba(0,243,255,0.08); border:1px solid rgba(0,243,255,0.35); padding:3px 9px; border-radius:4px;">
-                Last synced UTC: 2026-11-25 17:33:40 UTC (local_daemon)
+            <div id="jac-last-synced" data-utc="2026-11-25T17:44:48Z" style="font-family:var(--mono-font); font-size:11px; color:var(--accent-cyan); background:rgba(0,243,255,0.08); border:1px solid rgba(0,243,255,0.35); padding:3px 9px; border-radius:4px;">
+                Last synced UTC: 2026-11-25 17:44:48 UTC (local_daemon)
             </div>
         </div>
     </div>
@@ -414,6 +414,26 @@
     <div id="jac-alert-banner" style="display:block; background:rgba(239,68,68,0.18); border:2px solid #ef4444; color:#fecaca; padding:12px 16px; border-radius:6px; margin-bottom:18px; font-family:var(--mono-font); font-size:12px; font-weight:700;">
         ⚠ CLOUD CRON ALERT: 5 consecutive GitHub Actions failures (billing_locked) — GitHub Actions account locked due to a billing issue (verified on runs 45445939353..45584471896)
     </div>
+    
+    <details style="background:var(--card-bg); border:1px solid var(--card-border); border-left:4px solid #fbbf24; border-radius:6px; padding:12px 16px; margin-bottom:18px; font-family:var(--mono-font);">
+        <summary style="cursor:pointer; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:12px; font-weight:700;">
+            <span>AUTONOMY SCORECARD // <span style="color:#fbbf24;">60.55%</span> (7 PASS · 3 PROVISIONAL · 8 FAIL · 1 UNVERIFIED)</span>
+            <span style="color:var(--text-muted); font-size:11px;">Audited: 2026-11-25T17:44:48Z · Click to expand (1 snapshots)</span>
+        </summary>
+        <div style="margin-top:10px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:11px;">
+                <thead>
+                    <tr style="color:var(--accent-cyan); text-align:left; border-bottom:1px solid #334155;">
+                        <th style="padding:4px 8px;">Metric</th>
+                        <th style="padding:4px 8px;">Sample N</th>
+                        <th style="padding:4px 8px; text-align:right;">Score %</th>
+                        <th style="padding:4px 8px; text-align:center;">Status</th>
+                    </tr>
+                </thead>
+                <tbody><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Unattended Re-Login Recovery Rate</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=1 of 20 needed</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>0.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Local Session Reuse Rate</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=5 of 20 needed</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-weight:700;'>PROVISIONAL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Cloud IP Login Viability</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=0 (billing locked)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>0.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>UNVERIFIED</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Credential Hygiene (0 Leaks in Git History)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=full git history</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#10b981; font-weight:700;'>PASS</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Cloud Scheduled Run Success Rate (48h)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=10 of 20 needed</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>0.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Cloud Cron Punctuality (48h)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=10</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>0.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Local Daemon Git Push Success Rate (Cumulative)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=5 of 20 needed</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>0.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>SQLite Integrity &amp; Zero Duplicate Rows</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=1 DB (604-&gt;521 legs)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#10b981; font-weight:700;'>PASS</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Cold-Start Recovery (Fresh Clone)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=2 subsystems</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>50.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Live Reconciliation Accuracy</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=17 slips</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#10b981; font-weight:700;'>PASS</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Twin-Order Disambiguation (booking_code, stake)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=2 orders</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#10b981; font-weight:700;'>PASS</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Auto-Cashout Dry-Run Correctness</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=5 open slips</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-weight:700;'>PROVISIONAL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Closed-Loop Learning Ingestion (Lost Tickets)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=19 lost slips</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>94.74%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>48h Freshness Share (&lt;= 30 min old)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=48h (10 pushes)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>5.71%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Live GitHub Pages Parity (status.json)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=1 live fetch</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>0.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#ef4444; font-weight:700;'>FAIL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Alert Accuracy &amp; Detection Latency (Fault Injection)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=5 fault cases</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#10b981; font-weight:700;'>PASS</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Local Daemon Self-Restart (Supervisor)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=1 of 20 needed</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#fbbf24; font-weight:700;'>PROVISIONAL</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Node Test Suite (npm test)</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=35 tests</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#10b981; font-weight:700;'>PASS</td></tr><tr><td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>Python Unit Test Suite</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>N=3 tests</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>100.00%</td><td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:#10b981; font-weight:700;'>PASS</td></tr></tbody>
+            </table>
+        </div>
+    </details>
     
     <!-- Top Key Metrics (Including Capital Deposit & Foundation Preservation) -->
     <div class="grid-stats">
@@ -449,7 +469,7 @@
     <div class="ticket-card" style="margin-bottom: 26px; border-top: 3px solid var(--accent-cyan);">
         <div class="ticket-header">
             <h3>1. Live Open Slips Scoreboard (Tap Any Booking Code to Jump to Full Leg Breakdown)</h3>
-            <span class="ticket-meta">ACTIVE ORDERS: <strong style="color:var(--accent-green);">5</strong> | TOTAL STAKED: <strong>12.90 GHS</strong> | LIVE CASHOUT SUM: <strong style="color:var(--accent-cyan);">19.47 GHS</strong> | TOTAL UPSIDE: <strong style="color:var(--accent-green);">1,073.84 GHS</strong></span>
+            <span class="ticket-meta">ACTIVE ORDERS: <strong style="color:var(--accent-green);">5</strong> | TOTAL STAKED: <strong>12.90 GHS</strong> | LIVE CASHOUT SUM: <strong style="color:var(--accent-cyan);">0.00 GHS</strong> | TOTAL UPSIDE: <strong style="color:var(--accent-green);">1,073.84 GHS</strong></span>
         </div>
         <div style="overflow-x: auto;">
             <table class="legs-table">
@@ -484,7 +504,7 @@
                             3.00 &rarr; <strong style="color:var(--accent-green);">674.44 GHS</strong>
                             <span style="color:var(--text-muted); font-size:10px;">(224.8x)</span>
                         </td>
-                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">9.64 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(321% of stake)</span></td>
+                        <td style="font-family:var(--mono-font);"><span style="color:var(--text-muted);">Paused / Unavailable</span></td>
                         <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-25 20:00</span> &mdash; Sporting vs Man Utd</td>
                     </tr>
         
@@ -507,7 +527,7 @@
                             3.00 &rarr; <strong style="color:var(--accent-green);">388.31 GHS</strong>
                             <span style="color:var(--text-muted); font-size:10px;">(129.4x)</span>
                         </td>
-                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">4.93 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(164% of stake)</span></td>
+                        <td style="font-family:var(--mono-font);"><span style="color:var(--text-muted);">Paused / Unavailable</span></td>
                         <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-25 19:45</span> &mdash; Bolton Wanderers vs West Bromwich</td>
                     </tr>
         
@@ -530,7 +550,7 @@
                             2.90 &rarr; <strong style="color:var(--accent-green);">5.78 GHS</strong>
                             <span style="color:var(--text-muted); font-size:10px;">(2.0x)</span>
                         </td>
-                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">2.90 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(100% of stake)</span></td>
+                        <td style="font-family:var(--mono-font);"><span style="color:var(--text-muted);">Paused / Unavailable</span></td>
                         <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-26 17:45</span> &mdash; FK Jablonec vs Lugano</td>
                     </tr>
         
@@ -576,7 +596,7 @@
                             2.00 &rarr; <strong style="color:var(--accent-green);">2.02 GHS</strong>
                             <span style="color:var(--text-muted); font-size:10px;">(1.0x)</span>
                         </td>
-                        <td style="font-family:var(--mono-font);"><strong style="color:var(--accent-green);">2.00 GHS</strong> <span style="color:var(--text-muted); font-size:10px;">(100% of stake)</span></td>
+                        <td style="font-family:var(--mono-font);"><span style="color:var(--text-muted);">Paused / Unavailable</span></td>
                         <td style="font-size:11px;"><span style="color:var(--accent-cyan); font-family:var(--mono-font);">11-26 17:45</span> &mdash; Besiktas Istanbul vs Hapoel Be`er Sheva FC</td>
                     </tr>
         
@@ -1431,7 +1451,7 @@
         <div id="slip-CH_MONSTER_20261121_V10_HYBRID_200X" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
                 <h3>25-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: 9121S3</span> <span class="status-won" style="margin-left:8px;">● ALIVE & UNDEFEATED (7/25 WON)</span></h3>
-                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 152.42x | CASHOUT: <strong style="color: var(--accent-cyan);">9.64 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">674.44 GHS</strong></span>
+                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 152.42x | CASHOUT: <strong style="color: var(--accent-cyan);">Paused / Unavailable</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">674.44 GHS</strong></span>
             </div>
             <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
                 <div>PROGRESS: <strong style="color:var(--accent-green);">7 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">18 PENDING</span> (28.0%)</div>
@@ -1687,7 +1707,7 @@
         <div id="slip-CH_MONSTER_20261123_V16_UCL_SHIELD_130X" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
                 <h3>24-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: F9QK8B</span> <span class="status-won" style="margin-left:8px;">● ALIVE & UNDEFEATED (5/24 WON)</span></h3>
-                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 89.27x | CASHOUT: <strong style="color: var(--accent-cyan);">4.93 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">388.31 GHS</strong></span>
+                <span class="ticket-meta">STAKE: 3.00 GHS | BASE ODDS: 89.27x | CASHOUT: <strong style="color: var(--accent-cyan);">Paused / Unavailable</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">388.31 GHS</strong></span>
             </div>
             <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
                 <div>PROGRESS: <strong style="color:var(--accent-green);">5 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">19 PENDING</span> (20.8%)</div>
@@ -1934,7 +1954,7 @@
         <div id="slip-CH_ANOINTED_V21_VAULT_STEP2" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
                 <h3>3-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: C2P3EB</span><span class="tier-probation" style="margin-left:8px;">MODE C // INTEGER PUSH VAULT STEP 1</span> <span class="status-ready" style="margin-left:8px;">● PRE-MATCH READY (0/3 · 3 UPCOMING)</span></h3>
-                <span class="ticket-meta">STAKE: 2.90 GHS | BASE ODDS: 1.95x | CASHOUT: <strong style="color: var(--accent-cyan);">2.90 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">5.78 GHS</strong></span>
+                <span class="ticket-meta">STAKE: 2.90 GHS | BASE ODDS: 1.95x | CASHOUT: <strong style="color: var(--accent-cyan);">Paused / Unavailable</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">5.78 GHS</strong></span>
             </div>
             <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
                 <div>PROGRESS: <strong style="color:var(--accent-green);">0 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">3 PENDING</span> (0.0%)</div>
@@ -2473,7 +2493,7 @@
         <div id="slip-CH_QUANT_V11_FORTRESS_98PCT_20261121_C3GCWW" class="ticket-card" style="border-top: 3px solid var(--accent-gold); margin-bottom: 20px;">
             <div class="ticket-header">
                 <h3>1-Fold Syndicate Slip <span class="code-tag" style="margin-left:8px; background: rgba(251, 191, 36, 0.2); border-color: var(--accent-gold); color: var(--accent-gold);">BOOKED CODE: C3GCWW</span> <span class="status-ready" style="margin-left:8px;">● PRE-MATCH READY (0/1 · 1 UPCOMING)</span></h3>
-                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 1.01x | CASHOUT: <strong style="color: var(--accent-cyan);">2.00 GHS</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">2.02 GHS</strong></span>
+                <span class="ticket-meta">STAKE: 2.00 GHS | BASE ODDS: 1.01x | CASHOUT: <strong style="color: var(--accent-cyan);">Paused / Unavailable</strong> | POTENTIAL WIN: <strong style="color: var(--accent-green); font-size: 13px;">2.02 GHS</strong></span>
             </div>
             <div style="padding: 8px 16px; background: rgba(0,0,0,0.28); border-bottom: 1px solid var(--card-border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; font-family: var(--mono-font); font-size: 11px;">
                 <div>PROGRESS: <strong style="color:var(--accent-green);">0 WON</strong> &middot; <span style="color:var(--accent-red);">0 LOST</span> &middot; <span style="color:var(--accent-gold);">0 LIVE</span> &middot; <span style="color:var(--text-muted);">1 PENDING</span> (0.0%)</div>
@@ -4898,7 +4918,7 @@
     </div>
     
     <!-- Hardened Quantitative Guardrails Matrix (Dynamic from syndicate_heuristics.json) -->
-    <div class="section-title">Hardened Quantitative Guardrails (Heuristics v3.0.0 // Updated: 2026-11-25T17:33:40Z)</div>
+    <div class="section-title">Hardened Quantitative Guardrails (Heuristics v3.0.0 // Updated: 2026-11-25T17:41:41Z)</div>
     <div class="guardrails-box">
         <div class="rule-item">
             <span class="rule-badge" style="border-color: var(--accent-red); color: var(--accent-red); background: rgba(239, 68, 68, 0.15);">ACTIVE BANS</span>

@@ -1,0 +1,55 @@
+name: Jac 24h Autonomy Audit & Trend Tracker
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: jac-autonomy-audit-24h
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  autonomy-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Jac Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run 24h Autonomy Audit & Update KPI Terminal
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 syndicate/run_autonomy_audit.py
+          python3 syndicate/render_syndicate_terminal.py
+          cp syndicate/syndicate_terminal.html index.html
+          mkdir -p docs
+          cp syndicate/syndicate_terminal.html docs/index.html
+
+      - name: Commit & Push Updated Scorecard & History
+        run: |
+          git config user.name "Jac Autonomy Auditor"
+          git config user.email "jac-syndicate@users.noreply.github.com"
+          git add docs/AUTONOMY_SCORECARD.md docs/autonomy_history.json autonomy_history.json syndicate/syndicate_terminal.html index.html docs/index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(jac-audit): 24h automated autonomy scorecard & trend update"
+            git pull --rebase origin main
+            git push origin main
+          else
+            echo "No scorecard changes to commit."
+          fi

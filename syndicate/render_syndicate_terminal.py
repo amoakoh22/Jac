@@ -859,6 +859,50 @@ def generate_html():
     </div>
     """
 
+    # Autonomy Scorecard Banner (reads latest snapshot from docs/autonomy_history.json)
+    _ah_path = os.path.join(BASE_DIR, "docs", "autonomy_history.json")
+    if os.path.exists(_ah_path):
+        try:
+            _ah = json.load(open(_ah_path, "r", encoding="utf-8"))
+            if isinstance(_ah, list) and len(_ah) > 0:
+                _latest_a = _ah[-1]
+                _a_score = float(_latest_a.get("overall_autonomy_score_pct") or 0.0)
+                _a_color = "#10b981" if _a_score >= 98.0 else ("#fbbf24" if _a_score >= 60.0 else "#ef4444")
+                _a_rows = ""
+                for _m in (_latest_a.get("metrics") or []):
+                    _st_col = "#10b981" if _m["status"] == "PASS" else ("#fbbf24" if _m["status"] == "PROVISIONAL" else "#ef4444")
+                    _a_rows += (
+                        f"<tr>"
+                        f"<td style='padding:4px 8px; border-bottom:1px solid #1e293b;'>{__import__('html').escape(str(_m['name']))}</td>"
+                        f"<td style='padding:4px 8px; border-bottom:1px solid #1e293b; color:#94a3b8;'>{__import__('html').escape(str(_m['n_str']))}</td>"
+                        f"<td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:right; font-weight:700;'>{_m['pct']:.2f}%</td>"
+                        f"<td style='padding:4px 8px; border-bottom:1px solid #1e293b; text-align:center; color:{_st_col}; font-weight:700;'>{__import__('html').escape(str(_m['status']))}</td>"
+                        f"</tr>"
+                    )
+                html += f"""
+    <details style="background:var(--card-bg); border:1px solid var(--card-border); border-left:4px solid {_a_color}; border-radius:6px; padding:12px 16px; margin-bottom:18px; font-family:var(--mono-font);">
+        <summary style="cursor:pointer; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-size:12px; font-weight:700;">
+            <span>AUTONOMY SCORECARD // <span style="color:{_a_color};">{_a_score:.2f}%</span> ({_latest_a.get('pass_count',0)} PASS · {_latest_a.get('provisional_count',0)} PROVISIONAL · {_latest_a.get('fail_count',0)} FAIL · {_latest_a.get('unverified_count',0)} UNVERIFIED)</span>
+            <span style="color:var(--text-muted); font-size:11px;">Audited: {__import__('html').escape(str(_latest_a.get('audited_at_utc','')))} · Click to expand ({len(_ah)} snapshots)</span>
+        </summary>
+        <div style="margin-top:10px; overflow-x:auto;">
+            <table style="width:100%; border-collapse:collapse; font-size:11px;">
+                <thead>
+                    <tr style="color:var(--accent-cyan); text-align:left; border-bottom:1px solid #334155;">
+                        <th style="padding:4px 8px;">Metric</th>
+                        <th style="padding:4px 8px;">Sample N</th>
+                        <th style="padding:4px 8px; text-align:right;">Score %</th>
+                        <th style="padding:4px 8px; text-align:center;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>{_a_rows}</tbody>
+            </table>
+        </div>
+    </details>
+    """
+        except Exception:
+            pass
+
     # Build inline SVG Running Balance Area Chart from capital_txs
     svg_chart = ""
     if len(capital_txs) >= 2:
