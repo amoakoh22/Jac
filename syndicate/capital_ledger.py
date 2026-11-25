@@ -80,13 +80,10 @@ def sync_capital_ledger():
     )
     """)
 
-    if not os.path.exists(STMT_PATH):
-        conn.commit()
-        conn.close()
-        return
-
-    with open(STMT_PATH, "r", encoding="utf-8") as f:
-        stmts = json.load(f)
+    stmts = []
+    if os.path.exists(STMT_PATH):
+        with open(STMT_PATH, "r", encoding="utf-8") as f:
+            stmts = json.load(f)
 
     # Seed opening carryover balance row prior to Nov 14 deposit (GHS 0.21)
     cur.execute("""
@@ -135,6 +132,21 @@ def sync_capital_ledger():
             tid, dt_str, ct_ms, cat, tcode, biz, oid, t_ref,
             direction, amt, signed_amt, before_bal, after_bal, notes
         ))
+
+    # Manual entries (bank-side overhead etc.) from data/manual_ledger_entries.json
+    mpath = os.path.join(BASE_DIR, "data", "manual_ledger_entries.json")
+    if os.path.exists(mpath):
+        import datetime as _dt
+        for m in json.load(open(mpath, encoding="utf-8")):
+            ms = int(_dt.datetime.strptime(m["timestamp_gmt"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=_dt.timezone.utc).timestamp() * 1000)
+            amt = m["amount_ghs"]
+            cur.execute("""INSERT OR REPLACE INTO syndicate_capital_ledger
+                (trade_id, timestamp_gmt, create_time_ms, tx_category, trade_code, biz_type, order_id, ticket_ref,
+                 direction, amount_ghs, signed_amount_ghs, balance_before_ghs, balance_after_ghs, notes)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)""",
+                (m["trade_id"], m["timestamp_gmt"], ms, m["tx_category"], m["trade_code"], m["biz_type"], "",
+                 m["ticket_ref"], m["direction"], amt, -amt if m["direction"] == "DEBIT" else amt,
+                 m["balance_before_ghs"], m["balance_after_ghs"], m["notes"]))
 
     conn.commit()
     rows = cur.execute("SELECT COUNT(*), SUM(CASE WHEN tx_category='DEPOSIT' THEN amount_ghs ELSE 0 END) FROM syndicate_capital_ledger").fetchone()
