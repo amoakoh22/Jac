@@ -86,19 +86,27 @@ def main():
             )
 
         if role == "VAULT_STEP":
+            import re as _re
+            m_step = _re.search(r"STEP(\d+)", bullet_id or "", _re.I)
+            step_num = int(m_step.group(1)) if m_step else 1
+            banked = 3.0 if step_num >= 2 else 0.0
             cur.execute(
                 """
                 INSERT OR REPLACE INTO syndicate_vault_ladders
                 (ladder_id, seed_stake, current_equity, banked_profit, current_step, target_multiplier, active_booking_code, status, updated_at)
-                VALUES (?, ?, ?, 0.0, 1, 100.0, ?, 'ACTIVE', ?)
+                VALUES (?, 3.0, ?, ?, ?, 100.0, ?, 'ACTIVE', ?)
                 """,
-                (wave_group_id or "VAULT_LADDER_V1", stake, stake, code, now_iso),
+                (wave_group_id or "VAULT_LADDER_V1", stake, banked, step_num, code, now_iso),
             )
 
         src_shot = t.get("screenshotPath")
         if src_shot and os.path.exists(src_shot):
-            dst_shot = os.path.join(ARTIFACT_DIR, os.path.basename(src_shot))
-            shutil.copyfile(src_shot, dst_shot)
+            try:
+                os.makedirs(ARTIFACT_DIR, exist_ok=True)
+                dst_shot = os.path.join(ARTIFACT_DIR, os.path.basename(src_shot))
+                shutil.copyfile(src_shot, dst_shot)
+            except OSError:
+                pass
 
         recorded.append((code, role, folds, stake, pot_win, t.get("effectiveMultiplier"), round(t.get("trueExpectedRtp", 0) * 100, 2)))
 
