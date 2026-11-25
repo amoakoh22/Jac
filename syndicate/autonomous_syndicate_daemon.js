@@ -1,19 +1,19 @@
 /**
  * Hermes Syndicate - Autonomous 24/7 Loop & Self-Learning Engine
  * Runs continuously without user prompting:
- *  1. Every 5m: Live Open/Settled Bets audit (monitor_syndicate_bets.js) + Cashout/Equity check + Terminal sync
- *  2. On Settlement: Self-learning post-mortem audit (syndicate_post_mortems + runtime/syndicate_experience.json)
- *  3. Every 60m: Session keep-alive (persist sportybet_authenticated_state.json) + CodeHub scout (scrape_codehub.js)
- *  4. Daily 05:30 GMT: Harvests live fixtures & prepares next uncorrelated cycle if exposure < 24%
+ *  1. Every 5m: monitor_syndicate_bets.js (AUTO_CASHOUT=1) + live_api_audit.js + reconcile_live_audit.py
+ *  2. Every 5m: closed_loop_learner.py + capital_ledger.py + update_status.py + render_syndicate_terminal.py
+ *  3. Every 5m: Sync index.html, docs/index.html, status.json, docs/status.json, sqlite & commit+push to origin/main
+ *  4. 3x Daily (06:00, 14:00, 20:00 GMT): CodeHub scout (scrape_codehub.js)
+ *  5. Daily 05:30 GMT: Harvest live fixtures cache
  */
 const fs = require('fs');
 const path = require('path');
 const { spawnSync } = require('child_process');
 
 const ROOT_DIR = path.resolve(__dirname, '..');
-const DB_PATH = path.join(ROOT_DIR, 'data', 'syndicate_ledger.sqlite');
-const EXP_FILE = path.join(ROOT_DIR, 'runtime', 'syndicate_experience.json');
 const LOG_FILE = path.join(ROOT_DIR, 'runtime', 'logs', 'syndicate_daemon.log');
+const CYCLE_SLEEP_MS = parseInt(process.env.JAC_CYCLE_SLEEP_MS || String(5 * 60 * 1000), 10);
 
 fs.mkdirSync(path.dirname(LOG_FILE), { recursive: true });
 
@@ -23,29 +23,42 @@ function log(msg) {
   fs.appendFileSync(LOG_FILE, line + '\n');
 }
 
-function runScript(relPath, envExtra = {}) {
-  const res = spawnSync('node', [path.join(ROOT_DIR, relPath)], {
+function runCmd(bin, args, envExtra = {}, timeout = 180000) {
+  const res = spawnSync(bin, args, {
     cwd: ROOT_DIR,
     encoding: 'utf8',
-    timeout: 180000,
+    timeout,
     env: { ...process.env, ...envExtra }
   });
   if (res.status !== 0) {
-    log(`[WARN] ${relPath} exited ${res.status}: ${(res.stderr || res.stdout || '').slice(-300)}`);
+    log(`[WARN] ${bin} ${args.join(' ')} exited ${res.status}: ${(res.stderr || res.stdout || '').slice(-300)}`);
   }
-  return res.stdout || '';
+  return res;
 }
 
-function runLearningLoop() {
-  const r = spawnSync('python3', ['syndicate/closed_loop_learner.py'], {
-    cwd: ROOT_DIR,
-    encoding: 'utf8',
-    timeout: 120000
-  });
-  if (r.status !== 0) {
-    log(`[WARN] closed_loop_learner.py exited ${r.status}: ${(r.stderr || r.stdout || '').slice(-300)}`);
-  } else if (r.stdout) {
-    log(`[LearningLoop] ${r.stdout.trim().replace(/\s+/g, ' ').slice(0, 400)}`);
+function syncAndPush() {
+  const termSrc = path.join(ROOT_DIR, 'syndicate', 'syndicate_terminal.html');
+  const statusSrc = path.join(ROOT_DIR, 'status.json');
+  fs.mkdirSync(path.join(ROOT_DIR, 'docs'), { recursive: true });
+  if (fs.existsSync(termSrc)) {
+    fs.copyFileSync(termSrc, path.join(ROOT_DIR, 'index.html'));
+    fs.copyFileSync(termSrc, path.join(ROOT_DIR, 'docs', 'index.html'));
+  }
+  if (fs.existsSync(statusSrc)) {
+    fs.copyFileSync(statusSrc, path.join(ROOT_DIR, 'docs', 'status.json'));
+  }
+
+  const pushCmd = [
+    'git add index.html docs/index.html status.json docs/status.json syndicate/syndicate_terminal.html data/syndicate_ledger.sqlite data/syndicate_heuristics.json',
+    'if ! git diff --staged --quiet; then',
+    '  git commit -m "chore(jac-daemon): live terminal, status & ledger telemetry sync"',
+    '  git pull --rebase origin main',
+    '  git push origin main',
+    'fi'
+  ].join(' && ');
+  const r = runCmd('bash', ['-c', pushCmd], {}, 60000);
+  if (r.status === 0) {
+    log('[GitSync] Verified commit/push to origin/main.');
   }
 }
 
@@ -59,54 +72,54 @@ function runLearningLoop() {
     tick++;
     log(`--- Cycle #${tick} starting ---`);
     try {
-      // 1. Live Open/Settled Bets + Balance + Auto-Cashout + Survivor Re-Bullet + Leg-Level Learning
-      //    (monitor_syndicate_bets.js already invokes closed_loop_learner.py, creator_trust_engine.py, and render_syndicate_terminal.py)
-      let monOut = runScript('syndicate/monitor_syndicate_bets.js', { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
+      // 1. Live Open/Settled Bets + Balance + Auto-Cashout + Survivor Re-Bullet
+      let mon = runCmd('node', ['syndicate/monitor_syndicate_bets.js'], { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
+      let monOut = mon.stdout || '';
       if (monOut.includes('Stored session invalid')) {
-        log('[SessionSelfHeal] Stored session expired — running active_login_sentinel.js...');
-        const authOut = runScript('syndicate/active_login_sentinel.js');
-        if (authOut.includes('AUTHENTICATED')) {
+        log('[SessionSelfHeal] Stored session expired — running active_login_sentinel.js (short non-interactive check)...');
+        const auth = runCmd('node', ['syndicate/active_login_sentinel.js'], { SENTINEL_WAIT: '10' }, 60000);
+        if ((auth.stdout || '').includes('AUTHENTICATED')) {
           log('[SessionSelfHeal] Re-authenticated cleanly — retrying monitor pass...');
-          monOut = runScript('syndicate/monitor_syndicate_bets.js', { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
+          mon = runCmd('node', ['syndicate/monitor_syndicate_bets.js'], { AUTO_CASHOUT: '1', AUTO_REBULLET: '1' });
+          monOut = mon.stdout || '';
         }
       }
       const balMatch = monOut.match(/Live Balance:\s*GHS\s*([0-9,.]+)/i);
       if (balMatch) log(`[Telemetry] Wallet: GHS ${balMatch[1]}`);
 
-      // 2. Ensure closed-loop learning runs even if monitor had 0 active items
-      if (monOut.includes('No IN_PROGRESS syndicate tickets')) {
-        runLearningLoop();
-        spawnSync('python3', ['syndicate/render_syndicate_terminal.py'], { cwd: ROOT_DIR, encoding: 'utf8' });
-      }
+      // 2. Direct API Audit + Twin-aware Reconciler + Closed-Loop Learner + Capital Ledger
+      runCmd('node', ['syndicate/live_api_audit.js']);
+      runCmd('python3', ['syndicate/reconcile_live_audit.py']);
+      const learn = runCmd('python3', ['syndicate/closed_loop_learner.py']);
+      if (learn.stdout) log(`[LearningLoop] ${learn.stdout.trim().replace(/\s+/g, ' ').slice(0, 300)}`);
+      runCmd('python3', ['syndicate/capital_ledger.py']);
 
-      // 3. Sync sanitized Syndicate Terminal to root index.html & docs/index.html inside Jac repo
-      const termSrc = path.join(ROOT_DIR, 'syndicate', 'syndicate_terminal.html');
-      if (fs.existsSync(termSrc)) {
-        fs.copyFileSync(termSrc, path.join(ROOT_DIR, 'index.html'));
-        fs.mkdirSync(path.join(ROOT_DIR, 'docs'), { recursive: true });
-        fs.copyFileSync(termSrc, path.join(ROOT_DIR, 'docs', 'index.html'));
-        spawnSync('bash', ['-c', 'git add index.html docs/index.html syndicate/syndicate_terminal.html data/syndicate_ledger.sqlite && ! git diff --staged --quiet && git commit -m "chore(jac-daemon): live terminal & ledger telemetry sync" && git pull --rebase origin main && git push origin main'], { cwd: ROOT_DIR, timeout: 30000 });
-      }
+      // 3. Update status.json (liveness timestamp) & Render KPI Terminal
+      runCmd('python3', ['syndicate/update_status.py', '--source', 'local_daemon', '--cloud-result', 'unchanged']);
+      runCmd('python3', ['syndicate/render_syndicate_terminal.py']);
 
-      // 4. Intelligent 3x Daily Pre-Slate CodeHub Scout Windows (06:00, 14:00, 20:00 GMT)
+      // 4. Sync index.html / docs/index.html / status.json and commit+push to origin/main every cycle
+      syncAndPush();
+
+      // 5. Intelligent 3x Daily Pre-Slate CodeHub Scout Windows (06:00, 14:00, 20:00 GMT)
       const now = new Date();
       const utcH = now.getUTCHours();
       const utcM = now.getUTCMinutes();
       if ([6, 14, 20].includes(utcH) && utcM >= 0 && utcM < 6) {
         log(`[CodeHub Window ${utcH}:00 GMT] Running scheduled pre-slate CodeHub intelligence & creator trust audit...`);
-        runScript('syndicate/scrape_codehub.js');
+        runCmd('node', ['syndicate/scrape_codehub.js']);
       }
 
-      // 5. Daily 05:30 GMT: Refresh live fixtures cache for next cycle
+      // 6. Daily 05:30 GMT: Refresh live fixtures cache for next cycle
       if (utcH === 5 && utcM >= 30 && utcM < 36) {
         log('[05:30 GMT Gate] Harvesting fresh daily fixtures...');
-        runScript('syndicate/harvest_live_fixtures.js');
+        runCmd('node', ['syndicate/harvest_live_fixtures.js']);
       }
     } catch (e) {
       log(`[ERROR] Cycle #${tick}: ${e.message}`);
     }
 
-    log(`--- Cycle #${tick} complete. Sleeping 5 minutes... ---`);
-    await new Promise(r => setTimeout(r, 5 * 60 * 1000));
+    log(`--- Cycle #${tick} complete. Sleeping ${Math.round(CYCLE_SLEEP_MS / 1000)}s... ---`);
+    await new Promise(r => setTimeout(r, CYCLE_SLEEP_MS));
   }
 })();

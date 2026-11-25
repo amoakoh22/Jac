@@ -412,10 +412,40 @@ def generate_html():
     capital_preserved_pct = (wallet["balance"] / total_capital_base * 100.0) if total_capital_base > 0 else 0.0
     equity_preserved_pct = (total_account_equity / total_capital_base * 100.0) if total_capital_base > 0 else 0.0
 
+    import datetime as _dt
+    _now_utc = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    _status_path = os.path.join(BASE_DIR, "status.json")
+    _sync_status = {
+        "last_synced_utc": _now_utc,
+        "source": "render",
+        "consecutive_cloud_failures": 0,
+        "last_cloud_status": "unknown",
+        "last_cloud_error": "",
+        "alert_active": False,
+        "alert_message": "",
+    }
+    if os.path.exists(_status_path):
+        try:
+            with open(_status_path, "r", encoding="utf-8") as _sf:
+                _loaded = json.load(_sf)
+                if isinstance(_loaded, dict):
+                    _sync_status.update(_loaded)
+        except Exception:
+            pass
+    last_synced_utc = _sync_status.get("last_synced_utc") or _now_utc
+    last_synced_display = last_synced_utc.replace("T", " ").replace("Z", " UTC")
+    sync_source = _sync_status.get("source") or "local_daemon"
+    cloud_failures = int(_sync_status.get("consecutive_cloud_failures") or 0)
+    alert_active = bool(_sync_status.get("alert_active")) or cloud_failures >= 3
+    alert_message = _sync_status.get("alert_message") or (
+        f"CLOUD CRON ALERT: {cloud_failures} consecutive failures" if cloud_failures >= 3 else ""
+    )
+
     html = f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="120">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JAC // HERMES ASYMMETRIC SYNDICATE TERMINAL</title>
     <style>
@@ -812,11 +842,20 @@ def generate_html():
     <div class="header">
         <div class="logo-group">
             <h1>JAC // HERMES ASYMMETRIC SYNDICATE TERMINAL</h1>
-            <p>7-DAY ROLLING HORIZON (NOV 16 – NOV 22) // TELECEL SPORTYBET GHANA ACCOUNT // 3X DAILY CODEHUB WINDOWS (06:00, 14:00, 20:00 GMT)</p>
+            <p>TELECEL SPORTYBET GHANA ACCOUNT // AUTO-REFRESH 120s // 3X DAILY CODEHUB WINDOWS (06:00, 14:00, 20:00 GMT)</p>
         </div>
-        <div class="status-badge">
-            ● 24/7 DAEMON + CREATOR TRUST ENGINE ACTIVE
+        <div style="display:flex; flex-direction:column; align-items:flex-end; gap:6px;">
+            <div class="status-badge">
+                ● 24/7 DAEMON + CREATOR TRUST ENGINE ACTIVE
+            </div>
+            <div id="jac-last-synced" data-utc="{__import__('html').escape(last_synced_utc)}" style="font-family:var(--mono-font); font-size:11px; color:var(--accent-cyan); background:rgba(0,243,255,0.08); border:1px solid rgba(0,243,255,0.35); padding:3px 9px; border-radius:4px;">
+                Last synced UTC: {__import__('html').escape(last_synced_display)} ({__import__('html').escape(sync_source)})
+            </div>
         </div>
+    </div>
+
+    <div id="jac-alert-banner" style="display:{'block' if alert_active else 'none'}; background:rgba(239,68,68,0.18); border:2px solid #ef4444; color:#fecaca; padding:12px 16px; border-radius:6px; margin-bottom:18px; font-family:var(--mono-font); font-size:12px; font-weight:700;">
+        ⚠ {__import__('html').escape(alert_message)}
     </div>
     """
 
@@ -1550,6 +1589,46 @@ def generate_html():
     html += """
     </div>
 
+    <script>
+    (function() {
+        var el = document.getElementById('jac-last-synced');
+        var banner = document.getElementById('jac-alert-banner');
+        function evaluateStaleness(isoUtc, extraAlert) {
+            var msgs = [];
+            if (extraAlert) msgs.push(extraAlert);
+            if (isoUtc) {
+                var ts = Date.parse(isoUtc);
+                if (!isNaN(ts)) {
+                    var ageMin = Math.floor((Date.now() - ts) / 60000);
+                    if (ageMin > 45) {
+                        msgs.push('STALE DATA ALERT: Last synced UTC was ' + ageMin + ' minutes ago (>45m threshold). Engine or push pipeline may be down.');
+                    }
+                }
+            }
+            if (msgs.length > 0 && banner) {
+                banner.style.display = 'block';
+                banner.textContent = '⚠ ' + msgs.join(' | ');
+            }
+        }
+        var initialIso = el ? el.getAttribute('data-utc') : '';
+        var initialAlert = (banner && banner.style.display !== 'none') ? banner.textContent.replace(/^⚠\\s*/, '').trim() : '';
+        evaluateStaleness(initialIso, initialAlert);
+        if (window.fetch && window.location && window.location.protocol.indexOf('http') === 0) {
+            fetch('status.json?t=' + Date.now(), { cache: 'no-store' })
+                .then(function(r) { return r.ok ? r.json() : null; })
+                .then(function(st) {
+                    if (!st) return;
+                    if (el && st.last_synced_utc) {
+                        el.setAttribute('data-utc', st.last_synced_utc);
+                        el.textContent = 'Last synced UTC: ' + st.last_synced_utc.replace('T', ' ').replace('Z', ' UTC') + ' (' + (st.source || 'live') + ')';
+                    }
+                    var msg = (st.alert_active || (st.consecutive_cloud_failures >= 3)) ? (st.alert_message || ('CLOUD CRON ALERT: ' + st.consecutive_cloud_failures + ' consecutive failures')) : '';
+                    evaluateStaleness(st.last_synced_utc || initialIso, msg);
+                })
+                .catch(function() {});
+        }
+    })();
+    </script>
 </body>
 </html>
 """
@@ -1564,8 +1643,11 @@ if __name__ == "__main__":
         f.write(content)
     print(f"[SyndicateTerminal] Rendered HTML terminal to: {out_path}")
 
-    os.makedirs(ARTIFACT_DIR, exist_ok=True)
-    artifact_path = os.path.join(ARTIFACT_DIR, "syndicate_kpi_terminal.html")
-    with open(artifact_path, 'w', encoding='utf-8') as f:
-        f.write(content)
-    print(f"[SyndicateTerminal] Synced artifact to: {artifact_path}")
+    try:
+        os.makedirs(ARTIFACT_DIR, exist_ok=True)
+        artifact_path = os.path.join(ARTIFACT_DIR, "syndicate_kpi_terminal.html")
+        with open(artifact_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        print(f"[SyndicateTerminal] Synced artifact to: {artifact_path}")
+    except OSError as e:
+        print(f"[SyndicateTerminal] Skipped optional artifact sync ({e})")

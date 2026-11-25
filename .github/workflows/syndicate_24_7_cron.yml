@@ -1,0 +1,97 @@
+name: Jac 24/7 Autonomous Syndicate Cron
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+concurrency:
+  group: jac-syndicate-24-7-cron
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  syndicate-cycle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      AUTO_CASHOUT: '1'
+      SENTINEL_WAIT: '15'
+      JACK_AUTHENTICATED_STATE_JSON: ${{ secrets.JACK_AUTHENTICATED_STATE_JSON }}
+      SPORTYBET_PHONE: ${{ secrets.SPORTYBET_PHONE }}
+      SPORTYBET_PASSWORD: ${{ secrets.SPORTYBET_PASSWORD }}
+
+    steps:
+      - name: Checkout Jac Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Dependencies & Chromium
+        run: |
+          npm ci
+          npx playwright-core install --with-deps chromium
+
+      - name: Hydrate Runtime Credentials & Session State (Never Committed)
+        run: |
+          mkdir -p runtime/logs/screenshots
+          if [ -n "$JACK_AUTHENTICATED_STATE_JSON" ]; then
+            printf '%s' "$JACK_AUTHENTICATED_STATE_JSON" > runtime/jack_authenticated_state.json
+            chmod 600 runtime/jack_authenticated_state.json
+          fi
+          if [ -n "$SPORTYBET_PHONE" ] && [ -n "$SPORTYBET_PASSWORD" ]; then
+            node -e '
+              const fs = require("fs");
+              fs.writeFileSync("runtime/jack_vault.json", JSON.stringify({
+                phone: process.env.SPORTYBET_PHONE,
+                password: process.env.SPORTYBET_PASSWORD
+              }, null, 2), { mode: 0o600 });
+            '
+          fi
+
+      - name: Run SportyBet Login, Monitor (AUTO_CASHOUT=1), Live Audit & Learning Loop
+        id: engine
+        run: |
+          set -o pipefail
+          node syndicate/active_login_sentinel.js
+          AUTO_CASHOUT=1 node syndicate/monitor_syndicate_bets.js
+          node syndicate/live_api_audit.js
+          python3 syndicate/reconcile_live_audit.py
+          python3 syndicate/closed_loop_learner.py
+          python3 syndicate/capital_ledger.py
+
+      - name: Update Liveness Status & Render KPI Terminal
+        if: always()
+        run: |
+          if [ "${{ steps.engine.outcome }}" = "success" ]; then
+            python3 syndicate/update_status.py --source github_actions --cloud-result ok
+          else
+            python3 syndicate/update_status.py --source github_actions --cloud-result failed --error "Engine step outcome=${{ steps.engine.outcome }} (check GitHub Actions logs for IP/session block)"
+          fi
+          python3 syndicate/render_syndicate_terminal.py
+          cp syndicate/syndicate_terminal.html index.html
+          mkdir -p docs
+          cp syndicate/syndicate_terminal.html docs/index.html
+          cp status.json docs/status.json
+
+      - name: Commit & Push Updated Ledger, Status & Terminal
+        if: always()
+        run: |
+          git config user.name "Jac Autonomous Engine"
+          git config user.email "jac-syndicate@users.noreply.github.com"
+          git add data/syndicate_ledger.sqlite data/syndicate_heuristics.json status.json docs/status.json syndicate/syndicate_terminal.html index.html docs/index.html
+          if ! git diff --staged --quiet; then
+            git commit -m "chore(jac-24-7-cron): live telemetry, ledger & terminal sync"
+            git pull --rebase origin main
+            git push origin main
+          else
+            echo "No changes to commit."
+          fi
