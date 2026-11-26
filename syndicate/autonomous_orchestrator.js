@@ -244,8 +244,8 @@ async function deployModeAX100(action, isLive) {
   try {
     await page.goto('https://www.sportybet.com/gh/m/', { waitUntil: 'domcontentloaded', timeout: 35000 });
     await page.waitForTimeout(2000);
-    const bal = await S.checkBalance(context);
-    if (bal === null) throw new Error('SportyBet session unauthenticated during Mode A auto-deploy');
+    const sess = await S.readSession(page);
+    if (!sess || !sess.isLogged) throw new Error('SportyBet session unauthenticated during Mode A auto-deploy');
 
     let bonusPlan = bonusModel.getDefaultBonusPlan();
     try {
@@ -287,7 +287,7 @@ async function deployModeAX100(action, isLive) {
     };
 
     const receipt = await verifyAndPlaceTicket(context, page, ticket, bonusPlan, 1);
-    const balAfter = await S.checkBalance(context);
+    const balAfter = (await S.readSession(page))?.balance ?? null;
     await S.persistState(context);
 
     if (!receipt || !receipt.success || !receipt.booking_code) {
