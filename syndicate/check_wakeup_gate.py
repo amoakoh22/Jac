@@ -99,8 +99,8 @@ def last_sync_age_minutes(now_utc: dt.datetime):
         return None
 
 
-def evaluate(now_utc: dt.datetime, event_name: str = "schedule"):
-    if event_name == "workflow_dispatch":
+def evaluate(now_utc: dt.datetime, event_name: str = "schedule", respect_gate: bool = False):
+    if event_name == "workflow_dispatch" and not respect_gate:
         return True, "MANUAL_DISPATCH", "Triggered manually via workflow_dispatch", None
 
     events = collect_active_kickoffs()
@@ -144,6 +144,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--at", help="Override UTC ISO timestamp for testing (YYYY-MM-DDTHH:MM:SSZ)")
     ap.add_argument("--event", default=os.environ.get("GITHUB_EVENT_NAME", "schedule"))
+    ap.add_argument("--respect-gate", action="store_true", default=os.environ.get("RESPECT_GATE", "").lower() == "true")
     args = ap.parse_args()
 
     now_utc = (
@@ -151,7 +152,7 @@ def main():
         if args.at
         else dt.datetime.now(dt.timezone.utc)
     )
-    should_run, reason, detail, next_win = evaluate(now_utc, args.event)
+    should_run, reason, detail, next_win = evaluate(now_utc, args.event, args.respect_gate)
     print(f"[WakeupGate] {now_utc.strftime('%Y-%m-%dT%H:%MZ')} | should_run={should_run} | reason={reason} | {detail}")
 
     gh_out = os.environ.get("GITHUB_OUTPUT")

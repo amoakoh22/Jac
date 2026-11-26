@@ -4,6 +4,11 @@ on:
   schedule:
     - cron: '*/15 * * * *'
   workflow_dispatch:
+    inputs:
+      respect_gate:
+        description: 'Skip dead hours using dynamic kickoff gate (for external cron triggers)'
+        required: false
+        default: 'false'
 
 concurrency:
   group: jac-syndicate-24-7-cron
@@ -19,6 +24,7 @@ jobs:
     env:
       AUTO_CASHOUT: '1'
       SENTINEL_WAIT: '15'
+      RESPECT_GATE: ${{ github.event.inputs.respect_gate || 'false' }}
       JACK_AUTHENTICATED_STATE_JSON: ${{ secrets.JACK_AUTHENTICATED_STATE_JSON }}
       SPORTYBET_PHONE: ${{ secrets.SPORTYBET_PHONE }}
       SPORTYBET_PASSWORD: ${{ secrets.SPORTYBET_PASSWORD }}
