@@ -23,6 +23,7 @@ jobs:
     timeout-minutes: 12
     env:
       AUTO_CASHOUT: '1'
+      AUTO_DEPLOY: '1'
       SENTINEL_WAIT: '15'
       RESPECT_GATE: ${{ github.event.inputs.respect_gate || 'false' }}
       JACK_AUTHENTICATED_STATE_JSON: ${{ secrets.JACK_AUTHENTICATED_STATE_JSON }}
@@ -70,7 +71,7 @@ jobs:
             '
           fi
 
-      - name: Run SportyBet Login, Monitor (AUTO_CASHOUT=1), Live Audit & Learning Loop
+      - name: Run SportyBet Login, Monitor (AUTO_CASHOUT=1), Live Audit, Learning & Auto-Deploy
         if: steps.gate.outputs.should_run == 'true'
         id: engine
         run: |
@@ -81,6 +82,7 @@ jobs:
           python3 syndicate/reconcile_live_audit.py
           python3 syndicate/closed_loop_learner.py
           python3 syndicate/capital_ledger.py
+          AUTO_DEPLOY=1 node syndicate/autonomous_orchestrator.js --live
 
       - name: Update Liveness Status & Render KPI Terminal
         if: always() && steps.gate.outputs.should_run == 'true'

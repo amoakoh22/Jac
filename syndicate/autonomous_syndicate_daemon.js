@@ -111,6 +111,8 @@ function syncAndPush() {
       const learn = runCmd('python3', ['syndicate/closed_loop_learner.py']);
       if (learn.stdout) log(`[LearningLoop] ${learn.stdout.trim().replace(/\s+/g, ' ').slice(0, 300)}`);
       runCmd('python3', ['syndicate/capital_ledger.py']);
+      const orch = runCmd('node', ['syndicate/autonomous_orchestrator.js', '--live'], { AUTO_DEPLOY: '1' });
+      if (orch.stdout) log(`[Orchestrator] ${orch.stdout.trim().replace(/\s+/g, ' ').slice(0, 300)}`);
 
       // 3. Update status.json (liveness timestamp) & Render KPI Terminal
       runCmd('python3', ['syndicate/update_status.py', '--source', 'local_daemon', '--cloud-result', 'unchanged']);

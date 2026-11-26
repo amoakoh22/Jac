@@ -99,6 +99,58 @@ def last_sync_age_minutes(now_utc: dt.datetime):
         return None
 
 
+def needs_portfolio_replenish(now_utc: dt.datetime):
+    if not os.path.exists(DB):
+        return False, ""
+    try:
+        conn = sqlite3.connect(DB, timeout=10.0)
+        cur = conn.cursor()
+        bal_row = cur.execute("SELECT liquid_balance FROM syndicate_wallets WHERE id = 1").fetchone()
+        bal = float(bal_row[0]) if bal_row and bal_row[0] is not None else 0.0
+        if bal < 120.0:
+            conn.close()
+            return False, ""
+
+        reasons = []
+        ladder = cur.execute(
+            "SELECT current_step, active_booking_code FROM syndicate_vault_ladders WHERE ladder_id = 'VAULT_LADDER_V1'"
+        ).fetchone()
+        if ladder and ladder[1]:
+            b = cur.execute(
+                "SELECT status FROM syndicate_codehub_bullets WHERE booking_code = ? ORDER BY rowid DESC LIMIT 1",
+                (ladder[1],),
+            ).fetchone()
+            if b and b[0] == "WON":
+                reasons.append(f"Vault Step {ladder[0]} ({ladder[1]}) WON -> advance to Step {int(ladder[0]) + 1}")
+
+        x100_cnt = cur.execute(
+            "SELECT COUNT(*) FROM syndicate_codehub_bullets WHERE status = 'IN_PROGRESS' AND total_odds >= 50.0"
+        ).fetchone()[0]
+        if x100_cnt < 2:
+            reasons.append(f"x100+ active slots {x100_cnt}/2")
+
+        if reasons:
+            # Respect 3h cooldown if an auto-deploy attempt already ran recently
+            tbl = cur.execute(
+                "SELECT name FROM sqlite_master WHERE type='table' AND name='syndicate_auto_deployments'"
+            ).fetchone()
+            if tbl:
+                recent = cur.execute(
+                    "SELECT created_at FROM syndicate_auto_deployments ORDER BY created_at DESC LIMIT 1"
+                ).fetchone()
+                if recent and recent[0]:
+                    last_dt = dt.datetime.fromisoformat(recent[0].replace("Z", "+00:00"))
+                    if (now_utc - last_dt).total_seconds() < 10800:
+                        conn.close()
+                        return False, ""
+            conn.close()
+            return True, "; ".join(reasons)
+        conn.close()
+    except Exception:
+        pass
+    return False, ""
+
+
 def evaluate(now_utc: dt.datetime, event_name: str = "schedule", respect_gate: bool = False):
     if event_name == "workflow_dispatch" and not respect_gate:
         return True, "MANUAL_DISPATCH", "Triggered manually via workflow_dispatch", None
@@ -124,8 +176,12 @@ def evaluate(now_utc: dt.datetime, event_name: str = "schedule", respect_gate: b
             upcoming[0][0].strftime("%Y-%m-%dT%H:%MZ") if upcoming else None,
         )
 
-    age_min = last_sync_age_minutes(now_utc)
+    rep_needed, rep_reason = needs_portfolio_replenish(now_utc)
     next_win = upcoming[0][0].strftime("%Y-%m-%dT%H:%MZ") if upcoming else None
+    if rep_needed:
+        return True, "REPLENISH_READY", f"Autonomous opportunity open: {rep_reason}", next_win
+
+    age_min = last_sync_age_minutes(now_utc)
     next_desc = f"{upcoming[0][2]} {upcoming[0][3]} (window opens {next_win})" if upcoming else "none"
 
     if age_min is None or age_min >= HEARTBEAT_MAX_AGE_MIN:
