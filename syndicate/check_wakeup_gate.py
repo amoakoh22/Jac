@@ -121,30 +121,38 @@ def needs_portfolio_replenish(now_utc: dt.datetime):
                 (ladder[1],),
             ).fetchone()
             if b and b[0] == "WON":
-                reasons.append(f"Vault Step {ladder[0]} ({ladder[1]}) WON -> advance to Step {int(ladder[0]) + 1}")
+                reasons.append(("MODE_C_VAULT", f"Vault Step {ladder[0]} ({ladder[1]}) WON -> advance to Step {int(ladder[0]) + 1}"))
 
         x100_cnt = cur.execute(
             "SELECT COUNT(*) FROM syndicate_codehub_bullets WHERE status = 'IN_PROGRESS' AND total_odds >= 50.0"
         ).fetchone()[0]
         if x100_cnt < 2:
-            reasons.append(f"x100+ active slots {x100_cnt}/2")
+            reasons.append(("MODE_A_X100", f"x100+ active slots {x100_cnt}/2"))
 
         if reasons:
-            # Respect 3h cooldown if an auto-deploy attempt already ran recently
+            # Respect 3h cooldown per strategy if that strategy already attempted recently
             tbl = cur.execute(
                 "SELECT name FROM sqlite_master WHERE type='table' AND name='syndicate_auto_deployments'"
             ).fetchone()
+            filtered_reasons = []
             if tbl:
-                recent = cur.execute(
-                    "SELECT created_at FROM syndicate_auto_deployments ORDER BY created_at DESC LIMIT 1"
-                ).fetchone()
-                if recent and recent[0]:
-                    last_dt = dt.datetime.fromisoformat(recent[0].replace("Z", "+00:00"))
-                    if (now_utc - last_dt).total_seconds() < 10800:
-                        conn.close()
-                        return False, ""
+                for strat, msg in reasons:
+                    recent = cur.execute(
+                        "SELECT created_at FROM syndicate_auto_deployments WHERE strategy = ? ORDER BY created_at DESC LIMIT 1",
+                        (strat,),
+                    ).fetchone()
+                    if recent and recent[0]:
+                        last_dt = dt.datetime.fromisoformat(recent[0].replace("Z", "+00:00"))
+                        if (now_utc - last_dt).total_seconds() < 10800:
+                            continue
+                    filtered_reasons.append(msg)
+            else:
+                filtered_reasons = [msg for _, msg in reasons]
+
             conn.close()
-            return True, "; ".join(reasons)
+            if filtered_reasons:
+                return True, "; ".join(filtered_reasons)
+            return False, ""
         conn.close()
     except Exception:
         pass
