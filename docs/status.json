@@ -1,6 +1,6 @@
 {
-  "last_synced_utc": "2026-11-26T22:11:52Z",
-  "source": "github_actions",
+  "last_synced_utc": "2026-11-26T22:21:56Z",
+  "source": "local_daemon",
   "consecutive_cloud_failures": 0,
   "last_cloud_run_utc": "2026-11-26T22:11:52Z",
   "last_cloud_status": "ok",
