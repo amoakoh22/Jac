@@ -101,13 +101,14 @@ jobs:
       - name: Commit & Push Updated Ledger, Status & Terminal
         if: always() && steps.gate.outputs.should_run == 'true'
         run: |
+          sqlite3 data/syndicate_ledger.sqlite "PRAGMA integrity_check;" | grep -qx "ok"
           git config user.name "Jac Autonomous Engine"
           git config user.email "jac-syndicate@users.noreply.github.com"
           git add data/syndicate_ledger.sqlite data/syndicate_heuristics.json status.json docs/status.json syndicate/syndicate_terminal.html index.html docs/index.html
           if ! git diff --staged --quiet; then
             git commit -m "chore(jac-24-7-cron): live telemetry, ledger & terminal sync"
-            git pull --rebase origin main
-            git push origin main
+            git pull --rebase -X theirs origin main
+            git push origin main || (git pull --rebase -X theirs origin main && git push origin main)
           else
             echo "No changes to commit."
           fi
