@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-27T08:54:17Z",
+  "last_updated": "2026-11-27T09:08:45Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
