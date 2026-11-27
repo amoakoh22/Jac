@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-27T19:46:30Z",
+  "last_updated": "2026-11-27T22:54:07Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -171,10 +171,10 @@
         "banned": false
       },
       "1H_UNDER_2_5": {
-        "won": 50,
+        "won": 53,
         "lost": 6,
-        "empirical_hit_rate": 0.8929,
-        "penalty": 0.028,
+        "empirical_hit_rate": 0.8983,
+        "penalty": 0.0266,
         "banned": true
       },
       "1X2_1UP": {
@@ -269,17 +269,17 @@
         "banned": false
       },
       "UNDER_2_5": {
-        "won": 11,
+        "won": 12,
         "lost": 2,
-        "empirical_hit_rate": 0.8462,
-        "penalty": 0.1403,
+        "empirical_hit_rate": 0.8571,
+        "penalty": 0.1166,
         "banned": false
       },
       "UNDER_3_5": {
-        "won": 11,
+        "won": 12,
         "lost": 3,
-        "empirical_hit_rate": 0.7857,
-        "penalty": 0.2136,
+        "empirical_hit_rate": 0.8,
+        "penalty": 0.1867,
         "banned": false
       },
       "UNDER_4_0": {
