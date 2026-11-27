@@ -124,10 +124,10 @@ def needs_portfolio_replenish(now_utc: dt.datetime):
                 reasons.append(("MODE_C_VAULT", f"Vault Step {ladder[0]} ({ladder[1]}) WON -> advance to Step {int(ladder[0]) + 1}"))
 
         x100_cnt = cur.execute(
-            "SELECT COUNT(*) FROM syndicate_codehub_bullets WHERE status = 'IN_PROGRESS' AND total_odds >= 50.0"
+            "SELECT COUNT(*) FROM syndicate_codehub_bullets WHERE status = 'IN_PROGRESS' AND total_odds >= 25.0"
         ).fetchone()[0]
         if x100_cnt < 2:
-            reasons.append(("MODE_A_X100", f"x100+ active slots {x100_cnt}/2"))
+            reasons.append(("MODE_A_X100", f"jackpot active slots {x100_cnt}/2"))
 
         if reasons:
             # Respect 3h cooldown per strategy if that strategy already attempted recently

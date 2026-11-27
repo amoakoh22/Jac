@@ -45,10 +45,12 @@ const CONFIG = Object.freeze({
   VAULT_MAX_STAKE_GHS: 15.0,
   VAULT_LOSS_COOLDOWN_HOURS: 12,
   X100_TARGET_ACTIVE_SLOTS: 2,
-  X100_MIN_ODDS_CLASS: 50.0,
+  X100_MIN_ODDS_CLASS: 25.0,
   X100_STAKE_GHS: 2.0,
   X100_MIN_MULTIPLIER: 100.0,
-  X100_EV_THRESHOLD: 1.05,
+  X100_FALLBACK_MULTIPLIER: 25.0,
+  X100_EV_THRESHOLD: 1.02,
+  SKIP_RETRY_COOLDOWN_HOURS: 3,
   PROBE_MAX_AGE_MINUTES: 120,
 });
 
@@ -169,9 +171,16 @@ function evaluatePortfolioPlan(db, now = new Date()) {
   } else {
     const slotNum = activeX100.length + 1;
     const deployKey = `X100_${today}_SLOT_${slotNum}`;
-    const existing = db.prepare('SELECT status FROM syndicate_auto_deployments WHERE deploy_key = ?').get(deployKey);
-    if (existing) {
-      holds.push(`X100_LOCKED: ${deployKey} already attempted today (${existing.status})`);
+    const existing = db.prepare('SELECT status, created_at FROM syndicate_auto_deployments WHERE deploy_key = ?').get(deployKey);
+    const isLocked = existing && (existing.status === 'PLACED' || existing.status === 'PENDING');
+    const hoursSinceSkip = existing && existing.created_at
+      ? (now.getTime() - Date.parse(existing.created_at)) / 3600000
+      : CONFIG.SKIP_RETRY_COOLDOWN_HOURS;
+
+    if (isLocked) {
+      holds.push(`X100_LOCKED: ${deployKey} already ${existing.status}`);
+    } else if (existing && hoursSinceSkip < CONFIG.SKIP_RETRY_COOLDOWN_HOURS) {
+      holds.push(`X100_COOLDOWN: ${deployKey} (${existing.status}) ${hoursSinceSkip.toFixed(1)}h ago (< ${CONFIG.SKIP_RETRY_COOLDOWN_HOURS}h)`);
     } else if (CONFIG.X100_STAKE_GHS > remAfterVault) {
       holds.push(`X100_CAP: needs GHS ${CONFIG.X100_STAKE_GHS.toFixed(2)} > remaining GHS ${remAfterVault.toFixed(2)}`);
     } else {
@@ -180,7 +189,7 @@ function evaluatePortfolioPlan(db, now = new Date()) {
         deployKey,
         step: slotNum,
         stake: CONFIG.X100_STAKE_GHS,
-        reason: `Active x100+ slots ${activeX100.length}/${CONFIG.X100_TARGET_ACTIVE_SLOTS}; replenishing disjoint +EV Jackpot`,
+        reason: `Active jackpot slots ${activeX100.length}/${CONFIG.X100_TARGET_ACTIVE_SLOTS}; scanning 100x+ (or 25x+ Sweet-Spot) +EV slip`,
       });
     }
   }
@@ -254,28 +263,39 @@ async function deployModeAX100(action, isLive) {
       if (parsed) bonusPlan = parsed;
     } catch (_) {}
 
-    const scanRes = await scanMultiSportCandidates(context.request, { maxEventsPerSport: 35, maxHoursAhead: 72 });
+    const scanRes = await scanMultiSportCandidates(context.request, { maxEventsPerSport: 60, maxHoursAhead: 72 });
     const candidates = Array.isArray(scanRes) ? scanRes : (scanRes?.candidates || []);
-    const built = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
+    let tierLabel = 'x100+ Mega-Jackpot';
+    let built = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
       minMultiplier: CONFIG.X100_MIN_MULTIPLIER,
       evThreshold: CONFIG.X100_EV_THRESHOLD,
       stake: action.stake,
     });
 
+    // Near-miss re-engineering: if 100x+ pool is thin, build a 25x+ Sweet-Spot Mid-Jackpot (10-16F, much higher hit rate)
     if (!built || !built.legs || built.legs.length < 3) {
-      return { placed: false, reason: 'No qualifying >=100x +EV ticket met Hermes learning & RTP>=0.98 filters' };
+      tierLabel = '25x+ Sweet-Spot Mid-Jackpot';
+      built = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
+        minMultiplier: CONFIG.X100_FALLBACK_MULTIPLIER,
+        evThreshold: CONFIG.X100_EV_THRESHOLD,
+        stake: action.stake,
+      });
+    }
+
+    if (!built || !built.legs || built.legs.length < 3) {
+      return { placed: false, reason: `No qualifying >=25x +EV ticket met Hermes learning & RTP>=0.98 filters (scanned ${candidates.length} candidates)` };
     }
 
     if (!isLive) {
       return {
         placed: false,
         dryRun: true,
-        reason: `DRY-RUN qualified ${built.legs.length}F @ ${Number(built.effectiveMultiplier || 0).toFixed(2)}x (EV=${Number(built.trueExpectedRtp || 0).toFixed(3)})`,
+        reason: `DRY-RUN qualified ${tierLabel} ${built.legs.length}F @ ${Number(built.effectiveMultiplier || 0).toFixed(2)}x (EV=${Number(built.trueExpectedRtp || 0).toFixed(3)})`,
       };
     }
 
     const ticket = {
-      title: `Autonomous x100+ Jackpot (${utcDateStr()})`,
+      title: `Autonomous ${tierLabel} (${utcDateStr()})`,
       bulletId: `CH_AUTO_X100_${utcDateStr().replace(/-/g, '')}_S${action.step}`,
       role: 'SOLO',
       waveGroupId: '',

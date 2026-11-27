@@ -75,3 +75,21 @@ test('idempotent SQLite lock prevents duplicate auto-deployments', () => {
   assert.ok(plan2.holds.some(h => h.startsWith('VAULT_LOCKED')));
   db.close();
 });
+
+test('SKIPPED_NO_CANDIDATE cools down for 3h then retries automatically', () => {
+  const db = makeMemDb({ balance: 167.59, vaultStatus: 'IN_PROGRESS', x100Count: 0 });
+  const plan0 = evaluatePortfolioPlan(db, new Date('2026-11-27T03:00:00Z'));
+  assert.equal(plan0.actions.length, 1);
+  db.prepare(
+    "INSERT INTO syndicate_auto_deployments VALUES (?, '2026-11-27', 'MODE_A_X100', 1, 2.0, '', 'SKIPPED_NO_CANDIDATE', 'thin pool', '2026-11-27T03:00:00Z')"
+  ).run(plan0.actions[0].deployKey);
+
+  const withinCooldown = evaluatePortfolioPlan(db, new Date('2026-11-27T05:00:00Z'));
+  assert.equal(withinCooldown.actions.length, 0);
+  assert.ok(withinCooldown.holds.some(h => h.startsWith('X100_COOLDOWN')));
+
+  const afterCooldown = evaluatePortfolioPlan(db, new Date('2026-11-27T06:30:00Z'));
+  assert.equal(afterCooldown.actions.length, 1);
+  assert.equal(afterCooldown.actions[0].strategy, 'MODE_A_X100');
+  db.close();
+});

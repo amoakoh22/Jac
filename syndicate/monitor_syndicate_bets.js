@@ -385,10 +385,15 @@ async function executeCashoutOnPage(page, item) {
 
       // Role-Aware Autonomous Cashout Check:
       //  - HARVESTER: Lock 100%+ of BOTH Twin-Pair stakes + instant profit once Wave 1 clears & 0 legs are live!
-      //  - MOONSHOT / SOLO: Hold for x100+ Jackpot unless >= 85% equity on final wave or >= GHS 150!
+      //  - SOLO (high-odds >= 15x): Mid-Flight Profit-Lock at >= 3.5x stake (+250% ROI) when no leg is live
+      //    (prevents 9121S3-style 12W/1L heartbreaks where GHS 12.26 cashout rides back to GHS 0.00).
+      //  - MOONSHOT: Hold 100% risk-free for x100+ Jackpot unless >= 85% equity or >= GHS 150!
+      const stakeVal = Number(item.stake || 0);
+      const isSoloMidHarvest = role === 'SOLO' && !anyLiveLeg && stakeVal > 0 && Number(item.total_odds || 0) >= 15 && cashoutOffer >= stakeVal * 3.5;
       const triggerCashout = AUTO_CASHOUT && cashoutOffer > 0 && (
         (item.kind === 'TICKET' && (equity >= 0.92 || cashoutOffer >= 100.0)) ||
         (item.kind === 'BULLET' && role === 'HARVESTER' && !anyLiveLeg && cashoutOffer >= pairTarget) ||
+        (item.kind === 'BULLET' && isSoloMidHarvest) ||
         (item.kind === 'BULLET' && role !== 'HARVESTER' && (equity >= 0.85 || cashoutOffer >= 150.0))
       );
 
