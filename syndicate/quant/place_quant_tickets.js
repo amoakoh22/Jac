@@ -577,8 +577,9 @@ async function verifyAndPlaceTicket(context, page, ticket, bonusPlan, ticketInde
     if (!liveMath.isPositiveEv || liveMath.trueExpectedRtp <= 1.00) {
       throw new Error(`MODE_A_EV_GATE_FAILED_PRE_PLACE: trueExpectedRtp=${liveMath.trueExpectedRtp}`);
     }
-    if (liveMath.effectiveMultiplier < 100.0) {
-      throw new Error(`MODE_A_MULTIPLIER_GATE_FAILED_PRE_PLACE: effectiveMultiplier=${liveMath.effectiveMultiplier}`);
+    const minMultGate = Number(ticket.minEffectiveMultiplier || 100.0);
+    if (liveMath.effectiveMultiplier < minMultGate) {
+      throw new Error(`MODE_A_MULTIPLIER_GATE_FAILED_PRE_PLACE: effectiveMultiplier=${liveMath.effectiveMultiplier} < ${minMultGate}`);
     }
   } else if (ticket.mode === 'fortress_98pct') {
     if (liveMath.combinedWinProb < 0.980 - 1e-9) {
@@ -646,8 +647,9 @@ async function verifyAndPlaceTicket(context, page, ticket, bonusPlan, ticketInde
       if (liveTrueRtp <= 1.00) {
         throw new Error(`LIVE_QUOTE_EV_GATE_FAILED: liveTrueRtp=${liveTrueRtp.toFixed(4)} <= 1.00 (potWin=${q.potentialWin})`);
       }
-      if (liveEffMult < 100.0) {
-        throw new Error(`LIVE_QUOTE_MULT_GATE_FAILED: liveEffMult=${liveEffMult.toFixed(2)} < 100.0`);
+      const minMultGate = Number(ticket.minEffectiveMultiplier || 100.0);
+      if (liveEffMult < minMultGate) {
+        throw new Error(`LIVE_QUOTE_MULT_GATE_FAILED: liveEffMult=${liveEffMult.toFixed(2)} < ${minMultGate}`);
       }
     } else if (ticket.mode === 'fortress_98pct') {
       if (liveMath.combinedWinProb < 0.980 - 1e-9) {

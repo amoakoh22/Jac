@@ -294,6 +294,7 @@ async function deployModeAX100(action, isLive) {
     const builtTicket = {
       ...builtRes.ticket,
       recommendedStakeGhs: action.stake,
+      minEffectiveMultiplier: tierLabel.startsWith('25x+') ? CONFIG.X100_FALLBACK_MULTIPLIER : CONFIG.X100_MIN_MULTIPLIER,
       name: `Autonomous ${tierLabel} (${utcDateStr()})`,
     };
     const mp = builtTicket.mathProof || {};
