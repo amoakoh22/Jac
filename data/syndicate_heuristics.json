@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-28T11:53:44Z",
+  "last_updated": "2026-11-28T13:39:20Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -227,10 +227,10 @@
         "banned": false
       },
       "OVER_1_5": {
-        "won": 47,
+        "won": 48,
         "lost": 7,
-        "empirical_hit_rate": 0.8704,
-        "penalty": 0.0335,
+        "empirical_hit_rate": 0.8727,
+        "penalty": 0.0329,
         "banned": false
       },
       "OVER_2_0": {
@@ -270,9 +270,9 @@
       },
       "UNDER_2_5": {
         "won": 12,
-        "lost": 2,
-        "empirical_hit_rate": 0.8571,
-        "penalty": 0.1166,
+        "lost": 3,
+        "empirical_hit_rate": 0.8,
+        "penalty": 0.1919,
         "banned": false
       },
       "UNDER_3_5": {
@@ -388,6 +388,12 @@
     {
       "date": "2026-11-26",
       "timestamp": "2026-11-26T21:53:34Z",
+      "event": "Closed-Loop Learner v3.0.0 Calibration",
+      "finding": "Audited all settled core tickets + Monster Bullets (+1 new leg post-mortems). Locked 12 banned markets, 8 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
+    },
+    {
+      "date": "2026-11-28",
+      "timestamp": "2026-11-28T13:39:20Z",
       "event": "Closed-Loop Learner v3.0.0 Calibration",
       "finding": "Audited all settled core tickets + Monster Bullets (+1 new leg post-mortems). Locked 12 banned markets, 8 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
     }
