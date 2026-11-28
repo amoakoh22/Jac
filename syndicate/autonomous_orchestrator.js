@@ -266,47 +266,47 @@ async function deployModeAX100(action, isLive) {
     const scanRes = await scanMultiSportCandidates(context.request, { maxEventsPerSport: 60, maxHoursAhead: 72 });
     const candidates = Array.isArray(scanRes) ? scanRes : (scanRes?.modeACandidates || scanRes?.candidates || []);
     let tierLabel = 'x100+ Mega-Jackpot';
-    let built = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
+    let builtRes = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
       minMultiplier: CONFIG.X100_MIN_MULTIPLIER,
-      evThreshold: CONFIG.X100_EV_THRESHOLD,
-      stake: action.stake,
+      minTicketEv: CONFIG.X100_EV_THRESHOLD,
+      minStake: action.stake,
+      maxStake: action.stake,
     });
 
-    // Near-miss re-engineering: if 100x+ pool is thin, build a 25x+ Sweet-Spot Mid-Jackpot (10-16F, much higher hit rate)
-    if (!built || !built.legs || built.legs.length < 3) {
+    // Near-miss re-engineering: if 100x+ pool is thin, build a 25x+ Sweet-Spot Mid-Jackpot (10-18F, much higher hit rate)
+    if (!builtRes || !builtRes.ok || !builtRes.ticket) {
       tierLabel = '25x+ Sweet-Spot Mid-Jackpot';
-      built = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
+      builtRes = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
         minMultiplier: CONFIG.X100_FALLBACK_MULTIPLIER,
-        evThreshold: CONFIG.X100_EV_THRESHOLD,
-        stake: action.stake,
+        minFolds: 10,
+        maxFolds: 18,
+        minTicketEv: CONFIG.X100_EV_THRESHOLD,
+        minStake: action.stake,
+        maxStake: action.stake,
       });
     }
 
-    if (!built || !built.legs || built.legs.length < 3) {
-      return { placed: false, reason: `No qualifying >=25x +EV ticket met Hermes learning & RTP>=0.98 filters (scanned ${candidates.length} candidates)` };
+    if (!builtRes || !builtRes.ok || !builtRes.ticket || !builtRes.ticket.legs || builtRes.ticket.legs.length < 3) {
+      const diag = builtRes?.diagnostics ? ` diag=${JSON.stringify(builtRes.diagnostics).slice(0, 140)}` : '';
+      return { placed: false, reason: `No qualifying >=25x +EV ticket met Hermes learning & RTP>=0.98 filters (scanned ${candidates.length} candidates${diag})` };
     }
+
+    const builtTicket = {
+      ...builtRes.ticket,
+      recommendedStakeGhs: action.stake,
+      name: `Autonomous ${tierLabel} (${utcDateStr()})`,
+    };
+    const mp = builtTicket.mathProof || {};
 
     if (!isLive) {
       return {
         placed: false,
         dryRun: true,
-        reason: `DRY-RUN qualified ${tierLabel} ${built.legs.length}F @ ${Number(built.effectiveMultiplier || 0).toFixed(2)}x (EV=${Number(built.trueExpectedRtp || 0).toFixed(3)})`,
+        reason: `DRY-RUN qualified ${tierLabel} ${builtTicket.legs.length}F @ ${Number(mp.effectiveMultiplier || 0).toFixed(2)}x (EV=${Number(mp.trueExpectedRtp || 0).toFixed(3)})`,
       };
     }
 
-    const ticket = {
-      title: `Autonomous ${tierLabel} (${utcDateStr()})`,
-      bulletId: `CH_AUTO_X100_${utcDateStr().replace(/-/g, '')}_S${action.step}`,
-      role: 'SOLO',
-      waveGroupId: '',
-      stake: action.stake,
-      legs: built.legs,
-      baseOdds: built.baseOdds,
-      effectiveMultiplier: built.effectiveMultiplier,
-      trueExpectedRtp: built.trueExpectedRtp,
-    };
-
-    const receipt = await verifyAndPlaceTicket(context, page, ticket, bonusPlan, 1);
+    const receipt = await verifyAndPlaceTicket(context, page, builtTicket, bonusPlan, 1);
     const balAfter = (await S.readSession(page))?.balance ?? null;
     await S.persistState(context);
 
@@ -314,15 +314,24 @@ async function deployModeAX100(action, isLive) {
       return { placed: false, reason: `Placement returned unconfirmed receipt: ${JSON.stringify(receipt || {}).slice(0, 200)}` };
     }
 
+    const bulletId = `CH_AUTO_X100_${utcDateStr().replace(/-/g, '')}_S${action.step}`;
     fs.writeFileSync(RESULTS_PATH, JSON.stringify({
       generatedAt: new Date().toISOString(),
       balanceAfter: balAfter,
       tickets: [{
-        ...ticket,
+        title: builtTicket.name,
+        bulletId,
+        role: 'SOLO',
+        waveGroupId: '',
+        stake: receipt.stake || action.stake,
+        legs: receipt.legs || builtTicket.legs,
+        baseOdds: receipt.baseOdds || mp.baseOdds || 0,
+        effectiveMultiplier: receipt.effectiveMultiplier || mp.effectiveMultiplier || 0,
+        trueExpectedRtp: receipt.trueExpectedRtp || mp.trueExpectedRtp || 0,
         success: true,
         booking_code: receipt.booking_code,
-        potentialWin: receipt.potentialWin || round2(action.stake * (built.effectiveMultiplier || built.baseOdds || 100)),
-        folds: built.legs.length,
+        potentialWin: receipt.potentialWin || round2(action.stake * (receipt.effectiveMultiplier || mp.effectiveMultiplier || 25)),
+        folds: receipt.folds || builtTicket.legs.length,
         screenshotPath: receipt.screenshotPath || '',
       }],
     }, null, 2));
@@ -331,7 +340,11 @@ async function deployModeAX100(action, isLive) {
     if (rec.status !== 0) {
       console.warn('[Orchestrator] record_anointed_v4.py warning:', rec.stderr || rec.stdout);
     }
-    return { placed: true, bookingCode: receipt.booking_code, reason: `Placed ${built.legs.length}F x100+ (${receipt.booking_code})` };
+    return {
+      placed: true,
+      bookingCode: receipt.booking_code,
+      reason: `Placed ${tierLabel} ${receipt.folds || builtTicket.legs.length}F (${receipt.booking_code}) @ ${Number(receipt.effectiveMultiplier || mp.effectiveMultiplier || 0).toFixed(2)}x`,
+    };
   } finally {
     await browser.close();
   }
