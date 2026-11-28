@@ -264,7 +264,7 @@ async function deployModeAX100(action, isLive) {
     } catch (_) {}
 
     const scanRes = await scanMultiSportCandidates(context.request, { maxEventsPerSport: 60, maxHoursAhead: 72 });
-    const candidates = Array.isArray(scanRes) ? scanRes : (scanRes?.candidates || []);
+    const candidates = Array.isArray(scanRes) ? scanRes : (scanRes?.modeACandidates || scanRes?.candidates || []);
     let tierLabel = 'x100+ Mega-Jackpot';
     let built = modeA.buildX100PlusEvTicket(candidates, bonusPlan, learningCtx, {
       minMultiplier: CONFIG.X100_MIN_MULTIPLIER,
