@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-28T18:23:44Z",
+  "last_updated": "2026-11-28T19:23:42Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -190,10 +190,10 @@
         "banned": false
       },
       "1X2_2UP": {
-        "won": 16,
+        "won": 17,
         "lost": 6,
-        "empirical_hit_rate": 0.7273,
-        "penalty": 0.2034,
+        "empirical_hit_rate": 0.7391,
+        "penalty": 0.1863,
         "banned": false
       },
       "2H_OVER_0_5": {
@@ -232,10 +232,10 @@
         "banned": false
       },
       "OVER_1_5": {
-        "won": 56,
+        "won": 57,
         "lost": 10,
-        "empirical_hit_rate": 0.8485,
-        "penalty": 0.0386,
+        "empirical_hit_rate": 0.8507,
+        "penalty": 0.038,
         "banned": false
       },
       "OVER_2_0": {
@@ -274,10 +274,10 @@
         "banned": false
       },
       "UNDER_2_5": {
-        "won": 15,
-        "lost": 3,
-        "empirical_hit_rate": 0.8333,
-        "penalty": 0.128,
+        "won": 16,
+        "lost": 4,
+        "empirical_hit_rate": 0.8,
+        "penalty": 0.1685,
         "banned": false
       },
       "UNDER_3_5": {
@@ -295,10 +295,10 @@
         "banned": false
       },
       "UNDER_4_5": {
-        "won": 55,
-        "lost": 8,
-        "empirical_hit_rate": 0.873,
-        "penalty": 0.0327,
+        "won": 56,
+        "lost": 9,
+        "empirical_hit_rate": 0.8615,
+        "penalty": 0.0354,
         "banned": false
       },
       "UNDER_5_0": {
@@ -423,6 +423,12 @@
     {
       "date": "2026-11-28",
       "timestamp": "2026-11-28T17:53:58Z",
+      "event": "Closed-Loop Learner v3.0.0 Calibration",
+      "finding": "Audited all settled core tickets + Monster Bullets (+2 new leg post-mortems). Locked 12 banned markets, 9 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
+    },
+    {
+      "date": "2026-11-28",
+      "timestamp": "2026-11-28T19:23:42Z",
       "event": "Closed-Loop Learner v3.0.0 Calibration",
       "finding": "Audited all settled core tickets + Monster Bullets (+2 new leg post-mortems). Locked 12 banned markets, 9 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
     }
