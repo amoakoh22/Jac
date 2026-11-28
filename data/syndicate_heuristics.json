@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-28T16:23:41Z",
+  "last_updated": "2026-11-28T16:36:09Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -119,6 +119,11 @@
           "market": "1X2_2UP",
           "league_pattern": "Premier League",
           "reason": "Auto-banned by closed-loop learner (0W-2L, gap=-0.78)"
+        },
+        {
+          "market": "1X2_2UP",
+          "league_pattern": "Bundesliga",
+          "reason": "Auto-banned by closed-loop learner (0W-2L, gap=-0.76)"
         }
       ]
     },
@@ -171,10 +176,10 @@
         "banned": false
       },
       "1H_UNDER_2_5": {
-        "won": 56,
+        "won": 58,
         "lost": 6,
-        "empirical_hit_rate": 0.9032,
-        "penalty": 0.0254,
+        "empirical_hit_rate": 0.9062,
+        "penalty": 0.0246,
         "banned": true
       },
       "1X2_1UP": {
@@ -186,9 +191,9 @@
       },
       "1X2_2UP": {
         "won": 16,
-        "lost": 5,
-        "empirical_hit_rate": 0.7619,
-        "penalty": 0.1539,
+        "lost": 6,
+        "empirical_hit_rate": 0.7273,
+        "penalty": 0.2034,
         "banned": false
       },
       "2H_OVER_0_5": {
@@ -227,10 +232,10 @@
         "banned": false
       },
       "OVER_1_5": {
-        "won": 52,
-        "lost": 8,
-        "empirical_hit_rate": 0.8667,
-        "penalty": 0.0343,
+        "won": 53,
+        "lost": 9,
+        "empirical_hit_rate": 0.8548,
+        "penalty": 0.0371,
         "banned": false
       },
       "OVER_2_0": {
@@ -276,10 +281,10 @@
         "banned": false
       },
       "UNDER_3_5": {
-        "won": 12,
+        "won": 13,
         "lost": 3,
-        "empirical_hit_rate": 0.8,
-        "penalty": 0.1867,
+        "empirical_hit_rate": 0.8125,
+        "penalty": 0.175,
         "banned": false
       },
       "UNDER_4_0": {
@@ -290,10 +295,10 @@
         "banned": false
       },
       "UNDER_4_5": {
-        "won": 52,
+        "won": 53,
         "lost": 7,
-        "empirical_hit_rate": 0.8814,
-        "penalty": 0.0307,
+        "empirical_hit_rate": 0.8833,
+        "penalty": 0.0302,
         "banned": false
       },
       "UNDER_5_0": {
@@ -402,6 +407,12 @@
       "timestamp": "2026-11-28T15:09:23Z",
       "event": "Closed-Loop Learner v3.0.0 Calibration",
       "finding": "Audited all settled core tickets + Monster Bullets (+1 new leg post-mortems). Locked 12 banned markets, 8 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
+    },
+    {
+      "date": "2026-11-28",
+      "timestamp": "2026-11-28T16:36:09Z",
+      "event": "Closed-Loop Learner v3.0.0 Calibration",
+      "finding": "Audited all settled core tickets + Monster Bullets (+2 new leg post-mortems). Locked 12 banned markets, 9 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
     }
   ]
 }
