@@ -1,7 +1,7 @@
 {
   "version": "3.0.0",
   "name": "Hermes Asymmetric Multi-Week Syndicate Heuristics Store",
-  "last_updated": "2026-11-28T16:43:47Z",
+  "last_updated": "2026-11-28T16:54:08Z",
   "rules": {
     "rule_22_nba_spread_cap_missing_alpha": {
       "id": 22,
@@ -232,10 +232,10 @@
         "banned": false
       },
       "OVER_1_5": {
-        "won": 53,
-        "lost": 9,
-        "empirical_hit_rate": 0.8548,
-        "penalty": 0.0371,
+        "won": 54,
+        "lost": 10,
+        "empirical_hit_rate": 0.8438,
+        "penalty": 0.0398,
         "banned": false
       },
       "OVER_2_0": {
@@ -274,10 +274,10 @@
         "banned": false
       },
       "UNDER_2_5": {
-        "won": 13,
+        "won": 14,
         "lost": 3,
-        "empirical_hit_rate": 0.8125,
-        "penalty": 0.1679,
+        "empirical_hit_rate": 0.8235,
+        "penalty": 0.1468,
         "banned": false
       },
       "UNDER_3_5": {
@@ -288,17 +288,17 @@
         "banned": false
       },
       "UNDER_4_0": {
-        "won": 3,
+        "won": 4,
         "lost": 0,
         "empirical_hit_rate": 1.0,
-        "penalty": 0.025,
+        "penalty": 0.0208,
         "banned": false
       },
       "UNDER_4_5": {
-        "won": 53,
+        "won": 55,
         "lost": 7,
-        "empirical_hit_rate": 0.8833,
-        "penalty": 0.0302,
+        "empirical_hit_rate": 0.8871,
+        "penalty": 0.0293,
         "banned": false
       },
       "UNDER_5_0": {
@@ -413,6 +413,12 @@
       "timestamp": "2026-11-28T16:36:09Z",
       "event": "Closed-Loop Learner v3.0.0 Calibration",
       "finding": "Audited all settled core tickets + Monster Bullets (+2 new leg post-mortems). Locked 12 banned markets, 9 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
+    },
+    {
+      "date": "2026-11-28",
+      "timestamp": "2026-11-28T16:54:08Z",
+      "event": "Closed-Loop Learner v3.0.0 Calibration",
+      "finding": "Audited all settled core tickets + Monster Bullets (+1 new leg post-mortems). Locked 12 banned markets, 9 banned market-league pairs, and upgraded Rule #29 RTP floor to 0.980 / min_ticket_ev 1.02."
     }
   ]
 }
